@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Randika Abeyrathna - Lead Engineer Portfolio</title>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Load Devicon for Tech Stack Icons -->
+    <link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+    
+    <!-- Load Roboto Mono font for a clear code aesthetic -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Custom styles for the new high-contrast, Japanese-inspired dark theme */
+        :root {
+            --primary-bg: #1e1e2e; /* Deep Indigo/Charcoal */
+            --primary-text: #f5e9fc; /* Soft White/Lavender */
+            --accent-color: #89b4fa; /* Pale Blue/Cyan - Main CTA */
+            
+            /* High-Contrast Syntax Colors */
+            --syntax-color-keyword: #f38ba8; /* Rose/Sakura Pink */
+            --syntax-color-operator: #fab387; /* Soft Orange */
+            --syntax-color-method: #a6e3a1; /* Pale Green */
+            --syntax-color-class: #fab387; /* Peach */
+            --syntax-color-string: #a6e3a1; /* Green for strings */
+            --syntax-color-comment: #6c7086; /* Grey for comments */
+            
+            --card-bg: #2f3446; /* Slightly lighter dark base for cards */
+            --timeline-line: #45475a;
+
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--primary-bg);
+            color: var(--primary-text);
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+            line-height: 1.6;
+            cursor: default;
+        }
+
+        /* --- Syntax Trail Container (Full Screen) --- */
+        #syntax-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none; 
+            overflow: hidden;
+            transition: filter 0.8s ease, opacity 0.8s ease; /* Smooth fade/blur transition */
+        }
+
+        /* The blur effect applied when viewing the roadmap */
+        #syntax-container.blurred {
+            filter: blur(8px);
+            opacity: 0.15;
+        }
+
+        .syntax-element {
+            position: absolute;
+            font-family: 'Roboto Mono', monospace; 
+            font-size: 1.1rem;
+            white-space: nowrap;
+            opacity: 0;
+            /* Subtle glow for the code elements */
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.1); 
+            transition: transform 3s ease-out, opacity 3s ease-out, filter 3s;
+            will-change: transform, opacity;
+        }
+        
+        /* The main content overlay */
+        .content-layer {
+            position: relative;
+            z-index: 10; 
+            min-height: 100vh;
+            padding-top: 5rem; 
+        }
+        
+        .accent-line {
+            height: 2px;
+            background-color: var(--syntax-color-keyword); 
+            width: 50px;
+            margin: 0 auto 3rem 0;
+            border-radius: 9999px;
+        }
+
+        .primary-button {
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+            box-shadow: 0 4px 20px rgba(137, 180, 250, 0.3); 
+        }
+        .primary-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(137, 180, 250, 0.5);
+            background-color: var(--syntax-color-keyword);
+            color: var(--card-bg); 
+        }
+
+        .card-bg {
+             background-color: var(--card-bg); 
+        }
+        
+        .hero-title-glow {
+            text-shadow: 0 0 15px rgba(137, 180, 250, 0.5), 0 0 30px rgba(137, 180, 250, 0.2);
+        }
+
+        /* --- 1. Glitch Effect Styles --- */
+        .glitch-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .glitch {
+            position: relative;
+            color: var(--primary-text);
+        }
+        .glitch::before, .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .glitch::before {
+            left: 2px;
+            text-shadow: -1px 0 #ff00c1;
+            clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+        .glitch::after {
+            left: -2px;
+            text-shadow: -1px 0 #00fff9;
+            clip: rect(85px, 550px, 140px, 0);
+            animation: glitch-anim 2.5s infinite linear alternate-reverse;
+        }
+        @keyframes glitch-anim {
+            0% { clip: rect(13px, 9999px, 81px, 0); }
+            20% { clip: rect(98px, 9999px, 11px, 0); }
+            40% { clip: rect(32px, 9999px, 56px, 0); }
+            60% { clip: rect(74px, 9999px, 4px, 0); }
+            80% { clip: rect(48px, 9999px, 91px, 0); }
+            100% { clip: rect(2px, 9999px, 63px, 0); }
+        }
+        @keyframes glitch-anim-2 {
+            0% { clip: rect(65px, 9999px, 100px, 0); }
+            20% { clip: rect(12px, 9999px, 3px, 0); }
+            40% { clip: rect(89px, 9999px, 55px, 0); }
+            60% { clip: rect(34px, 9999px, 81px, 0); }
+            80% { clip: rect(21px, 9999px, 11px, 0); }
+            100% { clip: rect(96px, 9999px, 25px, 0); }
+        }
+
+        /* --- 2. Floating Background Animation --- */
+        .float-anim {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* --- 3. Scroll Reveal Animation --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Map/Roadmap Styles --- */
+        .map-container {
+            position: relative;
+            background-image: 
+                linear-gradient(rgba(137, 180, 250, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(137, 180, 250, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+        .road-line-bg {
+            position: absolute;
+            left: 50%; top: 0; bottom: 0; width: 6px; background: #2f3446; transform: translateX(-50%); border-radius: 99px; z-index: 1;
+        }
+        .road-line-progress {
+            position: absolute;
+            left: 50%; top: 0; width: 6px; height: 0%; background: var(--accent-color); transform: translateX(-50%); border-radius: 99px; z-index: 2;
+            box-shadow: 0 0 15px var(--accent-color); transition: height 0.1s linear;
+        }
+        .map-traveller {
+            position: absolute; left: 50%; top: 0%; width: 24px; height: 24px; background: var(--primary-bg); border: 4px solid var(--syntax-color-keyword); transform: translate(-50%, -50%); border-radius: 50%; z-index: 10;
+            box-shadow: 0 0 20px var(--syntax-color-keyword); transition: top 0.1s linear;
+        }
+        .map-traveller::after {
+            content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: var(--syntax-color-keyword); border-radius: 50%;
+        }
+        .map-stop {
+            opacity: 0.3; transform: scale(0.95); transition: all 0.5s ease-out; filter: blur(2px);
+        }
+        .map-stop.active {
+            opacity: 1; transform: scale(1); filter: blur(0);
+        }
+        .connector-line {
+            height: 2px; background: var(--timeline-line); width: 0%; transition: width 0.5s ease 0.2s, background-color 0.3s;
+        }
+        .map-stop.active .connector-line {
+            width: 100%; background: var(--accent-color); box-shadow: 0 0 10px var(--accent-color);
+        }
+        
+        /* Tooltip for Icons */
+        .tech-icon {
+            font-size: 2rem;
+            transition: transform 0.2s, color 0.2s;
+        }
+        .tech-icon:hover {
+            transform: translateY(-5px) scale(1.1);
+            color: var(--accent-color);
+        }
+        
+        /* --- IDE/Terminal Styles (Upgraded) --- */
+        .ide-window {
+            background-color: #181825; 
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border: 1px solid #3b4052;
+            font-family: 'Roboto Mono', monospace;
+            display: flex;
+            flex-direction: column;
+            min-height: 500px;
+        }
+        .ide-header {
+            background-color: #11111b; padding: 0.5rem 1rem; display: flex; align-items: center; border-bottom: 1px solid #3b4052;
+        }
+        .ide-dots { display: flex; gap: 6px; }
+        .ide-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .bg-red-500 { background-color: #ff5f56; }
+        .bg-yellow-500 { background-color: #ffbd2e; }
+        .bg-green-500 { background-color: #27c93f; }
+        
+        /* Run Button */
+        .run-btn {
+            margin-left: auto;
+            background: #27c93f;
+            color: #111;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 4px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: opacity 0.2s;
+        }
+        .run-btn:hover { opacity: 0.9; }
+
+        .ide-body {
+            display: flex; flex: 1;
+        }
+        .ide-sidebar {
+            width: 250px; background-color: #1e1e2e; border-right: 1px solid #3b4052; padding: 1rem 0; display: none;
+        }
+        @media(min-width: 640px) { .ide-sidebar { display: block; } }
+        
+        .file-explorer-item {
+            padding: 0.5rem 1.5rem; cursor: pointer; color: #a6adc8; display: flex; align-items: center; gap: 8px; transition: background 0.2s, color 0.2s; font-size: 0.9rem;
+        }
+        .file-explorer-item:hover { background-color: #313244; color: #fff; }
+        .file-explorer-item.active { background-color: #313244; color: var(--accent-color); border-left: 2px solid var(--accent-color); }
+
+        .ide-editor-area {
+            flex: 1; display: flex; flex-direction: column;
+        }
+        .ide-editor {
+            flex: 2; padding: 1.5rem; color: #cdd6f4; overflow-x: auto; position: relative;
+        }
+        .ide-terminal {
+            height: 150px;
+            background-color: #11111b;
+            border-top: 1px solid #3b4052;
+            padding: 1rem;
+            font-size: 0.85rem;
+            color: #a6adc8;
+            overflow-y: auto;
+            font-family: 'Roboto Mono', monospace;
+        }
+        .terminal-prompt { color: var(--accent-color); }
+        .terminal-success { color: var(--syntax-color-method); }
+        
+        .line-numbers {
+            color: #45475a; text-align: right; padding-right: 1rem; user-select: none; border-right: 1px solid #313244; margin-right: 1rem; display: inline-block;
+        }
+        .code-content { display: inline-block; vertical-align: top; white-space: pre; }
+        
+        .syntax-keyword { color: var(--syntax-color-keyword); }
+        .syntax-method { color: var(--syntax-color-method); }
+        .syntax-string { color: var(--syntax-color-string); }
+        .syntax-comment { color: var(--syntax-color-comment); font-style: italic; }
+        .syntax-class { color: var(--syntax-color-class); }
+        
+        /* Smooth scroll for anchor links */
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+<body>
+
+    <!-- Syntax Trail Container -->
+    <div id="syntax-container"></div>
+
+    <!-- Main Content Layer -->
+    <div class="content-layer">
+
+        <!-- Navigation Bar (Sticky) -->
+        <header class="sticky top-0 z-50 bg-opacity-90 backdrop-blur-sm bg-[var(--primary-bg)] shadow-2xl border-b border-[#3b4052]">
+            <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-2xl md:text-3xl font-extrabold text-[var(--accent-color)] text-center md:text-left">
+                    Randika Abeyrathna <span class="text-[var(--primary-text)] font-semibold block md:inline text-lg md:text-3xl">| Lead Engineer</span>
+                </div>
+                <div class="space-x-4 flex flex-wrap justify-center font-mono text-sm">
+                    <a href="#about" class="text-[var(--primary-text)] hover:text-[var(--syntax-color-keyword)] transition duration-200">About</a>
+                    <a href="#roadmap" class="text-[var(--primary-text)] hover:text-[var(--syntax-color-keyword)] transition duration-200">Roadmap</a>
+                    <a href="#skills" class="text-[var(--primary-text)] hover:text-[var(--syntax-color-keyword)] transition duration-200">Skills</a>
+                    <a href="#contact" class="text-[var(--primary-text)] hover:text-[var(--syntax-color-keyword)] transition duration-200">Contact</a>
+                </div>
+            </nav>
+        </header>
+
+        <!-- 1. Hero Section -->
+        <section id="home" class="min-h-[90vh] flex items-center justify-center text-center px-4 relative overflow-hidden">
+            <!-- Decorative background elements (Floating) -->
+            <div class="absolute top-20 left-10 opacity-10 text-[var(--syntax-color-keyword)] text-9xl font-mono select-none hidden md:block float-anim">{ }</div>
+            <div class="absolute bottom-20 right-10 opacity-10 text-[var(--accent-color)] text-9xl font-mono select-none hidden md:block float-anim" style="animation-delay: 2s">&lt;/&gt;</div>
+
+            <div class="max-w-5xl pt-20 pb-40 z-10">
+                <p class="text-xl sm:text-2xl font-mono text-[var(--syntax-color-method)] mb-4 h-8" id="typewriter">
+                    <!-- Typewriter Text injected via JS -->
+                </p>
+                <!-- Glitch Effect Title -->
+                <div class="glitch-wrapper mb-6">
+                    <h1 class="text-4xl sm:text-7xl md:text-8xl font-extrabold leading-tight text-[var(--primary-text)] hero-title-glow glitch" data-text="Optimizing Performance">
+                        Optimizing <span class="text-[var(--accent-color)]">Performance</span>
+                    </h1>
+                </div>
+                <h2 class="text-3xl sm:text-5xl font-bold text-gray-400 mb-8">& <span class="text-[var(--syntax-color-keyword)]">Process</span>.</h2>
+                
+                <p class="text-lg sm:text-xl text-gray-400 mb-12 max-w-3xl mx-auto reveal">
+                    7+ years of experience in backend development and cloud solutions. I increase project efficiency, enhance code quality, and architect scalable systems.
+                </p>
+                <div class="flex justify-center gap-4 reveal">
+                    <a href="#roadmap" class="inline-block px-12 py-4 bg-[var(--accent-color)] text-white font-bold text-xl rounded-full primary-button">
+                        View Journey
+                    </a>
+                    <a href="#contact" class="inline-block px-12 py-4 bg-transparent border-2 border-[var(--syntax-color-keyword)] text-[var(--syntax-color-keyword)] font-bold text-xl rounded-full hover:bg-[var(--syntax-color-keyword)] hover:text-[var(--primary-bg)] transition duration-300">
+                        Hire Me
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-32 py-16">
+
+            <!-- 2. About Section (Scroll Reveal) -->
+            <section id="about" class="pt-16 reveal">
+                <div class="card-bg p-8 md:p-12 rounded-2xl shadow-2xl border border-[#3b4052]">
+                    <h2 class="text-4xl font-bold mb-4 text-[var(--accent-color)]">Summary</h2>
+                    <div class="accent-line"></div>
+                    <div class="grid md:grid-cols-3 gap-12">
+                        <div class="md:col-span-2">
+                            <p class="text-lg text-gray-300 mb-6">
+                                I am a <strong class="text-white">Lead Software Engineer</strong> with over 7 years of expertise in <strong class="text-white">Java Ecosystems</strong>, <strong class="text-white">Cloud Solutions</strong>, and <strong class="text-white">System Architecture</strong>. I have a proven track record of leading engineering teams to deliver high-quality software, establishing rigorous code review processes, and optimizing development workflows for maximum efficiency.
+                            </p>
+                            <p class="text-lg text-gray-300">
+                                My technical capabilities include architecting high-volume systems processing <strong class="text-white">1M+ daily transactions</strong>, optimizing complex Oracle/SQL databases, and managing robust AWS infrastructures. I specialize in transforming legacy applications into modern, scalable solutions using <strong class="text-white">Spring Boot</strong> and microservices architectures, delivering engineering excellence at scale.
+                            </p>
+                        </div>
+                        <div class="bg-gray-800 p-6 rounded-xl border border-[#3b4052]">
+                            <h3 class="text-2xl font-semibold mb-4 text-[var(--syntax-color-keyword)]">Education</h3>
+                            <div class="mb-4">
+                                <h4 class="text-white font-bold">MSc in Information Technology</h4>
+                                <p class="text-sm text-[var(--accent-color)]">Cardiff Metropolitan University, UK</p>
+                                <p class="text-xs text-gray-400">Final Grade: Distinction (2021-2022)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Interactive Journey Roadmap -->
+            <section id="roadmap" class="pt-16 relative reveal">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4 text-[var(--accent-color)]">Career Roadmap</h2>
+                    <p class="text-gray-400">A timeline of technical evolution and leadership.</p>
+                </div>
+
+                <div class="map-container py-20 px-4 md:px-0" id="roadmap-container">
+                    
+                    <!-- The Central Road -->
+                    <div class="road-line-bg"></div>
+                    <div class="road-line-progress" id="road-progress"></div>
+                    <div class="map-traveller" id="map-cursor"></div>
+
+                    <div class="max-w-5xl mx-auto space-y-24 relative z-10">
+
+                        <!-- Stop 1: IFS Lead (Current) -->
+                        <div class="map-stop flex flex-col md:flex-row items-center w-full" data-stop="1">
+                            <div class="w-full md:w-5/12 order-2 md:order-1">
+                                <div class="card-bg p-6 rounded-xl shadow-2xl border-l-4 border-[var(--syntax-color-keyword)] transform transition hover:-translate-y-1 relative group">
+                                    <!-- Header -->
+                                    <div class="flex justify-between items-start mb-1">
+                                        <h3 class="text-xl font-bold text-white">Lead Software Engineer</h3>
+                                        <span class="bg-[var(--syntax-color-keyword)] text-[var(--card-bg)] text-[10px] font-bold px-2 py-1 rounded tracking-wider">CURRENT</span>
+                                    </div>
+                                    <div class="text-gray-400 font-mono text-xs mb-4">IFS | Jun 2025 - Present</div>
+                                    
+                                    <!-- Key Impact Highlight -->
+                                    <div class="mb-4 p-3 bg-[var(--primary-bg)] rounded border border-[#3b4052] border-l-2 border-l-[var(--syntax-color-keyword)]">
+                                        <p class="text-sm text-gray-300 italic">"Leading a team of 7 to optimize engineering workflows & code quality."</p>
+                                    </div>
+
+                                    <!-- Tech Badges -->
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-[var(--syntax-color-keyword)] border border-gray-600">Java Ecosystem</span>
+                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-300 border border-gray-600">Team Leadership</span>
+                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-300 border border-gray-600">Code Reviews</span>
+                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-300 border border-gray-600">Mentoring</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-2/12 flex justify-center items-center h-8 md:h-auto order-1 md:order-2 my-4 md:my-0">
+                                <div class="connector-line w-full hidden md:block"></div>
+                            </div>
+                            <div class="w-full md:w-5/12 order-3 md:order-3"></div>
+                        </div>
+
+                        <!-- Stop 2: IFS Senior -->
+                        <div class="map-stop flex flex-col md:flex-row items-center w-full" data-stop="2">
+                            <div class="w-full md:w-5/12 order-3 md:order-1"></div>
+                            <div class="w-full md:w-2/12 flex justify-center items-center h-8 md:h-auto order-1 md:order-2 my-4 md:my-0">
+                                <div class="connector-line w-full hidden md:block"></div>
+                            </div>
+                            <div class="w-full md:w-5/12 order-2 md:order-3">
+                                <div class="card-bg p-6 rounded-xl shadow-2xl border-r-4 border-[var(--accent-color)] md:text-right transform transition hover:-translate-y-1 relative group">
+                                    <!-- Header -->
+                                    <h3 class="text-xl font-bold text-white">Senior Software Engineer</h3>
+                                    <div class="text-gray-400 font-mono text-xs mb-4">IFS | Aug 2024 - Jun 2025</div>
+                                    
+                                    <!-- Key Impact Highlight -->
+                                    <div class="mb-4 p-3 bg-[var(--primary-bg)] rounded border border-[#3b4052] border-r-2 border-r-[var(--accent-color)]">
+                                        <p class="text-sm text-gray-300 italic">"Spearheaded migration of legacy Java/JSP to modern IFS Cloud."</p>
+                                    </div>
+
+                                    <!-- Tech Badges -->
+                                    <div class="flex flex-wrap gap-2 justify-end">
+                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-[var(--accent-color)] border border-gray-600">IFS Cloud (Aurena)</span>
+                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-300 border border-gray-600">Oracle DB</span>
+                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-300 border border-gray-600">Performance Tuning</span>
+                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-300 border border-gray-600">Java EE</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Stop 3: MEXXAR -->
+                        <div class="map-stop flex flex-col md:flex-row items-center w-full" data-stop="3">
+                            <div class="w-full md:w-5/12 order-2 md:order-1">
+                                <div class="card-bg p-6 rounded-xl shadow-2xl border-l-4 border-[var(--syntax-color-method)] transform transition hover:-translate-y-1 relative group">
+                                    <!-- Header -->
+                                    <h3 class="text-xl font-bold text-white">Senior Software Engineer</h3>
+                                    <div class="text-gray-400 font-mono text-xs mb-4">MEXXAR | Jan 2024 - Aug 2024</div>
+                                    
+                                    <!-- Key Impact Highlight -->
+                                    <div class="mb-4 p-3 bg-[var(--primary-bg)] rounded border border-[#3b4052] border-l-2 border-l-[var(--syntax-color-method)]">
+                                        <p class="text-sm text-gray-300 italic">"Architected scalable AWS solutions & managed Cloud Infrastructure."</p>
+                                    </div>
+
+                                    <!-- Tech Badges -->
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-[var(--syntax-color-method)] border border-gray-600">AWS (EC2/RDS)</span>
+                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-300 border border-gray-600">Spring Boot</span>
+                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-300 border border-gray-600">React Integration</span>
+                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-300 border border-gray-600">PostgreSQL</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-2/12 flex justify-center items-center h-8 md:h-auto order-1 md:order-2 my-4 md:my-0">
+                                <div class="connector-line w-full hidden md:block"></div>
+                            </div>
+                            <div class="w-full md:w-5/12 order-3 md:order-3"></div>
+                        </div>
+
+                        <!-- Stop 4: HCL -->
+                        <div class="map-stop flex flex-col md:flex-row items-center w-full" data-stop="4">
+                            <div class="w-full md:w-5/12 order-3 md:order-1"></div>
+                            <div class="w-full md:w-2/12 flex justify-center items-center h-8 md:h-auto order-1 md:order-2 my-4 md:my-0">
+                                <div class="connector-line w-full hidden md:block"></div>
+                            </div>
+                            <div class="w-full md:w-5/12 order-2 md:order-3">
+                                <div class="card-bg p-6 rounded-xl shadow-2xl border-r-4 border-[var(--syntax-color-operator)] md:text-right transform transition hover:-translate-y-1 relative group">
+                                    <!-- Header -->
+                                    <h3 class="text-xl font-bold text-white">Senior Software Engineer</h3>
+                                    <div class="text-gray-400 font-mono text-xs mb-4">HCL Tech | Jan 2021 - Dec 2024</div>
+                                    
+                                    <!-- Key Impact Highlight -->
+                                    <div class="mb-4 p-3 bg-[var(--primary-bg)] rounded border border-[#3b4052] border-r-2 border-r-[var(--syntax-color-operator)]">
+                                        <p class="text-sm text-gray-300 italic">"Maintained high-volume Healthcare systems (1M+ Daily Transactions)."</p>
+                                    </div>
+
+                                    <!-- Tech Badges -->
+                                    <div class="flex flex-wrap gap-2 justify-end">
+                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-[var(--syntax-color-operator)] border border-gray-600">Spring Boot</span>
+                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-300 border border-gray-600">Microservices</span>
+                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-300 border border-gray-600">Oracle</span>
+                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-300 border border-gray-600">High Availability</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                         <!-- Stop 5: JIT -->
+                         <div class="map-stop flex flex-col md:flex-row items-center w-full" data-stop="5">
+                            <div class="w-full md:w-5/12 order-2 md:order-1">
+                                <div class="card-bg p-6 rounded-xl shadow-2xl border-l-4 border-gray-500 transform transition hover:-translate-y-1 relative group">
+                                    <!-- Header -->
+                                    <h3 class="text-xl font-bold text-white">Software Engineer</h3>
+                                    <div class="text-gray-400 font-mono text-xs mb-4">Just In Time | May 2019 - Jan 2021</div>
+                                    
+                                    <!-- Key Impact Highlight -->
+                                    <div class="mb-4 p-3 bg-[var(--primary-bg)] rounded border border-[#3b4052] border-l-2 border-gray-500">
+                                        <p class="text-sm text-gray-300 italic">"Developed core Digital Banking solutions & provided 24x7 support."</p>
+                                    </div>
+
+                                    <!-- Tech Badges -->
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-400 border border-gray-600">Java</span>
+                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-300 border border-gray-600">RabbitMQ</span>
+                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-300 border border-gray-600">IBM DB2</span>
+                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-300 border border-gray-600">Websphere</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-2/12 flex justify-center items-center h-8 md:h-auto order-1 md:order-2 my-4 md:my-0">
+                                <div class="connector-line w-full hidden md:block"></div>
+                            </div>
+                            <div class="w-full md:w-5/12 order-3 md:order-3"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- 4. Interactive Skills IDE (Upgraded) -->
+            <section id="skills" class="pt-16 pb-16 reveal">
+                <h2 class="text-4xl font-bold mb-4 text-[var(--accent-color)] text-center">Technical Arsenal</h2>
+                <div class="accent-line mx-auto"></div>
+                <p class="text-center text-gray-400 mb-8 max-w-2xl mx-auto">
+                    Execute the code blocks to verify technical competency.
+                </p>
+                
+                <div class="max-w-5xl mx-auto px-4">
+                    <div class="ide-window">
+                        <!-- IDE Header -->
+                        <div class="ide-header">
+                            <div class="ide-dots">
+                                <div class="ide-dot bg-red-500"></div>
+                                <div class="ide-dot bg-yellow-500"></div>
+                                <div class="ide-dot bg-green-500"></div>
+                            </div>
+                            <div class="ml-4 text-gray-400 text-xs font-mono">randika_portfolio — Visual Studio Code</div>
+                            <!-- Run Button -->
+                            <div class="run-btn" onclick="runCode()">
+                                <span>▶</span> Run
+                            </div>
+                        </div>
+                        
+                        <!-- IDE Body -->
+                        <div class="ide-body">
+                            <!-- Sidebar -->
+                            <div class="ide-sidebar">
+                                <div class="text-gray-500 text-xs font-bold px-4 mb-2 uppercase tracking-wider">Explorer</div>
+                                <div class="file-explorer-item active" onclick="loadCode('backend')">
+                                    <span>☕</span> Backend.java
+                                </div>
+                                <div class="file-explorer-item" onclick="loadCode('cloud')">
+                                    <span>☁️</span> CloudConfig.yml
+                                </div>
+                                <div class="file-explorer-item" onclick="loadCode('data')">
+                                    <span>💾</span> Database.sql
+                                </div>
+                                <div class="file-explorer-item" onclick="loadCode('process')">
+                                    <span>🔄</span> Process.json
+                                </div>
+                            </div>
+
+                            <!-- Editor & Terminal Area -->
+                            <div class="ide-editor-area">
+                                <div class="ide-editor">
+                                    <div class="flex">
+                                        <div class="line-numbers" id="line-numbers">
+                                            1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11
+                                        </div>
+                                        <div class="code-content" id="code-content">
+                                            <!-- Default Content (Backend) -->
+<span class="syntax-keyword">package</span> com.randika.skills;
+
+<span class="syntax-keyword">public class</span> <span class="syntax-class">BackendStack</span> {
+    <span class="syntax-keyword">private</span> List&lt;String&gt; core = List.of(<span class="syntax-string">"Java 17+"</span>, <span class="syntax-string">"Spring Boot"</span>);
+    <span class="syntax-keyword">private</span> List&lt;String&gt; web = List.of(<span class="syntax-string">"Spring MVC"</span>, <span class="syntax-string">"Java EE"</span>);
+    
+    <span class="syntax-comment">// IFS Cloud Framework</span>
+    <span class="syntax-keyword">public</span> <span class="syntax-class">Framework</span> getCloudFramework() {
+        <span class="syntax-keyword">return new</span> Aurena(); 
+    }
+    
+    <span class="syntax-comment">// Frontend Integration</span>
+    <span class="syntax-keyword">public</span> <span class="syntax-class">String</span> frontend = <span class="syntax-string">"React.js"</span>;
+}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Terminal Output -->
+                                <div class="ide-terminal" id="terminal-output">
+                                    <div class="mb-1">Randika@Portfolio:~$ <span class="terminal-prompt">ready</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. Contact Section -->
+            <section id="contact" class="pt-16 pb-32 reveal">
+                <h2 class="text-4xl font-bold mb-4 text-[var(--accent-color)]">Let's Connect</h2>
+                <div class="accent-line"></div>
+                <div class="text-center card-bg p-8 md:p-12 rounded-xl border border-[#3b4052]">
+                    <h3 class="text-3xl font-bold text-[var(--syntax-color-keyword)] mb-4">Randika Abeyrathna</h3>
+                    <p class="text-lg text-gray-300 mb-10 max-w-2xl mx-auto">
+                        Experienced Lead Software Engineer available for challenging projects in backend optimization, cloud migration, and system architecture.
+                    </p>
+                    
+                    <!-- New Action Cards Layout -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+                        
+                        <!-- Email Action Card -->
+                        <a href="mailto:randika.l.abeyrathna@gmail.com" class="group flex flex-col items-center justify-center p-8 rounded-xl bg-[var(--primary-bg)] border border-[#3b4052] hover:border-[var(--accent-color)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_0_20px_rgba(137,180,250,0.15)]">
+                            <div class="w-14 h-14 rounded-full bg-[#2f3446] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 text-[var(--accent-color)]">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect width="20" height="16" x="2" y="4" rx="2"/>
+                                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                                </svg>
+                            </div>
+                            <h4 class="text-xl font-bold text-white mb-1">Send an Email</h4>
+                            <p class="text-sm text-gray-400">For project inquiries & collaboration</p>
+                        </a>
+
+                        <!-- LinkedIn Action Card -->
+                        <a href="https://www.linkedin.com/in/randika-abeyrathna/" target="_blank" rel="noopener noreferrer" class="group flex flex-col items-center justify-center p-8 rounded-xl bg-[var(--primary-bg)] border border-[#3b4052] hover:border-[var(--syntax-color-keyword)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_0_20px_rgba(243,139,168,0.15)]">
+                            <div class="w-14 h-14 rounded-full bg-[#2f3446] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 text-[var(--syntax-color-keyword)]">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                                    <rect width="4" height="12" x="2" y="9"/>
+                                    <circle cx="4" cy="4" r="2"/>
+                                </svg>
+                            </div>
+                            <h4 class="text-xl font-bold text-white mb-1">LinkedIn Profile</h4>
+                            <p class="text-sm text-gray-400">Connect professionally</p>
+                        </a>
+
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-900 py-8 border-t border-[#3b4052]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500 text-sm">
+                &copy; 2025 Randika Abeyrathna. Engineered for Stability.
+            </div>
+        </footer>
+
+    </div> <!-- End of Content Layer -->
+
+    <!-- JavaScript -->
+    <script>
+        // --- 1. Scroll Reveal Logic ---
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); // Only animate once
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+
+        // --- 2. Typewriter Effect ---
+        const typeWriterText = "// > Lead Software Engineer ";
+        const typeWriterElement = document.getElementById('typewriter');
+        let i = 0;
+        function typeWriter() {
+            if (i < typeWriterText.length) {
+                typeWriterElement.innerHTML += typeWriterText.charAt(i);
+                i++;
+                setTimeout(typeWriter, 50);
+            }
+        }
+        // Start typewriter after a short delay
+        setTimeout(typeWriter, 500);
+
+
+        // --- 3. Syntax Trail Effect ---
+        const syntaxContainer = document.getElementById('syntax-container');
+        let currentMouseX = 0;
+        let currentMouseY = 0;
+        let elementCount = 0;
+        const MAX_ELEMENTS = 40; 
+        const SYNTAX_SNIPPETS = [
+            { text: 'public class', color: 'var(--syntax-color-keyword)', size: '1.2rem' },
+            { text: '@Autowired', color: 'var(--syntax-color-method)', size: '1.4rem' },
+            { text: 'Optional<T>', color: 'var(--syntax-color-keyword)', size: '1.1rem' },
+            { text: 'try {', color: 'var(--syntax-color-keyword)', size: '1.1rem' },
+            { text: 'return data;', color: 'var(--syntax-color-method)', size: '1.3rem' },
+            { text: '->', color: 'var(--syntax-color-operator)', size: '1.6rem' },
+            { text: ';', color: 'var(--syntax-color-operator)', size: '1.8rem' },
+            { text: '}', color: 'var(--syntax-color-operator)', size: '1.6rem' },
+            { text: 'catch (IOException)', color: 'var(--syntax-color-keyword)', size: '1.0rem' },
+            { text: 'void handle()', color: 'var(--syntax-color-method)', size: '1.4rem' },
+            { text: 'log.debug(', color: 'var(--syntax-color-method)', size: '1.5rem' },
+            { text: '@GetMapping', color: 'var(--syntax-color-method)', size: '1.2rem' },
+            { text: 'throw new RuntimeException', color: 'var(--syntax-color-keyword)', size: '1.3rem' },
+            { text: 'long count =', color: 'var(--syntax-color-method)', size: '1.1rem' },
+            { text: '!= null', color: 'var(--syntax-color-operator)', size: '1.5rem' },
+            { text: 'Stream.of(', color: 'var(--syntax-color-method)', size: '1.3rem' },
+            { text: '.filter(', color: 'var(--syntax-color-method)', size: '1.2rem' },
+            { text: '::', color: 'var(--syntax-color-operator)', size: '1.7rem' },
+            { text: 'private final', color: 'var(--syntax-color-keyword)', size: '1.4rem' },
+            { text: 'finally {', color: 'var(--syntax-color-keyword)', size: '1.2rem' },
+            { text: '== 0', color: 'var(--syntax-color-operator)', size: '1.5rem' },
+        ];
+
+        document.addEventListener('mousemove', (e) => {
+            currentMouseX = e.clientX;
+            currentMouseY = e.clientY;
+            if (Math.random() < 0.8) { 
+                 createSyntaxElement(currentMouseX, currentMouseY);
+            }
+        });
+
+        function createSyntaxElement(x, y) {
+            if (elementCount >= MAX_ELEMENTS) {
+                if(syntaxContainer.firstElementChild) {
+                    syntaxContainer.removeChild(syntaxContainer.firstElementChild);
+                    elementCount--;
+                }
+            }
+            const elementData = SYNTAX_SNIPPETS[Math.floor(Math.random() * SYNTAX_SNIPPETS.length)];
+            const element = document.createElement('div');
+            element.classList.add('syntax-element');
+            element.innerText = elementData.text;
+            element.style.color = elementData.color;
+            element.style.fontSize = elementData.size;
+            const offsetX = (Math.random() - 0.5) * 40;
+            const offsetY = (Math.random() - 0.5) * 40;
+            element.style.left = `${x + offsetX}px`;
+            element.style.top = `${y + offsetY}px`;
+            element.style.opacity = Math.random() * 0.4 + 0.6; 
+            syntaxContainer.appendChild(element);
+            elementCount++;
+            requestAnimationFrame(() => {
+                const driftRange = 400; 
+                const targetX = x + (Math.random() - 0.5) * driftRange; 
+                const targetY = y + (Math.random() - 0.5) * driftRange; 
+                element.style.transitionDuration = `${Math.random() * 2 + 2}s`; 
+                element.style.transform = `translate(${targetX - (x + offsetX)}px, ${targetY - (y + offsetY)}px) scale(0.6)`; 
+                element.style.opacity = 0;
+                element.style.filter = 'blur(1px)';
+            });
+            element.addEventListener('transitionend', () => {
+                if (element.parentNode) {
+                    element.parentNode.removeChild(element);
+                    elementCount--;
+                }
+            });
+        }
+
+        // --- 4. Interactive Map Roadmap Logic ---
+        const roadmapContainer = document.getElementById('roadmap-container');
+        const roadProgress = document.getElementById('road-progress');
+        const mapCursor = document.getElementById('map-cursor');
+        const stops = document.querySelectorAll('.map-stop');
+
+        function updateRoadmap() {
+            const rect = roadmapContainer.getBoundingClientRect();
+            const viewportHeight = window.innerHeight;
+            const startOffset = viewportHeight * 0.4;
+            let percentage = (viewportHeight - rect.top - startOffset) / (rect.height * 0.8);
+            percentage = Math.max(0, Math.min(1, percentage));
+            
+            const heightPercent = percentage * 100;
+            roadProgress.style.height = `${heightPercent}%`;
+            mapCursor.style.top = `${heightPercent}%`;
+
+            stops.forEach(stop => {
+                const stopRect = stop.getBoundingClientRect();
+                const stopTopRelative = stopRect.top - rect.top;
+                const stopPercent = (stopTopRelative / rect.height);
+                if (percentage >= stopPercent - 0.05) {
+                    stop.classList.add('active');
+                } else {
+                    stop.classList.remove('active');
+                }
+            });
+        }
+        window.addEventListener('scroll', updateRoadmap);
+        updateRoadmap();
+
+        // --- 5. IDE Code Loader Logic ---
+        const codeSnippets = {
+            backend: `<span class="syntax-keyword">package</span> com.randika.skills;
+
+<span class="syntax-keyword">public class</span> <span class="syntax-class">BackendStack</span> {
+    <span class="syntax-keyword">private</span> List&lt;String&gt; core = List.of(<span class="syntax-string">"Java 17+"</span>, <span class="syntax-string">"Spring Boot"</span>);
+    <span class="syntax-keyword">private</span> List&lt;String&gt; web = List.of(<span class="syntax-string">"Spring MVC"</span>, <span class="syntax-string">"Java EE"</span>);
+    
+    <span class="syntax-comment">// IFS Cloud Framework</span>
+    <span class="syntax-keyword">public</span> <span class="syntax-class">Framework</span> getCloudFramework() {
+        <span class="syntax-keyword">return new</span> Aurena(); 
+    }
+    
+    <span class="syntax-comment">// Frontend Integration</span>
+    <span class="syntax-keyword">public</span> <span class="syntax-class">String</span> frontend = <span class="syntax-string">"React.js"</span>;
+}`,
+            cloud: `<span class="syntax-comment"># AWS & DevOps Configuration</span>
+services:
+  aws_stack:
+    instances: [<span class="syntax-string">"EC2"</span>, <span class="syntax-string">"RDS"</span>, <span class="syntax-string">"S3"</span>]
+    networking: <span class="syntax-string">"Load Balancers"</span>
+    
+  containerization:
+    runtime: <span class="syntax-string">"Docker"</span>
+    orchestration: <span class="syntax-string">"Kubernetes (Basic)"</span>
+
+  ci_cd_pipeline:
+    tool: <span class="syntax-string">"Jenkins"</span>
+    repo: <span class="syntax-string">"Git/GitHub"</span>`,
+            data: `<span class="syntax-comment">-- Database Optimization Skills</span>
+<span class="syntax-keyword">SELECT</span> * <span class="syntax-keyword">FROM</span> skills 
+<span class="syntax-keyword">WHERE</span> category = <span class="syntax-string">'Database'</span>;
+
+<span class="syntax-comment">-- Expertise:</span>
+<span class="syntax-comment">-- 1. Oracle: Advanced PL/SQL, Query Tuning</span>
+<span class="syntax-comment">-- 2. PostgreSQL: High Availability setup</span>
+<span class="syntax-comment">-- 3. IBM DB2: Legacy System Maintenance</span>
+
+<span class="syntax-keyword">OPTIMIZE</span> TABLE transactions;`,
+            process: `{
+  <span class="syntax-string">"methodologies"</span>: [
+    <span class="syntax-string">"Agile Scrum"</span>,
+    <span class="syntax-string">"TDD (Test Driven Development)"</span>
+  ],
+  <span class="syntax-string">"leadership"</span>: {
+    <span class="syntax-string">"team_size"</span>: 7,
+    <span class="syntax-string">"focus"</span>: <span class="syntax-string">"Code Quality & Efficiency"</span>
+  },
+  <span class="syntax-string">"impact"</span>: {
+    <span class="syntax-string">"efficiency_boost"</span>: <span class="syntax-string">"25%"</span>,
+    <span class="syntax-string">"quality_boost"</span>: <span class="syntax-string">"30%"</span>
+  }
+}`
+        };
+        
+        // Terminal Outputs mapping
+        const terminalOutputs = {
+            backend: `> Compiling BackendStack.java...
+> Success!
+> [INFO] Initializing Spring Boot application...
+> [INFO] Loaded Bean: BackendStack
+> [INFO] Skills found: Java, Spring Boot, Aurena, React.`,
+            cloud: `> Reading CloudConfig.yml...
+> Validating YAML syntax... OK
+> [INFO] Deploying to AWS EC2...
+> [INFO] Connecting to RDS instance... Connected.
+> [INFO] Docker container built successfully.`,
+            data: `> Executing query on 'skills' table...
+> 4 rows selected.
+> Analyzing query plan...
+> [OPTIMIZATION] Index usage confirmed.
+> [INFO] PL/SQL block executed successfully.`,
+            process: `> Parsing Process.json...
+> [INFO] Agile Methodology loaded.
+> [INFO] TDD workflow enabled.
+> [STATS] Team Efficiency increased by 25%.
+> [STATS] Code Quality increased by 30%.`
+        };
+
+        let currentCategory = 'backend';
+
+        function loadCode(category) {
+            currentCategory = category;
+            
+            // Sidebar active state
+            document.querySelectorAll('.file-explorer-item').forEach(el => el.classList.remove('active'));
+            const items = document.querySelectorAll('.file-explorer-item');
+            items.forEach(item => {
+                if(item.getAttribute('onclick').includes(category)) {
+                    item.classList.add('active');
+                }
+            });
+
+            // Update Code Content
+            const codeBlock = document.getElementById('code-content');
+            codeBlock.style.opacity = '0';
+            setTimeout(() => {
+                codeBlock.innerHTML = codeSnippets[category];
+                codeBlock.style.opacity = '1';
+                // Clear terminal on new file load
+                document.getElementById('terminal-output').innerHTML = '<div class="mb-1">Randika@Portfolio:~$ <span class="terminal-prompt">ready</span></div>';
+            }, 100);
+        }
+        
+        function runCode() {
+            const term = document.getElementById('terminal-output');
+            const outputText = terminalOutputs[currentCategory];
+            
+            // Add "Running..." line
+            term.innerHTML += `<div>Randika@Portfolio:~$ <span class="text-yellow-400">./run ${currentCategory}</span></div>`;
+            term.scrollTop = term.scrollHeight;
+            
+            // Simulate delay
+            setTimeout(() => {
+                const lines = outputText.split('\n');
+                lines.forEach((line, index) => {
+                    setTimeout(() => {
+                        let colorClass = 'text-gray-300';
+                        if(line.includes('[INFO]')) colorClass = 'text-blue-400';
+                        if(line.includes('[STATS]')) colorClass = 'text-green-400';
+                        if(line.includes('Success')) colorClass = 'terminal-success';
+                        
+                        term.innerHTML += `<div class="${colorClass}">${line}</div>`;
+                        term.scrollTop = term.scrollHeight;
+                    }, index * 300);
+                });
+                
+                // Final prompt
+                setTimeout(() => {
+                     term.innerHTML += `<div class="mt-2">Randika@Portfolio:~$ <span class="terminal-prompt blink">_</span></div>`;
+                     term.scrollTop = term.scrollHeight;
+                }, lines.length * 300 + 100);
+                
+            }, 500);
+        }
+
+        // --- 6. Roadmap Focus Logic (Blur Syntax Trail) ---
+        const roadmapSection = document.getElementById('roadmap');
+        const syntaxContainerEl = document.getElementById('syntax-container');
+
+        const blurObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    syntaxContainerEl.classList.add('blurred');
+                } else {
+                    syntaxContainerEl.classList.remove('blurred');
+                }
+            });
+        }, { threshold: 0.15 }); // Trigger when 15% of roadmap is visible
+
+        blurObserver.observe(roadmapSection);
+
+    </script>
+
+</body>
+</html>
