@@ -3,987 +3,946 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Randika Abeyrathna - Lead Engineer Portfolio</title>
-    
-    <!-- Load Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Load Devicon for Tech Stack Icons -->
-    <link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
-    
-    <!-- Load Roboto Mono font for a clear code aesthetic -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    
+    <title>Randika Abeyrathna, Lead Software Engineer</title>
+    <meta name="description" content="Randika Abeyrathna is a Lead Software Engineer in Kandy, Sri Lanka, building enterprise Java back ends with Spring Boot, Oracle and AWS.">
+    <meta name="theme-color" content="#f2eee5" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#151411" media="(prefers-color-scheme: dark)">
+    <link rel="canonical" href="https://randika.me/">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://randika.me/">
+    <meta property="og:title" content="Randika Abeyrathna, Lead Software Engineer">
+    <meta property="og:description" content="Eight years of enterprise Java back ends with Spring Boot, Oracle and AWS. Read the CV, or walk through it in a small 3D town.">
+    <meta property="og:image" content="https://randika.me/assets/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
     <style>
-        /* Custom styles for the new high-contrast, Japanese-inspired dark theme */
         :root {
-            --primary-bg: #1e1e2e; /* Deep Indigo/Charcoal */
-            --primary-text: #f5e9fc; /* Soft White/Lavender */
-            --accent-color: #89b4fa; /* Pale Blue/Cyan - Main CTA */
-            
-            /* High-Contrast Syntax Colors */
-            --syntax-color-keyword: #f38ba8; /* Rose/Sakura Pink */
-            --syntax-color-operator: #fab387; /* Soft Orange */
-            --syntax-color-method: #a6e3a1; /* Pale Green */
-            --syntax-color-class: #fab387; /* Peach */
-            --syntax-color-string: #a6e3a1; /* Green for strings */
-            --syntax-color-comment: #6c7086; /* Grey for comments */
-            
-            --card-bg: #2f3446; /* Slightly lighter dark base for cards */
-            --timeline-line: #45475a;
+            --paper: #f2eee5;
+            --paper-deep: #e9e3d6;
+            --ink: #1b1a17;
+            --ink-soft: #4a463e;
+            --muted: #7a7466;
+            --rule: #cfc7b6;
+            --rule-soft: #ddd6c7;
+            --accent: #b4381c;
+            --band: #1b1a17;
+            --band-text: #f2eee5;
+            --band-soft: #cfc9bc;
+            --band-accent: #e9a08e;
+            color-scheme: light;
 
-            font-family: 'Inter', sans-serif;
-        }
+            --serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+            --sans: 'IBM Plex Sans', system-ui, sans-serif;
+            --mono: 'IBM Plex Mono', ui-monospace, monospace;
 
-        body {
-            background-color: var(--primary-bg);
-            color: var(--primary-text);
-            scroll-behavior: smooth;
-            overflow-x: hidden;
-            line-height: 1.6;
-            cursor: default;
+            --maxw: 1240px;
+            --gutter: clamp(16px, 4vw, 48px);
         }
 
-        /* --- Syntax Trail Container (Full Screen) --- */
-        #syntax-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            z-index: 0;
-            pointer-events: none; 
-            overflow: hidden;
-            transition: filter 0.8s ease, opacity 0.8s ease; /* Smooth fade/blur transition */
+        /* Dark mode follows the visitor's system setting */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --paper: #151411;
+                --paper-deep: #1d1b17;
+                --ink: #ece6d8;
+                --ink-soft: #c4bdae;
+                --muted: #8f887a;
+                --rule: #3a362e;
+                --rule-soft: #2b2823;
+                --accent: #e2694a;
+                --band: #24221d;
+                --band-text: #ece6d8;
+                --band-soft: #aea797;
+                --band-accent: #e2694a;
+                color-scheme: dark;
+            }
         }
 
-        /* The blur effect applied when viewing the roadmap */
-        #syntax-container.blurred {
-            filter: blur(8px);
-            opacity: 0.15;
-        }
-
-        .syntax-element {
-            position: absolute;
-            font-family: 'Roboto Mono', monospace; 
-            font-size: 1.1rem;
-            white-space: nowrap;
-            opacity: 0;
-            /* Subtle glow for the code elements */
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.1); 
-            transition: transform 3s ease-out, opacity 3s ease-out, filter 3s;
-            will-change: transform, opacity;
-        }
-        
-        /* The main content overlay */
-        .content-layer {
-            position: relative;
-            z-index: 10; 
-            min-height: 100vh;
-            padding-top: 5rem; 
-        }
-        
-        .accent-line {
-            height: 2px;
-            background-color: var(--syntax-color-keyword); 
-            width: 50px;
-            margin: 0 auto 3rem 0;
-            border-radius: 9999px;
-        }
-
-        .primary-button {
-            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
-            box-shadow: 0 4px 20px rgba(137, 180, 250, 0.3); 
-        }
-        .primary-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(137, 180, 250, 0.5);
-            background-color: var(--syntax-color-keyword);
-            color: var(--card-bg); 
-        }
-
-        .card-bg {
-             background-color: var(--card-bg); 
-        }
-        
-        .hero-title-glow {
-            text-shadow: 0 0 15px rgba(137, 180, 250, 0.5), 0 0 30px rgba(137, 180, 250, 0.2);
-        }
-
-        /* --- 1. Glitch Effect Styles --- */
-        .glitch-wrapper {
-            position: relative;
-            display: inline-block;
-        }
-        .glitch {
-            position: relative;
-            color: var(--primary-text);
-        }
-        .glitch::before, .glitch::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-        .glitch::before {
-            left: 2px;
-            text-shadow: -1px 0 #ff00c1;
-            clip: rect(24px, 550px, 90px, 0);
-            animation: glitch-anim-2 3s infinite linear alternate-reverse;
-        }
-        .glitch::after {
-            left: -2px;
-            text-shadow: -1px 0 #00fff9;
-            clip: rect(85px, 550px, 140px, 0);
-            animation: glitch-anim 2.5s infinite linear alternate-reverse;
-        }
-        @keyframes glitch-anim {
-            0% { clip: rect(13px, 9999px, 81px, 0); }
-            20% { clip: rect(98px, 9999px, 11px, 0); }
-            40% { clip: rect(32px, 9999px, 56px, 0); }
-            60% { clip: rect(74px, 9999px, 4px, 0); }
-            80% { clip: rect(48px, 9999px, 91px, 0); }
-            100% { clip: rect(2px, 9999px, 63px, 0); }
-        }
-        @keyframes glitch-anim-2 {
-            0% { clip: rect(65px, 9999px, 100px, 0); }
-            20% { clip: rect(12px, 9999px, 3px, 0); }
-            40% { clip: rect(89px, 9999px, 55px, 0); }
-            60% { clip: rect(34px, 9999px, 81px, 0); }
-            80% { clip: rect(21px, 9999px, 11px, 0); }
-            100% { clip: rect(96px, 9999px, 25px, 0); }
-        }
-
-        /* --- 2. Floating Background Animation --- */
-        .float-anim {
-            animation: float 6s ease-in-out infinite;
-        }
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0px); }
-        }
-
-        /* --- 3. Scroll Reveal Animation --- */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease-out;
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* --- Map/Roadmap Styles --- */
-        .map-container {
-            position: relative;
-            background-image: 
-                linear-gradient(rgba(137, 180, 250, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(137, 180, 250, 0.05) 1px, transparent 1px);
-            background-size: 40px 40px;
-            border-radius: 1rem;
-            overflow: hidden;
-        }
-        .road-line-bg {
-            position: absolute;
-            left: 50%; top: 0; bottom: 0; width: 6px; background: #2f3446; transform: translateX(-50%); border-radius: 99px; z-index: 1;
-        }
-        .road-line-progress {
-            position: absolute;
-            left: 50%; top: 0; width: 6px; height: 0%; background: var(--accent-color); transform: translateX(-50%); border-radius: 99px; z-index: 2;
-            box-shadow: 0 0 15px var(--accent-color); transition: height 0.1s linear;
-        }
-        .map-traveller {
-            position: absolute; left: 50%; top: 0%; width: 24px; height: 24px; background: var(--primary-bg); border: 4px solid var(--syntax-color-keyword); transform: translate(-50%, -50%); border-radius: 50%; z-index: 10;
-            box-shadow: 0 0 20px var(--syntax-color-keyword); transition: top 0.1s linear;
-        }
-        .map-traveller::after {
-            content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: var(--syntax-color-keyword); border-radius: 50%;
-        }
-        .map-stop {
-            opacity: 0.3; transform: scale(0.95); transition: all 0.5s ease-out; filter: blur(2px);
-        }
-        .map-stop.active {
-            opacity: 1; transform: scale(1); filter: blur(0);
-        }
-        .connector-line {
-            height: 2px; background: var(--timeline-line); width: 0%; transition: width 0.5s ease 0.2s, background-color 0.3s;
-        }
-        .map-stop.active .connector-line {
-            width: 100%; background: var(--accent-color); box-shadow: 0 0 10px var(--accent-color);
-        }
-        
-        /* Tooltip for Icons */
-        .tech-icon {
-            font-size: 2rem;
-            transition: transform 0.2s, color 0.2s;
-        }
-        .tech-icon:hover {
-            transform: translateY(-5px) scale(1.1);
-            color: var(--accent-color);
-        }
-        
-        /* --- IDE/Terminal Styles (Upgraded) --- */
-        .ide-window {
-            background-color: #181825; 
-            border-radius: 0.75rem;
-            overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            border: 1px solid #3b4052;
-            font-family: 'Roboto Mono', monospace;
-            display: flex;
-            flex-direction: column;
-            min-height: 500px;
-        }
-        .ide-header {
-            background-color: #11111b; padding: 0.5rem 1rem; display: flex; align-items: center; border-bottom: 1px solid #3b4052;
-        }
-        .ide-dots { display: flex; gap: 6px; }
-        .ide-dot { width: 12px; height: 12px; border-radius: 50%; }
-        .bg-red-500 { background-color: #ff5f56; }
-        .bg-yellow-500 { background-color: #ffbd2e; }
-        .bg-green-500 { background-color: #27c93f; }
-        
-        /* Run Button */
-        .run-btn {
-            margin-left: auto;
-            background: #27c93f;
-            color: #111;
-            font-size: 0.75rem;
-            font-weight: bold;
-            padding: 4px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: opacity 0.2s;
-        }
-        .run-btn:hover { opacity: 0.9; }
-
-        .ide-body {
-            display: flex; flex: 1;
-        }
-        .ide-sidebar {
-            width: 250px; background-color: #1e1e2e; border-right: 1px solid #3b4052; padding: 1rem 0; display: none;
-        }
-        @media(min-width: 640px) { .ide-sidebar { display: block; } }
-        
-        .file-explorer-item {
-            padding: 0.5rem 1.5rem; cursor: pointer; color: #a6adc8; display: flex; align-items: center; gap: 8px; transition: background 0.2s, color 0.2s; font-size: 0.9rem;
-        }
-        .file-explorer-item:hover { background-color: #313244; color: #fff; }
-        .file-explorer-item.active { background-color: #313244; color: var(--accent-color); border-left: 2px solid var(--accent-color); }
-
-        .ide-editor-area {
-            flex: 1; display: flex; flex-direction: column;
-        }
-        .ide-editor {
-            flex: 2; padding: 1.5rem; color: #cdd6f4; overflow-x: auto; position: relative;
-        }
-        .ide-terminal {
-            height: 150px;
-            background-color: #11111b;
-            border-top: 1px solid #3b4052;
-            padding: 1rem;
-            font-size: 0.85rem;
-            color: #a6adc8;
-            overflow-y: auto;
-            font-family: 'Roboto Mono', monospace;
-        }
-        .terminal-prompt { color: var(--accent-color); }
-        .terminal-success { color: var(--syntax-color-method); }
-        
-        .line-numbers {
-            color: #45475a; text-align: right; padding-right: 1rem; user-select: none; border-right: 1px solid #313244; margin-right: 1rem; display: inline-block;
-        }
-        .code-content { display: inline-block; vertical-align: top; white-space: pre; }
-        
-        .syntax-keyword { color: var(--syntax-color-keyword); }
-        .syntax-method { color: var(--syntax-color-method); }
-        .syntax-string { color: var(--syntax-color-string); }
-        .syntax-comment { color: var(--syntax-color-comment); font-style: italic; }
-        .syntax-class { color: var(--syntax-color-class); }
-        
-        /* Smooth scroll for anchor links */
+        *, *::before, *::after { box-sizing: border-box; }
         html { scroll-behavior: smooth; }
+        body {
+            margin: 0;
+            background: var(--paper);
+            color: var(--ink);
+            font-family: var(--sans);
+            font-size: 16px;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
+        a { color: inherit; }
+        p { margin: 0; }
+        h1, h2, h3 { margin: 0; font-weight: 400; }
+        ::selection { background: var(--ink); color: var(--paper); }
+
+        .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gutter); }
+        .mono { font-family: var(--mono); font-size: 12px; letter-spacing: 0.02em; }
+        .muted { color: var(--muted); }
+
+        .link {
+            text-decoration: none;
+            background-image: linear-gradient(currentColor, currentColor);
+            background-size: 100% 1px;
+            background-position: 0 100%;
+            background-repeat: no-repeat;
+            padding-bottom: 1px;
+            transition: color 0.15s;
+        }
+        .link:hover { color: var(--accent); }
+
+        /* ---------- Masthead ---------- */
+        .masthead { border-bottom: 1px solid var(--ink); }
+        .masthead .wrap {
+            display: flex; align-items: baseline; justify-content: space-between; gap: 24px;
+            padding-top: 18px; padding-bottom: 14px;
+        }
+        .masthead-name { font-family: var(--serif); font-size: 22px; text-decoration: none; letter-spacing: -0.01em; }
+        .masthead nav { display: flex; gap: 26px; font-size: 14px; }
+        .masthead nav a { text-decoration: none; color: var(--ink-soft); }
+        .masthead nav a:hover { color: var(--accent); }
+        .masthead-meta { display: flex; gap: 18px; color: var(--muted); }
+        @media (max-width: 860px) { .masthead-meta { display: none; } }
+        @media (max-width: 520px) { .masthead .wrap { flex-wrap: wrap; row-gap: 6px; } .masthead nav { gap: 16px; font-size: 13px; } .masthead nav .opt { display: none; } }
+
+        /* ---------- Hero ---------- */
+        .hero {
+            display: grid;
+            grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+            gap: clamp(28px, 5vw, 72px);
+            padding-top: clamp(40px, 7vw, 88px);
+            padding-bottom: clamp(40px, 6vw, 72px);
+            align-items: end;
+        }
+        .kicker { display: flex; flex-wrap: wrap; gap: 6px 18px; color: var(--muted); margin-bottom: 28px; }
+        .kicker b { color: var(--ink); font-weight: 500; }
+        .hero h1 {
+            font-family: var(--serif);
+            font-size: clamp(40px, 5.6vw, 76px);
+            line-height: 1.02;
+            letter-spacing: -0.025em;
+        }
+        .hero h1 em { font-style: italic; color: var(--accent); }
+        .hero-body {
+            margin-top: 32px; max-width: 34em;
+            font-size: 18px; color: var(--ink-soft);
+        }
+        .hero-links { display: flex; flex-wrap: wrap; gap: 10px 28px; margin-top: 32px; font-size: 15px; }
+        .hero-links a { font-weight: 500; }
+        @media (max-width: 900px) { .hero { grid-template-columns: 1fr; align-items: start; } }
+
+        /* ---------- Live system model ---------- */
+        .sys { margin: 0; }
+        .sys-frame { border: 1px solid var(--ink); background: var(--paper); }
+        .sys-head { display: flex; justify-content: space-between; gap: 12px; padding: 10px 14px; border-bottom: 1px solid var(--rule); color: var(--muted); }
+        .sys-head b { color: var(--ink); font-weight: 500; }
+        .sys-live { display: inline-flex; align-items: center; gap: 6px; }
+        .sys-live::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: #3f9a5a; }
+        #sys { display: block; width: 100%; height: auto; }
+        .sys-line { stroke: var(--rule); stroke-width: 1.2; fill: none; }
+        .sys-node rect { fill: var(--paper); stroke: var(--ink); stroke-width: 1.2; transition: stroke 0.3s; }
+        .sys-node text { font-family: var(--mono); font-size: 11px; fill: var(--ink); text-anchor: middle; }
+        .sys-node .sub { fill: var(--muted); font-size: 9.5px; }
+        .sys-node.down rect { stroke: var(--muted); stroke-dasharray: 4 3; }
+        .sys-node.down text { fill: var(--muted); }
+        .sys-node.hot rect { stroke: var(--accent); stroke-width: 2; }
+        .d-req { fill: var(--ink); }
+        .d-res { fill: var(--accent); }
+        .d-err { fill: none; stroke: #d23a2a; stroke-width: 1.6; }
+        .sys-legend text { font-family: var(--mono); font-size: 9.5px; fill: var(--muted); }
+        .sys-metrics { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--rule); }
+        .sys-metrics > div { padding: 10px 14px; }
+        .sys-metrics > div + div { border-left: 1px solid var(--rule); }
+        .sys-metrics .v { font-family: var(--serif); font-size: 26px; line-height: 1.1; font-variant-numeric: tabular-nums; transition: color 0.3s; }
+        .sys-metrics .v.bad { color: var(--accent); }
+        .sys-metrics .l { font-size: 12px; color: var(--muted); }
+        .sys-controls { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+        .sys-controls button {
+            font: 500 13px var(--sans); color: var(--ink); background: transparent;
+            border: 1px solid var(--ink); padding: 7px 12px; cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+        }
+        .sys-controls button:hover:not(:disabled) { background: var(--ink); color: var(--paper); }
+        .sys-controls button:disabled { opacity: 0.45; cursor: default; }
+        .sys-controls button.quiet { border-color: transparent; color: var(--muted); }
+        @media (max-width: 480px) {
+            .sys-head { flex-wrap: wrap; row-gap: 2px; }
+            .sys-metrics > div { padding: 8px 10px; }
+            .sys-metrics .v { font-size: 21px; }
+            .sys-metrics .l { font-size: 11px; }
+        }
+        .sys-status { margin-top: 12px; font-family: var(--serif); font-style: italic; font-size: 16px; line-height: 1.4; color: var(--ink-soft); min-height: 2.8em; }
+
+        /* ---------- Ticker line ---------- */
+        .ledger {
+            border-top: 1px solid var(--ink);
+            border-bottom: 1px solid var(--rule);
+        }
+        .ledger .wrap {
+            display: grid; grid-template-columns: repeat(4, 1fr);
+        }
+        .ledger div.cell { padding: 16px 0; padding-right: 16px; }
+        .ledger div.cell + div.cell { border-left: 1px solid var(--rule); padding-left: 16px; }
+        .ledger .num { font-family: var(--serif); font-size: 30px; line-height: 1.1; }
+        .ledger .lbl { color: var(--muted); font-size: 13px; }
+
+        /* ---------- Link to the 3D world ---------- */
+        .nav-play { color: var(--accent) !important; font-weight: 600; }
+        .play-band { background: var(--band); color: var(--band-text); }
+        .play-band .wrap {
+            display: flex; align-items: center; justify-content: space-between; gap: 24px 48px; flex-wrap: wrap;
+            padding-top: clamp(36px, 5vw, 56px); padding-bottom: clamp(36px, 5vw, 56px);
+        }
+        .play-kicker { color: var(--band-accent); }
+        .play-band h2 { font-family: var(--serif); font-size: clamp(30px, 3.6vw, 46px); line-height: 1.05; letter-spacing: -0.02em; margin-top: 10px; }
+        .play-band p { margin-top: 12px; max-width: 36em; color: var(--band-soft); font-size: 16px; }
+        .play-btn {
+            flex-shrink: 0;
+            text-decoration: none; font-weight: 600; font-size: 16px;
+            padding: 14px 26px; border: 1px solid var(--band-text); color: var(--band-text);
+            transition: background 0.15s, color 0.15s;
+        }
+        .play-btn:hover { background: var(--band-text); color: var(--band); }
+        @media (max-width: 720px) {
+            .ledger .wrap { grid-template-columns: 1fr 1fr; }
+            .ledger div.cell:nth-child(3) { border-left: 0; padding-left: 0; }
+            .ledger div.cell:nth-child(n+3) { border-top: 1px solid var(--rule); }
+        }
+
+        /* ---------- Sections ---------- */
+        .section { padding: clamp(56px, 8vw, 104px) 0; border-bottom: 1px solid var(--rule); }
+        .section-head {
+            display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: 24px;
+            margin-bottom: clamp(28px, 4vw, 48px);
+        }
+        .section-no { color: var(--accent); padding-top: 12px; }
+        .section-head h2 {
+            font-family: var(--serif); font-size: clamp(32px, 4vw, 52px);
+            line-height: 1.05; letter-spacing: -0.02em;
+        }
+        .section-head p { margin-top: 14px; color: var(--ink-soft); max-width: 36em; font-size: 17px; }
+        .indent { margin-left: calc((100% - 24px) * 3 / 12 + 24px); }
+        @media (max-width: 760px) {
+            .section-head { grid-template-columns: 1fr; gap: 6px; }
+            .section-no { padding-top: 0; }
+            .indent { margin-left: 0; }
+        }
+
+        /* ---------- Experience ---------- */
+        .jobs { border-top: 1px solid var(--ink); }
+        .job { border-bottom: 1px solid var(--rule); }
+        .job summary {
+            list-style: none;
+            display: grid;
+            grid-template-columns: 110px minmax(0, 1.3fr) minmax(0, 1fr) 24px;
+            gap: 20px; align-items: baseline;
+            padding: 20px 0;
+            cursor: pointer;
+        }
+        .job summary::-webkit-details-marker { display: none; }
+        .job-years { color: var(--muted); }
+        .job-role { font-family: var(--serif); font-size: 24px; line-height: 1.2; }
+        .job-org { color: var(--ink-soft); font-size: 15px; }
+        .job-org small { display: block; color: var(--muted); font-size: 13px; }
+        .job-toggle { font-family: var(--mono); color: var(--muted); text-align: right; transition: transform 0.2s; }
+        .job[open] .job-toggle { transform: rotate(45deg); color: var(--accent); }
+        .job summary:hover .job-role { color: var(--accent); }
+        .job-body {
+            display: grid;
+            grid-template-columns: 110px minmax(0, 1fr);
+            gap: 20px;
+            padding: 0 0 28px;
+        }
+        .job-body ul { margin: 0; padding: 0; list-style: none; max-width: 46em; }
+        .job-body li { position: relative; padding-left: 22px; color: var(--ink-soft); }
+        .job-body li + li { margin-top: 8px; }
+        .job-body li::before { content: ''; position: absolute; left: 2px; top: 0.7em; width: 6px; height: 1px; background: var(--muted); }
+        .job-stack { margin-top: 16px; color: var(--muted); }
+        @media (max-width: 760px) {
+            .job summary { grid-template-columns: minmax(0, 1fr) 24px; gap: 4px 12px; }
+            .job-years { grid-column: 1; }
+            .job-role { grid-column: 1; }
+            .job-org { grid-column: 1; }
+            .job-toggle { grid-column: 2; grid-row: 1 / span 3; align-self: center; }
+            .job-body { grid-template-columns: 1fr; }
+            .job-body > span { display: none; }
+        }
+
+        /* ---------- AI ---------- */
+        .ai-intro {
+            font-family: var(--serif);
+            font-size: clamp(22px, 2.4vw, 30px);
+            line-height: 1.3;
+            max-width: 30em;
+            letter-spacing: -0.01em;
+        }
+        .ai-cols {
+            display: grid; grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
+            border-top: 1px solid var(--ink);
+            margin-top: 48px;
+        }
+        .ai-col { padding: 22px 24px 0 0; }
+        .ai-col + .ai-col { border-left: 1px solid var(--rule); padding-left: 24px; }
+        .ai-col h3 { font-family: var(--serif); font-size: 24px; margin: 8px 0 14px; }
+        .ai-col p, .ai-col li { color: var(--ink-soft); font-size: 15px; }
+        .ai-col ul { margin: 0; padding: 0; list-style: none; }
+        .ai-col li { padding: 9px 0; border-top: 1px solid var(--rule-soft); }
+        .ai-col li:first-child { border-top: 0; padding-top: 0; }
+        .ai-col li b { color: var(--ink); font-weight: 500; }
+        .project + .project { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--rule-soft); }
+        .project-name { font-weight: 500; color: var(--ink); }
+        @media (max-width: 860px) {
+            .ai-cols { grid-template-columns: 1fr; }
+            .ai-col, .ai-col + .ai-col { padding: 22px 0; border-left: 0; }
+            .ai-col + .ai-col { border-top: 1px solid var(--rule); }
+        }
+
+        /* ---------- Skills & education ---------- */
+        .spec { width: 100%; border-collapse: collapse; border-top: 1px solid var(--ink); }
+        .spec th, .spec td { text-align: left; vertical-align: baseline; padding: 14px 0; border-bottom: 1px solid var(--rule); }
+        .spec th { width: 25%; font-weight: 500; font-size: 14px; padding-right: 24px; }
+        .spec td { color: var(--ink-soft); }
+        .spec td span + span::before { content: ' · '; color: var(--muted); }
+        @media (max-width: 760px) {
+            .spec, .spec tbody, .spec tr, .spec th, .spec td { display: block; width: auto; }
+            .spec th { border-bottom: 0; padding-bottom: 2px; }
+        }
+
+        .edu { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--ink); }
+        .edu > div { padding: 22px 24px 0 0; }
+        .edu > div + div { border-left: 1px solid var(--rule); padding-left: 24px; }
+        .edu h3 { font-family: var(--serif); font-size: 24px; line-height: 1.2; }
+        .edu p { color: var(--ink-soft); margin-top: 6px; }
+        @media (max-width: 760px) {
+            .edu { grid-template-columns: 1fr; }
+            .edu > div + div { border-left: 0; padding-left: 0; margin-top: 22px; padding-top: 22px; border-top: 1px solid var(--rule); }
+        }
+
+        /* ---------- Contact ---------- */
+        .contact { padding: clamp(64px, 10vw, 128px) 0; }
+        .contact h2 {
+            font-family: var(--serif);
+            font-size: clamp(44px, 8vw, 112px);
+            line-height: 0.98; letter-spacing: -0.03em;
+        }
+        .contact h2 a { text-decoration: none; }
+        .contact h2 a:hover { color: var(--accent); }
+        .contact-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; margin-top: 48px; border-top: 1px solid var(--ink); padding-top: 16px; }
+        .contact-grid div { font-size: 15px; }
+        .contact-grid .mono { display: block; color: var(--muted); margin-bottom: 4px; }
+        @media (max-width: 720px) { .contact-grid { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 480px) { .contact-grid { grid-template-columns: 1fr; } }
+        .contact-grid a { overflow-wrap: anywhere; }
+
+        .colophon { border-top: 1px solid var(--rule); padding: 20px 0 28px; color: var(--muted); }
+        .colophon .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px 24px; }
+
+        @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
     </style>
 </head>
 <body>
 
-    <!-- Syntax Trail Container -->
-    <div id="syntax-container"></div>
-
-    <!-- Main Content Layer -->
-    <div class="content-layer">
-
-        <!-- Navigation Bar (Sticky) -->
-        <header class="sticky top-0 z-50 bg-opacity-90 backdrop-blur-sm bg-[var(--primary-bg)] shadow-2xl border-b border-[#3b4052]">
-            <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
-                <div class="text-2xl md:text-3xl font-extrabold text-[var(--accent-color)] text-center md:text-left">
-                    Randika Abeyrathna <span class="text-[var(--primary-text)] font-semibold block md:inline text-lg md:text-3xl">| Lead Engineer</span>
-                </div>
-                <div class="space-x-4 flex flex-wrap justify-center font-mono text-sm">
-                    <a href="#about" class="text-[var(--primary-text)] hover:text-[var(--syntax-color-keyword)] transition duration-200">About</a>
-                    <a href="#roadmap" class="text-[var(--primary-text)] hover:text-[var(--syntax-color-keyword)] transition duration-200">Roadmap</a>
-                    <a href="#skills" class="text-[var(--primary-text)] hover:text-[var(--syntax-color-keyword)] transition duration-200">Skills</a>
-                    <a href="#contact" class="text-[var(--primary-text)] hover:text-[var(--syntax-color-keyword)] transition duration-200">Contact</a>
-                </div>
+    <header class="masthead">
+        <div class="wrap">
+            <a href="#top" class="masthead-name">Randika Abeyrathna</a>
+            <div class="masthead-meta mono">
+                <span>Kandy, Sri Lanka</span>
+                <span id="clock"></span>
+            </div>
+            <nav>
+                <a href="#work">Work</a>
+                <a href="#ai">AI</a>
+                <a href="#skills" class="opt">Skills</a>
+                <a href="#contact">Contact</a>
+                <a href="world.html" class="nav-play">Play</a>
             </nav>
-        </header>
+        </div>
+    </header>
 
-        <!-- 1. Hero Section -->
-        <section id="home" class="min-h-[90vh] flex items-center justify-center text-center px-4 relative overflow-hidden">
-            <!-- Decorative background elements (Floating) -->
-            <div class="absolute top-20 left-10 opacity-10 text-[var(--syntax-color-keyword)] text-9xl font-mono select-none hidden md:block float-anim">{ }</div>
-            <div class="absolute bottom-20 right-10 opacity-10 text-[var(--accent-color)] text-9xl font-mono select-none hidden md:block float-anim" style="animation-delay: 2s">&lt;/&gt;</div>
+    <main id="top">
 
-            <div class="max-w-5xl pt-20 pb-40 z-10">
-                <p class="text-xl sm:text-2xl font-mono text-[var(--syntax-color-method)] mb-4 h-8" id="typewriter">
-                    <!-- Typewriter Text injected via JS -->
-                </p>
-                <!-- Glitch Effect Title -->
-                <div class="glitch-wrapper mb-6">
-                    <h1 class="text-4xl sm:text-7xl md:text-8xl font-extrabold leading-tight text-[var(--primary-text)] hero-title-glow glitch" data-text="Optimizing Performance">
-                        Optimizing <span class="text-[var(--accent-color)]">Performance</span>
-                    </h1>
+        <!-- Hero -->
+        <section class="wrap hero">
+            <div>
+                <div class="kicker mono">
+                    <span><b>Lead Software Engineer</b> at IFS</span>
+                    <span>Java · Spring Boot · Oracle · AWS</span>
                 </div>
-                <h2 class="text-3xl sm:text-5xl font-bold text-gray-400 mb-8">& <span class="text-[var(--syntax-color-keyword)]">Process</span>.</h2>
-                
-                <p class="text-lg sm:text-xl text-gray-400 mb-12 max-w-3xl mx-auto reveal">
-                    7+ years of experience in backend development and cloud solutions. I increase project efficiency, enhance code quality, and architect scalable systems.
+                <h1>I build the Java back ends that banks, hospitals and aerospace teams <em>rely on</em> every day.</h1>
+                <p class="hero-body">
+                    Eight years of enterprise backend work: designing Spring Boot services, tuning Oracle until
+                    the execution plans make sense, moving legacy Java and JSP onto modern platforms, and helping
+                    the engineers around me do their best work. I lead, and I still write the code.
                 </p>
-                <div class="flex justify-center gap-4 reveal">
-                    <a href="#roadmap" class="inline-block px-12 py-4 bg-[var(--accent-color)] text-white font-bold text-xl rounded-full primary-button">
-                        View Journey
-                    </a>
-                    <a href="#contact" class="inline-block px-12 py-4 bg-transparent border-2 border-[var(--syntax-color-keyword)] text-[var(--syntax-color-keyword)] font-bold text-xl rounded-full hover:bg-[var(--syntax-color-keyword)] hover:text-[var(--primary-bg)] transition duration-300">
-                        Hire Me
-                    </a>
+                <div class="hero-links">
+                    <a class="link" href="mailto:randika.l.abeyrathna@gmail.com">randika.l.abeyrathna@gmail.com</a>
+                    <a class="link" href="https://www.linkedin.com/in/randika-abeyrathna/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                    <a class="link" href="assets/cv/Randika-Abeyrathna-CV.pdf" download>Download CV (PDF)</a>
+                </div>
+            </div>
+
+            <figure class="sys" aria-label="Interactive model of a backend system">
+                <div class="sys-frame">
+                    <div class="sys-head mono"><span><b>A backend, live</b></span><span class="sys-live">each dot is a request</span></div>
+                    <svg id="sys" viewBox="0 0 400 372" role="img" aria-label="Users send requests to an API gateway, which spreads them over three Spring Boot instances that query an Oracle database.">
+                        <path class="sys-line" d="M200 52 V112"/>
+                        <path class="sys-line" d="M200 144 L78 210 M200 144 V210 M200 144 L322 210"/>
+                        <path class="sys-line" d="M78 248 L200 316 M200 248 V316 M322 248 L200 316"/>
+                        <g class="sys-node" id="n-client"><rect x="148" y="20" width="104" height="32"/><text x="200" y="40">Users</text></g>
+                        <g class="sys-node" id="n-gw"><rect x="140" y="112" width="120" height="32"/><text x="200" y="132">API gateway</text></g>
+                        <g class="sys-node" id="n-s0"><rect x="30" y="210" width="96" height="38"/><text x="78" y="226">Spring Boot</text><text class="sub" x="78" y="240">instance 1</text></g>
+                        <g class="sys-node" id="n-s1"><rect x="152" y="210" width="96" height="38"/><text x="200" y="226">Spring Boot</text><text class="sub" x="200" y="240">instance 2</text></g>
+                        <g class="sys-node" id="n-s2"><rect x="274" y="210" width="96" height="38"/><text x="322" y="226">Spring Boot</text><text class="sub" x="322" y="240">instance 3</text></g>
+                        <g class="sys-node" id="n-db"><rect x="140" y="316" width="120" height="38"/><text x="200" y="332">Oracle</text><text class="sub" id="db-sub" x="200" y="346">query 240 ms</text></g>
+                        <g class="sys-legend"><circle cx="20" cy="340" r="3.2" class="d-req"/><text x="28" y="343">request</text><circle cx="20" cy="356" r="3.2" class="d-res"/><text x="28" y="359">response</text></g>
+                        <g id="sys-dots"></g>
+                    </svg>
+                    <div class="sys-metrics">
+                        <div><div class="v" id="m-rps">0</div><div class="l">requests a second</div></div>
+                        <div><div class="v" id="m-p95">0 ms</div><div class="l">slowest 5% take</div></div>
+                        <div><div class="v" id="m-err">0</div><div class="l">failed requests</div></div>
+                    </div>
+                </div>
+                <div class="sys-controls">
+                    <button id="b-spike">Traffic spike</button>
+                    <button id="b-fix">Fix the slow query</button>
+                    <button id="b-crash">Crash a server</button>
+                    <button id="b-reset" class="quiet">Reset</button>
+                </div>
+                <p class="sys-status" id="sys-status" aria-live="polite"></p>
+            </figure>
+        </section>
+
+        <div class="ledger">
+            <div class="wrap">
+                <div class="cell"><div class="num">8+</div><div class="lbl">years in enterprise software</div></div>
+                <div class="cell"><div class="num">4</div><div class="lbl">industries: aerospace, banking, healthcare, finance</div></div>
+                <div class="cell"><div class="num">6</div><div class="lbl">roles since 2017</div></div>
+                <div class="cell"><div class="num">MSc</div><div class="lbl">IT, with Distinction, Cardiff Met</div></div>
+            </div>
+        </div>
+
+        <!-- Invitation to the 3D world -->
+        <section class="play-band">
+            <div class="wrap">
+                <div>
+                    <div class="mono play-kicker">Career Street</div>
+                    <h2>Rather explore than read?</h2>
+                    <p>Walk through my career in a small 3D town. Every building is a place I've worked or studied. Make the calls I made, and catch a few bugs on the way.</p>
+                </div>
+                <a class="play-btn" href="world.html">Enter the town</a>
+            </div>
+        </section>
+
+        <!-- Experience -->
+        <section class="section" id="work">
+            <div class="wrap">
+                <div class="section-head">
+                    <div class="section-no mono">Work</div>
+                    <div>
+                        <h2>Where I've worked</h2>
+                        <p>Click a role to see what I did there.</p>
+                    </div>
+                </div>
+
+                <div class="jobs">
+                    <details class="job" open>
+                        <summary>
+                            <span class="job-years mono">2025–now</span>
+                            <span class="job-role">Lead Software Engineer</span>
+                            <span class="job-org">IFS<small>Contract via Just In Time Group · Colombo</small></span>
+                            <span class="job-toggle">+</span>
+                        </summary>
+                        <div class="job-body">
+                            <span></span>
+                            <div>
+                                <ul>
+                                    <li>Lead the engineering team: planning work, estimating stories, reviewing code and mentoring, while staying hands-on with backend development and solution design.</li>
+                                    <li>Play a key role in migrating legacy Java and JSP modules to the IFS Cloud Aurena framework, including designing the Oracle database structures behind them.</li>
+                                    <li>Improve performance by reading execution plans, rewriting Oracle SQL and redesigning database views.</li>
+                                    <li>Run technical investigations and proofs of concept to choose between approaches on difficult problems.</li>
+                                </ul>
+                                <div class="job-stack mono">Java EE · IFS Cloud Aurena · Oracle · PL/SQL</div>
+                            </div>
+                        </div>
+                    </details>
+
+                    <details class="job">
+                        <summary>
+                            <span class="job-years mono">2024–2025</span>
+                            <span class="job-role">Senior Software Engineer</span>
+                            <span class="job-org">IFS<small>Contract via Just In Time Group · Colombo</small></span>
+                            <span class="job-toggle">+</span>
+                        </summary>
+                        <div class="job-body">
+                            <span></span>
+                            <div>
+                                <ul>
+                                    <li>Migrated legacy Java and JSP modules to IFS Cloud Aurena without losing existing business behaviour.</li>
+                                    <li>Redesigned legacy Java EE implementations to fit the IFS Cloud architecture.</li>
+                                    <li>Designed and tuned Oracle SQL, views and PL/SQL components for speed and maintainability.</li>
+                                </ul>
+                                <div class="job-stack mono">Java EE · JSP · Oracle · PL/SQL</div>
+                            </div>
+                        </div>
+                    </details>
+
+                    <details class="job">
+                        <summary>
+                            <span class="job-years mono">2024</span>
+                            <span class="job-role">Senior Software Engineer</span>
+                            <span class="job-org">MEXXAR<small>Kandy</small></span>
+                            <span class="job-toggle">+</span>
+                        </summary>
+                        <div class="job-body">
+                            <span></span>
+                            <div>
+                                <ul>
+                                    <li>Technical lead for a backend team of five: sprint planning, task assignment, code review and mentoring.</li>
+                                    <li>Worked directly with customers to gather requirements, demo each sprint and fold their feedback into the plan.</li>
+                                    <li>Designed the backend architecture and built Spring Boot microservices.</li>
+                                    <li>Introduced Agile practices and Jira-based sprint planning to the team.</li>
+                                    <li>Built and ran deployment pipelines and the AWS infrastructure behind production releases.</li>
+                                </ul>
+                                <div class="job-stack mono">Spring Boot · Microservices · AWS · CI/CD · Jira</div>
+                            </div>
+                        </div>
+                    </details>
+
+                    <details class="job">
+                        <summary>
+                            <span class="job-years mono">2021–2024</span>
+                            <span class="job-role">Senior Software Engineer</span>
+                            <span class="job-org">HCL Technologies<small>Healthcare · Colombo</small></span>
+                            <span class="job-toggle">+</span>
+                        </summary>
+                        <div class="job-body">
+                            <span></span>
+                            <div>
+                                <ul>
+                                    <li>Designed, built and maintained Spring Boot microservices on Oracle for healthcare systems.</li>
+                                    <li>Tracked complex production issues to their root cause and shipped permanent fixes.</li>
+                                    <li>Tuned Oracle SQL and backend services for performance and scale.</li>
+                                    <li>Worked with QA, business analysts and infrastructure teams on every release.</li>
+                                </ul>
+                                <div class="job-stack mono">Java · Spring Boot · Microservices · Oracle</div>
+                            </div>
+                        </div>
+                    </details>
+
+                    <details class="job">
+                        <summary>
+                            <span class="job-years mono">2019–2021</span>
+                            <span class="job-role">Software Engineer</span>
+                            <span class="job-org">Just In Time Group<small>Assigned to Silverlake Digital Economy (Malaysia)</small></span>
+                            <span class="job-toggle">+</span>
+                        </summary>
+                        <div class="job-body">
+                            <span></span>
+                            <div>
+                                <ul>
+                                    <li>Built and supported the digital banking platform for People's Bank Sri Lanka.</li>
+                                    <li>Developed and enhanced Java, Spring Boot and DB2 applications for new business requirements.</li>
+                                    <li>Handled production support: investigating incidents, fixing defects and deploying updates.</li>
+                                    <li>Reviewed code and pushed for quality and maintainability improvements.</li>
+                                </ul>
+                                <div class="job-stack mono">Java · Spring Boot · IBM DB2 · WebSphere · RabbitMQ</div>
+                            </div>
+                        </div>
+                    </details>
+
+                    <details class="job">
+                        <summary>
+                            <span class="job-years mono">2017–2019</span>
+                            <span class="job-role">Associate Software Engineer</span>
+                            <span class="job-org">Swarnamahal Financial Services<small>Colombo</small></span>
+                            <span class="job-toggle">+</span>
+                        </summary>
+                        <div class="job-body">
+                            <span></span>
+                            <div>
+                                <ul>
+                                    <li>Developed and maintained the Pawning Management System used across 17 branches.</li>
+                                    <li>Designed and built the HR Management System for 500+ employees.</li>
+                                    <li>Maintained the InBank administration system and other internal Java and Oracle applications.</li>
+                                </ul>
+                                <div class="job-stack mono">Java · Oracle</div>
+                            </div>
+                        </div>
+                    </details>
                 </div>
             </div>
         </section>
 
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-32 py-16">
-
-            <!-- 2. About Section (Scroll Reveal) -->
-            <section id="about" class="pt-16 reveal">
-                <div class="card-bg p-8 md:p-12 rounded-2xl shadow-2xl border border-[#3b4052]">
-                    <h2 class="text-4xl font-bold mb-4 text-[var(--accent-color)]">Summary</h2>
-                    <div class="accent-line"></div>
-                    <div class="grid md:grid-cols-3 gap-12">
-                        <div class="md:col-span-2">
-                            <p class="text-lg text-gray-300 mb-6">
-                                I am a <strong class="text-white">Lead Software Engineer</strong> with over 7 years of expertise in <strong class="text-white">Java Ecosystems</strong>, <strong class="text-white">Cloud Solutions</strong>, and <strong class="text-white">System Architecture</strong>. I have a proven track record of leading engineering teams to deliver high-quality software, establishing rigorous code review processes, and optimizing development workflows for maximum efficiency.
-                            </p>
-                            <p class="text-lg text-gray-300">
-                                My technical capabilities include architecting high-volume systems processing <strong class="text-white">1M+ daily transactions</strong>, optimizing complex Oracle/SQL databases, and managing robust AWS infrastructures. I specialize in transforming legacy applications into modern, scalable solutions using <strong class="text-white">Spring Boot</strong> and microservices architectures, delivering engineering excellence at scale.
-                            </p>
-                        </div>
-                        <div class="bg-gray-800 p-6 rounded-xl border border-[#3b4052]">
-                            <h3 class="text-2xl font-semibold mb-4 text-[var(--syntax-color-keyword)]">Education</h3>
-                            <div class="mb-4">
-                                <h4 class="text-white font-bold">MSc in Information Technology</h4>
-                                <p class="text-sm text-[var(--accent-color)]">Cardiff Metropolitan University, UK</p>
-                                <p class="text-xs text-gray-400">Final Grade: Distinction (2021-2022)</p>
-                            </div>
-                        </div>
+        <!-- AI -->
+        <section class="section" id="ai">
+            <div class="wrap">
+                <div class="section-head">
+                    <div class="section-no mono">AI</div>
+                    <div>
+                        <h2>How I work with AI</h2>
                     </div>
                 </div>
-            </section>
 
-            <!-- 3. Interactive Journey Roadmap -->
-            <section id="roadmap" class="pt-16 relative reveal">
-                <div class="text-center mb-16">
-                    <h2 class="text-4xl font-bold mb-4 text-[var(--accent-color)]">Career Roadmap</h2>
-                    <p class="text-gray-400">A timeline of technical evolution and leadership.</p>
-                </div>
-
-                <div class="map-container py-20 px-4 md:px-0" id="roadmap-container">
-                    
-                    <!-- The Central Road -->
-                    <div class="road-line-bg"></div>
-                    <div class="road-line-progress" id="road-progress"></div>
-                    <div class="map-traveller" id="map-cursor"></div>
-
-                    <div class="max-w-5xl mx-auto space-y-24 relative z-10">
-
-                        <!-- Stop 1: IFS Lead (Current) -->
-                        <div class="map-stop flex flex-col md:flex-row items-center w-full" data-stop="1">
-                            <div class="w-full md:w-5/12 order-2 md:order-1">
-                                <div class="card-bg p-6 rounded-xl shadow-2xl border-l-4 border-[var(--syntax-color-keyword)] transform transition hover:-translate-y-1 relative group">
-                                    <!-- Header -->
-                                    <div class="flex justify-between items-start mb-1">
-                                        <h3 class="text-xl font-bold text-white">Lead Software Engineer</h3>
-                                        <span class="bg-[var(--syntax-color-keyword)] text-[var(--card-bg)] text-[10px] font-bold px-2 py-1 rounded tracking-wider">CURRENT</span>
-                                    </div>
-                                    <div class="text-gray-400 font-mono text-xs mb-4">IFS | Jun 2025 - Present</div>
-                                    
-                                    <!-- Key Impact Highlight -->
-                                    <div class="mb-4 p-3 bg-[var(--primary-bg)] rounded border border-[#3b4052] border-l-2 border-l-[var(--syntax-color-keyword)]">
-                                        <p class="text-sm text-gray-300 italic">"Leading a team of 7 to optimize engineering workflows & code quality."</p>
-                                    </div>
-
-                                    <!-- Tech Badges -->
-                                    <div class="flex flex-wrap gap-2">
-                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-[var(--syntax-color-keyword)] border border-gray-600">Java Ecosystem</span>
-                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-300 border border-gray-600">Team Leadership</span>
-                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-300 border border-gray-600">Code Reviews</span>
-                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-300 border border-gray-600">Mentoring</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="w-full md:w-2/12 flex justify-center items-center h-8 md:h-auto order-1 md:order-2 my-4 md:my-0">
-                                <div class="connector-line w-full hidden md:block"></div>
-                            </div>
-                            <div class="w-full md:w-5/12 order-3 md:order-3"></div>
-                        </div>
-
-                        <!-- Stop 2: IFS Senior -->
-                        <div class="map-stop flex flex-col md:flex-row items-center w-full" data-stop="2">
-                            <div class="w-full md:w-5/12 order-3 md:order-1"></div>
-                            <div class="w-full md:w-2/12 flex justify-center items-center h-8 md:h-auto order-1 md:order-2 my-4 md:my-0">
-                                <div class="connector-line w-full hidden md:block"></div>
-                            </div>
-                            <div class="w-full md:w-5/12 order-2 md:order-3">
-                                <div class="card-bg p-6 rounded-xl shadow-2xl border-r-4 border-[var(--accent-color)] md:text-right transform transition hover:-translate-y-1 relative group">
-                                    <!-- Header -->
-                                    <h3 class="text-xl font-bold text-white">Senior Software Engineer</h3>
-                                    <div class="text-gray-400 font-mono text-xs mb-4">IFS | Aug 2024 - Jun 2025</div>
-                                    
-                                    <!-- Key Impact Highlight -->
-                                    <div class="mb-4 p-3 bg-[var(--primary-bg)] rounded border border-[#3b4052] border-r-2 border-r-[var(--accent-color)]">
-                                        <p class="text-sm text-gray-300 italic">"Spearheaded migration of legacy Java/JSP to modern IFS Cloud."</p>
-                                    </div>
-
-                                    <!-- Tech Badges -->
-                                    <div class="flex flex-wrap gap-2 justify-end">
-                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-[var(--accent-color)] border border-gray-600">IFS Cloud (Aurena)</span>
-                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-300 border border-gray-600">Oracle DB</span>
-                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-300 border border-gray-600">Performance Tuning</span>
-                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-300 border border-gray-600">Java EE</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Stop 3: MEXXAR -->
-                        <div class="map-stop flex flex-col md:flex-row items-center w-full" data-stop="3">
-                            <div class="w-full md:w-5/12 order-2 md:order-1">
-                                <div class="card-bg p-6 rounded-xl shadow-2xl border-l-4 border-[var(--syntax-color-method)] transform transition hover:-translate-y-1 relative group">
-                                    <!-- Header -->
-                                    <h3 class="text-xl font-bold text-white">Senior Software Engineer</h3>
-                                    <div class="text-gray-400 font-mono text-xs mb-4">MEXXAR | Jan 2024 - Aug 2024</div>
-                                    
-                                    <!-- Key Impact Highlight -->
-                                    <div class="mb-4 p-3 bg-[var(--primary-bg)] rounded border border-[#3b4052] border-l-2 border-l-[var(--syntax-color-method)]">
-                                        <p class="text-sm text-gray-300 italic">"Architected scalable AWS solutions & managed Cloud Infrastructure."</p>
-                                    </div>
-
-                                    <!-- Tech Badges -->
-                                    <div class="flex flex-wrap gap-2">
-                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-[var(--syntax-color-method)] border border-gray-600">AWS (EC2/RDS)</span>
-                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-300 border border-gray-600">Spring Boot</span>
-                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-300 border border-gray-600">React Integration</span>
-                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-300 border border-gray-600">PostgreSQL</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="w-full md:w-2/12 flex justify-center items-center h-8 md:h-auto order-1 md:order-2 my-4 md:my-0">
-                                <div class="connector-line w-full hidden md:block"></div>
-                            </div>
-                            <div class="w-full md:w-5/12 order-3 md:order-3"></div>
-                        </div>
-
-                        <!-- Stop 4: HCL -->
-                        <div class="map-stop flex flex-col md:flex-row items-center w-full" data-stop="4">
-                            <div class="w-full md:w-5/12 order-3 md:order-1"></div>
-                            <div class="w-full md:w-2/12 flex justify-center items-center h-8 md:h-auto order-1 md:order-2 my-4 md:my-0">
-                                <div class="connector-line w-full hidden md:block"></div>
-                            </div>
-                            <div class="w-full md:w-5/12 order-2 md:order-3">
-                                <div class="card-bg p-6 rounded-xl shadow-2xl border-r-4 border-[var(--syntax-color-operator)] md:text-right transform transition hover:-translate-y-1 relative group">
-                                    <!-- Header -->
-                                    <h3 class="text-xl font-bold text-white">Senior Software Engineer</h3>
-                                    <div class="text-gray-400 font-mono text-xs mb-4">HCL Tech | Jan 2021 - Dec 2024</div>
-                                    
-                                    <!-- Key Impact Highlight -->
-                                    <div class="mb-4 p-3 bg-[var(--primary-bg)] rounded border border-[#3b4052] border-r-2 border-r-[var(--syntax-color-operator)]">
-                                        <p class="text-sm text-gray-300 italic">"Maintained high-volume Healthcare systems (1M+ Daily Transactions)."</p>
-                                    </div>
-
-                                    <!-- Tech Badges -->
-                                    <div class="flex flex-wrap gap-2 justify-end">
-                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-[var(--syntax-color-operator)] border border-gray-600">Spring Boot</span>
-                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-300 border border-gray-600">Microservices</span>
-                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-300 border border-gray-600">Oracle</span>
-                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-300 border border-gray-600">High Availability</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                         <!-- Stop 5: JIT -->
-                         <div class="map-stop flex flex-col md:flex-row items-center w-full" data-stop="5">
-                            <div class="w-full md:w-5/12 order-2 md:order-1">
-                                <div class="card-bg p-6 rounded-xl shadow-2xl border-l-4 border-gray-500 transform transition hover:-translate-y-1 relative group">
-                                    <!-- Header -->
-                                    <h3 class="text-xl font-bold text-white">Software Engineer</h3>
-                                    <div class="text-gray-400 font-mono text-xs mb-4">Just In Time | May 2019 - Jan 2021</div>
-                                    
-                                    <!-- Key Impact Highlight -->
-                                    <div class="mb-4 p-3 bg-[var(--primary-bg)] rounded border border-[#3b4052] border-l-2 border-gray-500">
-                                        <p class="text-sm text-gray-300 italic">"Developed core Digital Banking solutions & provided 24x7 support."</p>
-                                    </div>
-
-                                    <!-- Tech Badges -->
-                                    <div class="flex flex-wrap gap-2">
-                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-400 border border-gray-600">Java</span>
-                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-300 border border-gray-600">RabbitMQ</span>
-                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-300 border border-gray-600">IBM DB2</span>
-                                        <span class="px-3 py-1 rounded-full bg-[#3b4052] text-xs text-gray-300 border border-gray-600">Websphere</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="w-full md:w-2/12 flex justify-center items-center h-8 md:h-auto order-1 md:order-2 my-4 md:my-0">
-                                <div class="connector-line w-full hidden md:block"></div>
-                            </div>
-                            <div class="w-full md:w-5/12 order-3 md:order-3"></div>
-                        </div>
-
-                    </div>
-                </div>
-            </section>
-
-
-            <!-- 4. Interactive Skills IDE (Upgraded) -->
-            <section id="skills" class="pt-16 pb-16 reveal">
-                <h2 class="text-4xl font-bold mb-4 text-[var(--accent-color)] text-center">Technical Arsenal</h2>
-                <div class="accent-line mx-auto"></div>
-                <p class="text-center text-gray-400 mb-8 max-w-2xl mx-auto">
-                    Execute the code blocks to verify technical competency.
-                </p>
-                
-                <div class="max-w-5xl mx-auto px-4">
-                    <div class="ide-window">
-                        <!-- IDE Header -->
-                        <div class="ide-header">
-                            <div class="ide-dots">
-                                <div class="ide-dot bg-red-500"></div>
-                                <div class="ide-dot bg-yellow-500"></div>
-                                <div class="ide-dot bg-green-500"></div>
-                            </div>
-                            <div class="ml-4 text-gray-400 text-xs font-mono">randika_portfolio — Visual Studio Code</div>
-                            <!-- Run Button -->
-                            <div class="run-btn" onclick="runCode()">
-                                <span>▶</span> Run
-                            </div>
-                        </div>
-                        
-                        <!-- IDE Body -->
-                        <div class="ide-body">
-                            <!-- Sidebar -->
-                            <div class="ide-sidebar">
-                                <div class="text-gray-500 text-xs font-bold px-4 mb-2 uppercase tracking-wider">Explorer</div>
-                                <div class="file-explorer-item active" onclick="loadCode('backend')">
-                                    <span>☕</span> Backend.java
-                                </div>
-                                <div class="file-explorer-item" onclick="loadCode('cloud')">
-                                    <span>☁️</span> CloudConfig.yml
-                                </div>
-                                <div class="file-explorer-item" onclick="loadCode('data')">
-                                    <span>💾</span> Database.sql
-                                </div>
-                                <div class="file-explorer-item" onclick="loadCode('process')">
-                                    <span>🔄</span> Process.json
-                                </div>
-                            </div>
-
-                            <!-- Editor & Terminal Area -->
-                            <div class="ide-editor-area">
-                                <div class="ide-editor">
-                                    <div class="flex">
-                                        <div class="line-numbers" id="line-numbers">
-                                            1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11
-                                        </div>
-                                        <div class="code-content" id="code-content">
-                                            <!-- Default Content (Backend) -->
-<span class="syntax-keyword">package</span> com.randika.skills;
-
-<span class="syntax-keyword">public class</span> <span class="syntax-class">BackendStack</span> {
-    <span class="syntax-keyword">private</span> List&lt;String&gt; core = List.of(<span class="syntax-string">"Java 17+"</span>, <span class="syntax-string">"Spring Boot"</span>);
-    <span class="syntax-keyword">private</span> List&lt;String&gt; web = List.of(<span class="syntax-string">"Spring MVC"</span>, <span class="syntax-string">"Java EE"</span>);
-    
-    <span class="syntax-comment">// IFS Cloud Framework</span>
-    <span class="syntax-keyword">public</span> <span class="syntax-class">Framework</span> getCloudFramework() {
-        <span class="syntax-keyword">return new</span> Aurena(); 
-    }
-    
-    <span class="syntax-comment">// Frontend Integration</span>
-    <span class="syntax-keyword">public</span> <span class="syntax-class">String</span> frontend = <span class="syntax-string">"React.js"</span>;
-}
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Terminal Output -->
-                                <div class="ide-terminal" id="terminal-output">
-                                    <div class="mb-1">Randika@Portfolio:~$ <span class="terminal-prompt">ready</span></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 5. Contact Section -->
-            <section id="contact" class="pt-16 pb-32 reveal">
-                <h2 class="text-4xl font-bold mb-4 text-[var(--accent-color)]">Let's Connect</h2>
-                <div class="accent-line"></div>
-                <div class="text-center card-bg p-8 md:p-12 rounded-xl border border-[#3b4052]">
-                    <h3 class="text-3xl font-bold text-[var(--syntax-color-keyword)] mb-4">Randika Abeyrathna</h3>
-                    <p class="text-lg text-gray-300 mb-10 max-w-2xl mx-auto">
-                        Experienced Lead Software Engineer available for challenging projects in backend optimization, cloud migration, and system architecture.
+                <div class="indent">
+                    <p class="ai-intro">
+                        I treat AI tools as a fast pair programmer, not an authority. They speed up the reading,
+                        drafting and checking around my work; the design decisions, and the responsibility for what ships, stay with me.
                     </p>
-                    
-                    <!-- New Action Cards Layout -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-                        
-                        <!-- Email Action Card -->
-                        <a href="mailto:randika.l.abeyrathna@gmail.com" class="group flex flex-col items-center justify-center p-8 rounded-xl bg-[var(--primary-bg)] border border-[#3b4052] hover:border-[var(--accent-color)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_0_20px_rgba(137,180,250,0.15)]">
-                            <div class="w-14 h-14 rounded-full bg-[#2f3446] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 text-[var(--accent-color)]">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect width="20" height="16" x="2" y="4" rx="2"/>
-                                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-                                </svg>
-                            </div>
-                            <h4 class="text-xl font-bold text-white mb-1">Send an Email</h4>
-                            <p class="text-sm text-gray-400">For project inquiries & collaboration</p>
-                        </a>
 
-                        <!-- LinkedIn Action Card -->
-                        <a href="https://www.linkedin.com/in/randika-abeyrathna/" target="_blank" rel="noopener noreferrer" class="group flex flex-col items-center justify-center p-8 rounded-xl bg-[var(--primary-bg)] border border-[#3b4052] hover:border-[var(--syntax-color-keyword)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_0_20px_rgba(243,139,168,0.15)]">
-                            <div class="w-14 h-14 rounded-full bg-[#2f3446] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 text-[var(--syntax-color-keyword)]">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
-                                    <rect width="4" height="12" x="2" y="9"/>
-                                    <circle cx="4" cy="4" r="2"/>
-                                </svg>
-                            </div>
-                            <h4 class="text-xl font-bold text-white mb-1">LinkedIn Profile</h4>
-                            <p class="text-sm text-gray-400">Connect professionally</p>
-                        </a>
-
+                    <div class="ai-cols" id="ai-cols">
+                        <div class="ai-col">
+                            <h3>Every day</h3>
+                            <ul>
+                                <li><b>Reading legacy code.</b> Getting oriented in old Java and JSP modules before migrating them.</li>
+                                <li><b>Drafting tests</b> and boilerplate, then reviewing every line.</li>
+                                <li><b>A second look</b> at SQL and execution plans while tuning Oracle.</li>
+                                <li><b>First-pass reviews</b> before I open a pull request.</li>
+                            </ul>
+                        </div>
+                        <div class="ai-col">
+                            <h3>With my team</h3>
+                            <ul>
+                                <li><b>Bringing AI tools into the team's workflow</b>, with clear ground rules.</li>
+                                <li><b>Same review bar.</b> AI-written code goes through the same review as anything else.</li>
+                                <li><b>Nothing sensitive</b> goes into a prompt: no customer data, no secrets.</li>
+                                <li><b>Sharing what works.</b> Useful prompts and patterns get passed around, not reinvented.</li>
+                            </ul>
+                        </div>
+                        <div class="ai-col" id="ai-projects">
+                            <h3>On my own time</h3>
+                            <div id="ai-project-list"></div>
+                        </div>
                     </div>
                 </div>
-            </section>
-
-        </main>
-
-        <!-- Footer -->
-        <footer class="bg-gray-900 py-8 border-t border-[#3b4052]">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500 text-sm">
-                &copy; 2025 Randika Abeyrathna. Engineered for Stability.
             </div>
-        </footer>
+        </section>
 
-    </div> <!-- End of Content Layer -->
+        <!-- Skills -->
+        <section class="section" id="skills">
+            <div class="wrap">
+                <div class="section-head">
+                    <div class="section-no mono">Skills</div>
+                    <div><h2>Tools of the trade</h2></div>
+                </div>
+                <table class="spec">
+                    <tr><th>Languages</th><td><span>Java</span><span>JavaScript</span><span>PL/SQL</span><span>SQL</span></td></tr>
+                    <tr><th>Backend</th><td><span>Spring Boot</span><span>Spring MVC</span><span>Spring Security</span><span>REST APIs</span><span>Microservices</span><span>Java EE</span><span>JSP</span><span>IFS Cloud Aurena</span></td></tr>
+                    <tr><th>Databases</th><td><span>Oracle</span><span>PostgreSQL</span><span>IBM DB2</span></td></tr>
+                    <tr><th>Cloud &amp; DevOps</th><td><span>AWS (EC2, RDS, S3, Route 53, SNS, SQS)</span><span>Docker</span><span>Jenkins</span><span>CI/CD</span><span>Git, GitHub, Bitbucket</span></td></tr>
+                    <tr><th>Ways of working</th><td><span>Agile</span><span>Scrum</span><span>TDD</span><span>Code review</span><span>Mentoring</span></td></tr>
+                </table>
+            </div>
+        </section>
 
-    <!-- JavaScript -->
+        <!-- Education -->
+        <section class="section" id="education">
+            <div class="wrap">
+                <div class="section-head">
+                    <div class="section-no mono">Education</div>
+                    <div><h2>Study</h2></div>
+                </div>
+                <div class="edu">
+                    <div>
+                        <div class="mono muted">Master's</div>
+                        <h3 style="margin-top:8px">MSc in Information Technology</h3>
+                        <p>Cardiff Metropolitan University · Distinction</p>
+                    </div>
+                    <div>
+                        <div class="mono muted">Bachelor's</div>
+                        <h3 style="margin-top:8px">B.Eng. in Software Engineering</h3>
+                        <p>IIC University of Technology · Second Upper Class</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact -->
+        <section class="contact" id="contact">
+            <div class="wrap">
+                <div class="section-no mono" style="margin-bottom:20px">Contact</div>
+                <h2>Have a hard backend problem?<br><a href="mailto:randika.l.abeyrathna@gmail.com"><em>Write to me.</em></a></h2>
+                <div class="contact-grid">
+                    <div><span class="mono">Email</span><a class="link" href="mailto:randika.l.abeyrathna@gmail.com">randika.l.abeyrathna@gmail.com</a></div>
+                    <div><span class="mono">LinkedIn</span><a class="link" href="https://www.linkedin.com/in/randika-abeyrathna/" target="_blank" rel="noopener noreferrer">in/randika-abeyrathna</a></div>
+                    <div><span class="mono">CV</span><a class="link" href="assets/cv/Randika-Abeyrathna-CV.pdf" download>Download PDF</a></div>
+                    <div><span class="mono">Based in</span>Kandy, Sri Lanka</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="colophon mono">
+        <div class="wrap">
+            <span>© <span id="year">2026</span> Randika Abeyrathna</span>
+            <span>Set in Newsreader &amp; IBM Plex</span>
+        </div>
+    </footer>
+
     <script>
-        // --- 1. Scroll Reveal Logic ---
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: "0px 0px -50px 0px"
-        };
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if(entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                    observer.unobserve(entry.target); // Only animate once
-                }
-            });
-        }, observerOptions);
+        // Side projects for the AI section. Add your own here; the column hides itself while the list is empty.
+        // { name: 'Project name', text: 'One or two sentences on what it does and what you used.', url: 'https://github.com/...' }
+        const AI_PROJECTS = [];
 
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        const list = document.getElementById('ai-project-list');
+        if (AI_PROJECTS.length) {
+            list.innerHTML = AI_PROJECTS.map(p => `
+                <div class="project">
+                    <div class="project-name">${p.url ? `<a class="link" href="${p.url}" target="_blank" rel="noopener noreferrer">${p.name}</a>` : p.name}</div>
+                    <p>${p.text}</p>
+                </div>`).join('');
+        } else {
+            document.getElementById('ai-projects').remove();
+            document.getElementById('ai-cols').style.setProperty('--cols', 2);
+        }
 
+        // Local time in Kandy
+        const clock = document.getElementById('clock');
+        const fmt = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Colombo' });
+        const tick = () => { clock.textContent = fmt.format(new Date()) + ' local'; };
+        tick();
+        setInterval(tick, 30000);
 
-        // --- 2. Typewriter Effect ---
-        const typeWriterText = "// > Lead Software Engineer ";
-        const typeWriterElement = document.getElementById('typewriter');
-        let i = 0;
-        function typeWriter() {
-            if (i < typeWriterText.length) {
-                typeWriterElement.innerHTML += typeWriterText.charAt(i);
-                i++;
-                setTimeout(typeWriter, 50);
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+
+    <!-- A small simulated backend: requests flow users -> gateway -> Spring Boot -> Oracle and back -->
+    <script>
+        (() => {
+            const svg = document.getElementById('sys');
+            if (!svg) return;
+            const NS = 'http://www.w3.org/2000/svg';
+            const layer = document.getElementById('sys-dots');
+            const $ = id => document.getElementById(id);
+
+            const P = {
+                client: { x: 200, y: 52 },
+                gw: { x: 200, y: 128 },
+                svc: [{ x: 78, y: 229 }, { x: 200, y: 229 }, { x: 322, y: 229 }],
+                db: { x: 200, y: 316 },
+            };
+            const HOP = 360;            // ms to travel one line on screen
+            const SVC_MS = 30;          // time spent inside Spring Boot
+            const SLOW_MS = 240, FAST_MS = 20;
+            const DB_SLOTS = 4;         // queries Oracle runs at once
+            const BASE_RATE = 5, SPIKE_RATE = 20;
+
+            let sim;
+            function reset() {
+                layer.replaceChildren();
+                sim = {
+                    slow: true, spikeUntil: 0, crashed: -1, crashAt: 0, rr: 0,
+                    inDb: 0, queue: [], reqs: [], done: [], errors: [], carry: 0,
+                };
+                $('db-sub').textContent = `query ${SLOW_MS} ms`;
+                [0, 1, 2].forEach(i => $(`n-s${i}`).classList.remove('down'));
+                $('b-fix').disabled = false;
+                $('b-fix').textContent = 'Fix the slow query';
+                $('b-spike').disabled = false;
+                $('b-crash').disabled = false;
+                say('Normal traffic. One slow Oracle query costs about 240 ms on every request.');
             }
-        }
-        // Start typewriter after a short delay
-        setTimeout(typeWriter, 500);
+            function say(text) { $('sys-status').textContent = text; }
 
-
-        // --- 3. Syntax Trail Effect ---
-        const syntaxContainer = document.getElementById('syntax-container');
-        let currentMouseX = 0;
-        let currentMouseY = 0;
-        let elementCount = 0;
-        const MAX_ELEMENTS = 40; 
-        const SYNTAX_SNIPPETS = [
-            { text: 'public class', color: 'var(--syntax-color-keyword)', size: '1.2rem' },
-            { text: '@Autowired', color: 'var(--syntax-color-method)', size: '1.4rem' },
-            { text: 'Optional<T>', color: 'var(--syntax-color-keyword)', size: '1.1rem' },
-            { text: 'try {', color: 'var(--syntax-color-keyword)', size: '1.1rem' },
-            { text: 'return data;', color: 'var(--syntax-color-method)', size: '1.3rem' },
-            { text: '->', color: 'var(--syntax-color-operator)', size: '1.6rem' },
-            { text: ';', color: 'var(--syntax-color-operator)', size: '1.8rem' },
-            { text: '}', color: 'var(--syntax-color-operator)', size: '1.6rem' },
-            { text: 'catch (IOException)', color: 'var(--syntax-color-keyword)', size: '1.0rem' },
-            { text: 'void handle()', color: 'var(--syntax-color-method)', size: '1.4rem' },
-            { text: 'log.debug(', color: 'var(--syntax-color-method)', size: '1.5rem' },
-            { text: '@GetMapping', color: 'var(--syntax-color-method)', size: '1.2rem' },
-            { text: 'throw new RuntimeException', color: 'var(--syntax-color-keyword)', size: '1.3rem' },
-            { text: 'long count =', color: 'var(--syntax-color-method)', size: '1.1rem' },
-            { text: '!= null', color: 'var(--syntax-color-operator)', size: '1.5rem' },
-            { text: 'Stream.of(', color: 'var(--syntax-color-method)', size: '1.3rem' },
-            { text: '.filter(', color: 'var(--syntax-color-method)', size: '1.2rem' },
-            { text: '::', color: 'var(--syntax-color-operator)', size: '1.7rem' },
-            { text: 'private final', color: 'var(--syntax-color-keyword)', size: '1.4rem' },
-            { text: 'finally {', color: 'var(--syntax-color-keyword)', size: '1.2rem' },
-            { text: '== 0', color: 'var(--syntax-color-operator)', size: '1.5rem' },
-        ];
-
-        document.addEventListener('mousemove', (e) => {
-            currentMouseX = e.clientX;
-            currentMouseY = e.clientY;
-            if (Math.random() < 0.8) { 
-                 createSyntaxElement(currentMouseX, currentMouseY);
+            const lerp = (a, b, t) => ({ x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t });
+            function along(points, t) {
+                const seg = Math.min(points.length - 2, Math.floor(t * (points.length - 1)));
+                return lerp(points[seg], points[seg + 1], t * (points.length - 1) - seg);
             }
-        });
-
-        function createSyntaxElement(x, y) {
-            if (elementCount >= MAX_ELEMENTS) {
-                if(syntaxContainer.firstElementChild) {
-                    syntaxContainer.removeChild(syntaxContainer.firstElementChild);
-                    elementCount--;
-                }
+            function makeDot() {
+                const c = document.createElementNS(NS, 'circle');
+                c.setAttribute('r', '3.2');
+                c.setAttribute('class', 'd-req');
+                layer.appendChild(c);
+                return c;
             }
-            const elementData = SYNTAX_SNIPPETS[Math.floor(Math.random() * SYNTAX_SNIPPETS.length)];
-            const element = document.createElement('div');
-            element.classList.add('syntax-element');
-            element.innerText = elementData.text;
-            element.style.color = elementData.color;
-            element.style.fontSize = elementData.size;
-            const offsetX = (Math.random() - 0.5) * 40;
-            const offsetY = (Math.random() - 0.5) * 40;
-            element.style.left = `${x + offsetX}px`;
-            element.style.top = `${y + offsetY}px`;
-            element.style.opacity = Math.random() * 0.4 + 0.6; 
-            syntaxContainer.appendChild(element);
-            elementCount++;
-            requestAnimationFrame(() => {
-                const driftRange = 400; 
-                const targetX = x + (Math.random() - 0.5) * driftRange; 
-                const targetY = y + (Math.random() - 0.5) * driftRange; 
-                element.style.transitionDuration = `${Math.random() * 2 + 2}s`; 
-                element.style.transform = `translate(${targetX - (x + offsetX)}px, ${targetY - (y + offsetY)}px) scale(0.6)`; 
-                element.style.opacity = 0;
-                element.style.filter = 'blur(1px)';
-            });
-            element.addEventListener('transitionend', () => {
-                if (element.parentNode) {
-                    element.parentNode.removeChild(element);
-                    elementCount--;
+
+            // The gateway keeps sending to a crashed instance until its health check notices (1.5 s)
+            const routable = (i, now) => i !== sim.crashed || now < sim.crashAt + 1500;
+            function pickService(now) {
+                for (let k = 0; k < 3; k++) {
+                    const i = (sim.rr++) % 3;
+                    if (routable(i, now)) return i;
                 }
-            });
-        }
+                return 0;
+            }
 
-        // --- 4. Interactive Map Roadmap Logic ---
-        const roadmapContainer = document.getElementById('roadmap-container');
-        const roadProgress = document.getElementById('road-progress');
-        const mapCursor = document.getElementById('map-cursor');
-        const stops = document.querySelectorAll('.map-stop');
+            function spawn(now) {
+                const svc = pickService(now);
+                sim.reqs.push({ svc, stage: 'in', t0: now, el: makeDot() });
+            }
+            function startQuery(r, now) {
+                sim.inDb++;
+                r.stage = 'query';
+                r.t0 = now;
+                r.dur = (sim.slow ? SLOW_MS : FAST_MS) * (0.8 + Math.random() * 0.4);
+            }
 
-        function updateRoadmap() {
-            const rect = roadmapContainer.getBoundingClientRect();
-            const viewportHeight = window.innerHeight;
-            const startOffset = viewportHeight * 0.4;
-            let percentage = (viewportHeight - rect.top - startOffset) / (rect.height * 0.8);
-            percentage = Math.max(0, Math.min(1, percentage));
-            
-            const heightPercent = percentage * 100;
-            roadProgress.style.height = `${heightPercent}%`;
-            mapCursor.style.top = `${heightPercent}%`;
-
-            stops.forEach(stop => {
-                const stopRect = stop.getBoundingClientRect();
-                const stopTopRelative = stopRect.top - rect.top;
-                const stopPercent = (stopTopRelative / rect.height);
-                if (percentage >= stopPercent - 0.05) {
-                    stop.classList.add('active');
-                } else {
-                    stop.classList.remove('active');
+            function step(now) {
+                for (const r of sim.reqs) {
+                    const el = r.el;
+                    const s = P.svc[r.svc];
+                    if (r.stage === 'in') {
+                        const t = (now - r.t0) / (HOP * 2);
+                        if (t >= 1) {
+                            if (r.svc === sim.crashed) {
+                                r.stage = 'fail'; r.t0 = now;
+                                el.setAttribute('class', 'd-err');
+                                el.setAttribute('r', '5');
+                                sim.errors.push(now);
+                            } else { r.stage = 'svc'; r.t0 = now; }
+                        } else {
+                            const p = along([P.client, P.gw, s], t);
+                            el.setAttribute('cx', p.x); el.setAttribute('cy', p.y);
+                        }
+                    } else if (r.stage === 'svc') {
+                        el.setAttribute('cx', s.x + 30); el.setAttribute('cy', s.y);
+                        if (now - r.t0 >= SVC_MS) { r.stage = 'todb'; r.t0 = now; }
+                    } else if (r.stage === 'todb') {
+                        const t = (now - r.t0) / HOP;
+                        if (t >= 1) {
+                            r.atDb = now; // latency counts server time only, not the on-screen travel
+                            if (sim.inDb < DB_SLOTS) startQuery(r, now);
+                            else { r.stage = 'queued'; sim.queue.push(r); }
+                        } else {
+                            const p = lerp(s, P.db, t);
+                            el.setAttribute('cx', p.x); el.setAttribute('cy', p.y);
+                        }
+                    } else if (r.stage === 'query') {
+                        el.setAttribute('cx', P.db.x - 36 + (r.svc * 7)); el.setAttribute('cy', P.db.y + 22);
+                        if (now - r.t0 >= r.dur) {
+                            sim.inDb--;
+                            sim.done.push({ at: now, ms: now - r.atDb + SVC_MS });
+                            r.stage = 'out'; r.t0 = now;
+                            el.setAttribute('class', 'd-res');
+                            const next = sim.queue.shift();
+                            if (next) startQuery(next, now);
+                        }
+                    } else if (r.stage === 'out') {
+                        const t = (now - r.t0) / (HOP * 3);
+                        if (t >= 1) r.stage = 'gone';
+                        else {
+                            const p = along([P.db, s, P.gw, P.client], t);
+                            el.setAttribute('cx', p.x); el.setAttribute('cy', p.y);
+                        }
+                    } else if (r.stage === 'fail') {
+                        const t = (now - r.t0) / 700;
+                        el.setAttribute('cx', s.x); el.setAttribute('cy', s.y - 26);
+                        el.style.opacity = String(Math.max(0, 1 - t));
+                        if (t >= 1) r.stage = 'gone';
+                    }
                 }
-            });
-        }
-        window.addEventListener('scroll', updateRoadmap);
-        updateRoadmap();
-
-        // --- 5. IDE Code Loader Logic ---
-        const codeSnippets = {
-            backend: `<span class="syntax-keyword">package</span> com.randika.skills;
-
-<span class="syntax-keyword">public class</span> <span class="syntax-class">BackendStack</span> {
-    <span class="syntax-keyword">private</span> List&lt;String&gt; core = List.of(<span class="syntax-string">"Java 17+"</span>, <span class="syntax-string">"Spring Boot"</span>);
-    <span class="syntax-keyword">private</span> List&lt;String&gt; web = List.of(<span class="syntax-string">"Spring MVC"</span>, <span class="syntax-string">"Java EE"</span>);
-    
-    <span class="syntax-comment">// IFS Cloud Framework</span>
-    <span class="syntax-keyword">public</span> <span class="syntax-class">Framework</span> getCloudFramework() {
-        <span class="syntax-keyword">return new</span> Aurena(); 
-    }
-    
-    <span class="syntax-comment">// Frontend Integration</span>
-    <span class="syntax-keyword">public</span> <span class="syntax-class">String</span> frontend = <span class="syntax-string">"React.js"</span>;
-}`,
-            cloud: `<span class="syntax-comment"># AWS & DevOps Configuration</span>
-services:
-  aws_stack:
-    instances: [<span class="syntax-string">"EC2"</span>, <span class="syntax-string">"RDS"</span>, <span class="syntax-string">"S3"</span>]
-    networking: <span class="syntax-string">"Load Balancers"</span>
-    
-  containerization:
-    runtime: <span class="syntax-string">"Docker"</span>
-    orchestration: <span class="syntax-string">"Kubernetes (Basic)"</span>
-
-  ci_cd_pipeline:
-    tool: <span class="syntax-string">"Jenkins"</span>
-    repo: <span class="syntax-string">"Git/GitHub"</span>`,
-            data: `<span class="syntax-comment">-- Database Optimization Skills</span>
-<span class="syntax-keyword">SELECT</span> * <span class="syntax-keyword">FROM</span> skills 
-<span class="syntax-keyword">WHERE</span> category = <span class="syntax-string">'Database'</span>;
-
-<span class="syntax-comment">-- Expertise:</span>
-<span class="syntax-comment">-- 1. Oracle: Advanced PL/SQL, Query Tuning</span>
-<span class="syntax-comment">-- 2. PostgreSQL: High Availability setup</span>
-<span class="syntax-comment">-- 3. IBM DB2: Legacy System Maintenance</span>
-
-<span class="syntax-keyword">OPTIMIZE</span> TABLE transactions;`,
-            process: `{
-  <span class="syntax-string">"methodologies"</span>: [
-    <span class="syntax-string">"Agile Scrum"</span>,
-    <span class="syntax-string">"TDD (Test Driven Development)"</span>
-  ],
-  <span class="syntax-string">"leadership"</span>: {
-    <span class="syntax-string">"team_size"</span>: 7,
-    <span class="syntax-string">"focus"</span>: <span class="syntax-string">"Code Quality & Efficiency"</span>
-  },
-  <span class="syntax-string">"impact"</span>: {
-    <span class="syntax-string">"efficiency_boost"</span>: <span class="syntax-string">"25%"</span>,
-    <span class="syntax-string">"quality_boost"</span>: <span class="syntax-string">"30%"</span>
-  }
-}`
-        };
-        
-        // Terminal Outputs mapping
-        const terminalOutputs = {
-            backend: `> Compiling BackendStack.java...
-> Success!
-> [INFO] Initializing Spring Boot application...
-> [INFO] Loaded Bean: BackendStack
-> [INFO] Skills found: Java, Spring Boot, Aurena, React.`,
-            cloud: `> Reading CloudConfig.yml...
-> Validating YAML syntax... OK
-> [INFO] Deploying to AWS EC2...
-> [INFO] Connecting to RDS instance... Connected.
-> [INFO] Docker container built successfully.`,
-            data: `> Executing query on 'skills' table...
-> 4 rows selected.
-> Analyzing query plan...
-> [OPTIMIZATION] Index usage confirmed.
-> [INFO] PL/SQL block executed successfully.`,
-            process: `> Parsing Process.json...
-> [INFO] Agile Methodology loaded.
-> [INFO] TDD workflow enabled.
-> [STATS] Team Efficiency increased by 25%.
-> [STATS] Code Quality increased by 30%.`
-        };
-
-        let currentCategory = 'backend';
-
-        function loadCode(category) {
-            currentCategory = category;
-            
-            // Sidebar active state
-            document.querySelectorAll('.file-explorer-item').forEach(el => el.classList.remove('active'));
-            const items = document.querySelectorAll('.file-explorer-item');
-            items.forEach(item => {
-                if(item.getAttribute('onclick').includes(category)) {
-                    item.classList.add('active');
-                }
-            });
-
-            // Update Code Content
-            const codeBlock = document.getElementById('code-content');
-            codeBlock.style.opacity = '0';
-            setTimeout(() => {
-                codeBlock.innerHTML = codeSnippets[category];
-                codeBlock.style.opacity = '1';
-                // Clear terminal on new file load
-                document.getElementById('terminal-output').innerHTML = '<div class="mb-1">Randika@Portfolio:~$ <span class="terminal-prompt">ready</span></div>';
-            }, 100);
-        }
-        
-        function runCode() {
-            const term = document.getElementById('terminal-output');
-            const outputText = terminalOutputs[currentCategory];
-            
-            // Add "Running..." line
-            term.innerHTML += `<div>Randika@Portfolio:~$ <span class="text-yellow-400">./run ${currentCategory}</span></div>`;
-            term.scrollTop = term.scrollHeight;
-            
-            // Simulate delay
-            setTimeout(() => {
-                const lines = outputText.split('\n');
-                lines.forEach((line, index) => {
-                    setTimeout(() => {
-                        let colorClass = 'text-gray-300';
-                        if(line.includes('[INFO]')) colorClass = 'text-blue-400';
-                        if(line.includes('[STATS]')) colorClass = 'text-green-400';
-                        if(line.includes('Success')) colorClass = 'terminal-success';
-                        
-                        term.innerHTML += `<div class="${colorClass}">${line}</div>`;
-                        term.scrollTop = term.scrollHeight;
-                    }, index * 300);
+                // Waiting requests line up beside Oracle
+                sim.queue.forEach((r, k) => {
+                    r.el.setAttribute('cx', P.db.x + 72 + (k % 8) * 8);
+                    r.el.setAttribute('cy', P.db.y + 8 + Math.floor(k / 8) * 8);
                 });
-                
-                // Final prompt
-                setTimeout(() => {
-                     term.innerHTML += `<div class="mt-2">Randika@Portfolio:~$ <span class="terminal-prompt blink">_</span></div>`;
-                     term.scrollTop = term.scrollHeight;
-                }, lines.length * 300 + 100);
-                
-            }, 500);
-        }
+                sim.reqs = sim.reqs.filter(r => {
+                    if (r.stage !== 'gone') return true;
+                    r.el.remove();
+                    return false;
+                });
+                $('n-db').classList.toggle('hot', sim.queue.length > 0);
+            }
 
-        // --- 6. Roadmap Focus Logic (Blur Syntax Trail) ---
-        const roadmapSection = document.getElementById('roadmap');
-        const syntaxContainerEl = document.getElementById('syntax-container');
+            let lastMetrics = 0;
+            function metrics(now) {
+                if (now - lastMetrics < 300) return;
+                lastMetrics = now;
+                sim.done = sim.done.filter(d => now - d.at < 3000);
+                sim.errors = sim.errors.filter(at => now - at < 6000);
+                const rps = sim.done.filter(d => now - d.at < 2000).length / 2;
+                const sorted = sim.done.map(d => d.ms).sort((a, b) => a - b);
+                const p95 = sorted.length ? sorted[Math.min(sorted.length - 1, Math.floor(sorted.length * 0.95))] : 0;
+                $('m-rps').textContent = rps.toFixed(rps < 10 ? 1 : 0);
+                $('m-p95').textContent = `${Math.round(p95)} ms`;
+                $('m-p95').classList.toggle('bad', p95 > 500);
+                $('m-err').textContent = sim.errors.length;
+                $('m-err').classList.toggle('bad', sim.errors.length > 0);
+            }
 
-        const blurObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    syntaxContainerEl.classList.add('blurred');
-                } else {
-                    syntaxContainerEl.classList.remove('blurred');
+            // Scripted events
+            function events(now) {
+                if (sim.spikeUntil && now > sim.spikeUntil) {
+                    sim.spikeUntil = 0;
+                    $('b-spike').disabled = false;
+                    say(sim.slow ? 'Traffic is back to normal and the queue drains. The slow query is still there, waiting for the next spike.' : 'Traffic is back to normal.');
                 }
+                if (sim.crashed >= 0) {
+                    const since = now - sim.crashAt;
+                    if (since > 1500 && !sim.rerouted) {
+                        sim.rerouted = true;
+                        say('The health check caught it. The gateway now sends traffic only to the two healthy instances.');
+                    }
+                    if (since > 7000) {
+                        $(`n-s${sim.crashed}`).classList.remove('down');
+                        sim.crashed = -1;
+                        sim.rerouted = false;
+                        $('b-crash').disabled = false;
+                        say('The instance restarted and is back in rotation. No one had to be woken up.');
+                    }
+                }
+            }
+
+            $('b-spike').addEventListener('click', () => {
+                sim.spikeUntil = performance.now() + 9000;
+                $('b-spike').disabled = true;
+                say(sim.slow
+                    ? 'Traffic just quadrupled. Oracle runs only 4 queries at once, and each takes 240 ms, so requests start to queue. Watch the slowest 5% climb.'
+                    : 'Traffic just quadrupled. With the query fixed, Oracle keeps up easily and nothing queues.');
             });
-        }, { threshold: 0.15 }); // Trigger when 15% of roadmap is visible
+            $('b-fix').addEventListener('click', () => {
+                sim.slow = false;
+                $('db-sub').textContent = `query ${FAST_MS} ms`;
+                $('b-fix').disabled = true;
+                $('b-fix').textContent = 'Query fixed';
+                say('I read the execution plan, found a full table scan and added the right index. The query drops from 240 ms to 20 ms.');
+            });
+            $('b-crash').addEventListener('click', () => {
+                const now = performance.now();
+                sim.crashed = 1;
+                sim.crashAt = now;
+                sim.rerouted = false;
+                $('n-s1').classList.add('down');
+                $('b-crash').disabled = true;
+                // Requests already inside that instance are lost
+                sim.reqs.forEach(r => {
+                    if (r.svc === 1 && (r.stage === 'svc' || r.stage === 'todb')) {
+                        r.stage = 'fail'; r.t0 = now;
+                        r.el.setAttribute('class', 'd-err'); r.el.setAttribute('r', '5');
+                        sim.errors.push(now);
+                    }
+                });
+                say('Instance 2 just crashed. A few requests fail until the gateway\'s health check notices.');
+            });
+            $('b-reset').addEventListener('click', reset);
 
-        blurObserver.observe(roadmapSection);
-
+            // Run only while visible
+            let visible = true, last = performance.now();
+            new IntersectionObserver(([e]) => { visible = e.isIntersecting; }).observe(svg);
+            function loop(now) {
+                requestAnimationFrame(loop);
+                const dt = Math.min(now - last, 100);
+                last = now;
+                if (!visible || document.hidden) return;
+                const rate = sim.spikeUntil ? SPIKE_RATE : BASE_RATE;
+                sim.carry += rate * dt / 1000;
+                while (sim.carry >= 1) { sim.carry -= 1; spawn(now); }
+                step(now);
+                metrics(now);
+                events(now);
+            }
+            reset();
+            requestAnimationFrame(loop);
+        })();
     </script>
 
 </body>

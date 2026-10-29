@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Career Street, by Randika Abeyrathna</title>
+    <meta name="description" content="Walk down Career Street: a small 3D town where every building is a place Randika Abeyrathna, Lead Software Engineer, has worked or studied.">
+    <meta name="theme-color" content="#c9dbe6">
+    <link rel="canonical" href="https://randika.me/world.html">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://randika.me/world.html">
+    <meta property="og:title" content="Career Street: walk through Randika Abeyrathna's career">
+    <meta property="og:description" content="A small 3D town where every building is a place I've worked or studied. Make the calls I made, and catch the bugs.">
+    <meta property="og:image" content="https://randika.me/assets/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --paper: #f7f3ea;
+            --ink: #1f2024;
+            --grey: #6a6c72;
+            --line: #1f2024;
+            --signal: #e2552b;
+            --good: #2f7a4a;
+            --font: 'Schibsted Grotesk', 'Helvetica Neue', Arial, sans-serif;
+        }
+        *, *::before, *::after { box-sizing: border-box; }
+        html, body { margin: 0; height: 100%; overflow: hidden; }
+        body { background: #c9dbe6; color: var(--ink); font-family: var(--font); -webkit-font-smoothing: antialiased; user-select: none; }
+        a { color: inherit; }
+        button { font: inherit; color: inherit; }
+        #scene { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; outline: none; }
+
+        .panel { background: var(--paper); border: 2px solid var(--line); border-radius: 10px; box-shadow: 0 3px 0 var(--line); }
+        .btn {
+            display: inline-block; border: 2px solid var(--line); border-radius: 8px; background: var(--paper);
+            padding: 9px 16px; font-weight: 700; font-size: 15px; cursor: pointer; text-decoration: none;
+            box-shadow: 0 3px 0 var(--line); transition: transform 0.08s, box-shadow 0.08s;
+        }
+        .btn:hover { background: #fff; }
+        .btn:active { transform: translateY(3px); box-shadow: 0 0 0 var(--line); }
+        .btn.primary { background: var(--signal); color: #fff; }
+        .btn[disabled] { opacity: 0.5; cursor: wait; }
+
+        .hud { position: fixed; top: 14px; left: 14px; z-index: 5; padding: 12px 16px; min-width: 220px; }
+        .hud h1 { margin: 0; font-size: 18px; font-weight: 800; letter-spacing: -0.02em; }
+        .meters { display: grid; grid-template-columns: auto auto; gap: 2px 14px; margin-top: 8px; font-size: 14px; }
+        .meters b { font-variant-numeric: tabular-nums; text-align: right; }
+        .top-links { position: fixed; top: 14px; right: 14px; z-index: 5; display: flex; gap: 8px; }
+        .top-links .btn { padding: 7px 12px; font-size: 14px; }
+        .top-links .btn[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+        .minimap { position: fixed; top: 64px; right: 14px; z-index: 5; width: 160px; height: 160px; padding: 0; border: 0; border-radius: 50%; background: transparent; box-shadow: none; }
+        .bubble {
+            position: fixed; left: 0; top: 0; z-index: 4; pointer-events: none;
+            max-width: 220px; padding: 7px 11px; border: 2px solid var(--line); border-radius: 10px;
+            background: var(--paper); font-size: 13px; font-weight: 600; line-height: 1.3;
+            opacity: 0; transition: opacity 0.25s; will-change: transform;
+        }
+        .bubble::after {
+            content: ''; position: absolute; left: 50%; bottom: -8px; width: 12px; height: 12px; margin-left: -6px;
+            background: var(--paper); border-right: 2px solid var(--line); border-bottom: 2px solid var(--line);
+            transform: rotate(45deg);
+        }
+        .bubble.show { opacity: 1; }
+        .photo-title {
+            position: fixed; left: 40px; bottom: 40px; z-index: 9; padding: 18px 24px 20px;
+            background: var(--paper); border: 3px solid var(--line); border-radius: 14px; box-shadow: 0 5px 0 var(--line);
+        }
+        .photo-title b { display: block; font-size: 46px; font-weight: 800; letter-spacing: -0.035em; line-height: 1; }
+        .photo-title span { display: block; margin-top: 8px; font-size: 21px; font-weight: 500; color: var(--grey); }
+        body.photo .panel, body.photo .top-links, body.photo .intro, body.photo .stick, body.photo .jump-btn, body.photo #bubbles { display: none !important; }
+        .keys { position: fixed; left: 14px; bottom: 14px; z-index: 5; padding: 8px 12px; font-size: 13px; line-height: 1.7; }
+        .keys kbd { font: 700 12px var(--font); border: 1.5px solid var(--line); border-radius: 4px; padding: 0 5px; background: #fff; }
+        .toast { position: fixed; top: 18px; left: 50%; transform: translate(-50%, -160%); z-index: 8; padding: 10px 16px; font-weight: 700; font-size: 15px; transition: transform 0.25s; white-space: nowrap; }
+        .toast.show { transform: translate(-50%, 0); }
+
+        .card {
+            position: fixed; right: 14px; bottom: 14px; z-index: 6;
+            width: min(400px, calc(100vw - 28px)); max-height: calc(100vh - 110px); overflow-y: auto;
+            padding: 18px 20px 20px; transform: translateX(calc(100% + 40px));
+            transition: transform 0.3s cubic-bezier(.2,.8,.3,1); user-select: text;
+        }
+        .card.open { transform: none; }
+        .card .kicker { font-size: 13px; color: var(--grey); }
+        .card h2 { margin: 4px 0 2px; font-size: 24px; line-height: 1.1; letter-spacing: -0.02em; font-weight: 800; }
+        .card .role { font-size: 15px; font-weight: 500; }
+        .card ul { margin: 14px 0 0; padding: 0; list-style: none; }
+        .card li { position: relative; padding-left: 16px; font-size: 15px; line-height: 1.45; }
+        .card li + li { margin-top: 7px; }
+        .card li::before { content: ''; position: absolute; left: 0; top: 0.55em; width: 6px; height: 6px; border-radius: 50%; background: var(--signal); }
+        .card .stack { margin-top: 12px; font-size: 13px; color: var(--grey); }
+        .card .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+        .card .q { font-size: 17px; font-weight: 700; line-height: 1.3; margin-top: 10px; }
+        .options { display: grid; gap: 8px; margin-top: 14px; }
+        .option { text-align: left; padding: 10px 12px; cursor: pointer; border: 2px solid var(--line); border-radius: 8px; background: #fff; font-size: 15px; line-height: 1.35; }
+        .option:hover { background: #fff7e8; }
+        .result { margin-top: 14px; padding: 12px; border: 2px solid var(--line); border-radius: 8px; background: #fff; font-size: 15px; line-height: 1.45; }
+        .result strong { display: block; margin-bottom: 4px; }
+        .result.good strong { color: var(--good); }
+        .result.bad strong { color: var(--signal); }
+        .done-tag { display: inline-block; margin-top: 14px; font-size: 13px; font-weight: 700; padding: 3px 8px; border: 2px solid var(--line); border-radius: 6px; }
+
+        .intro { position: fixed; inset: 0; z-index: 10; display: grid; place-items: center; background: rgba(201, 219, 230, 0.35); padding: 16px; transition: opacity 0.5s; }
+        .intro.hidden { opacity: 0; pointer-events: none; }
+        .intro .panel { max-width: 540px; padding: 28px 28px 24px; }
+        .intro h2 { margin: 0; font-size: clamp(30px, 6vw, 46px); line-height: 0.95; letter-spacing: -0.04em; font-weight: 800; }
+        .intro p { margin: 14px 0 0; font-size: 16px; line-height: 1.5; }
+        .intro .rules { margin: 16px 0 0; padding: 12px 14px; border: 2px solid var(--line); border-radius: 8px; background: #fff; font-size: 14px; line-height: 1.65; }
+        .intro .actions { display: flex; flex-wrap: wrap; gap: 10px 16px; margin-top: 22px; align-items: center; }
+        .intro .actions a { font-size: 14px; text-underline-offset: 3px; }
+        .progress { height: 6px; border: 2px solid var(--line); border-radius: 99px; margin-top: 18px; overflow: hidden; background: #fff; }
+        .progress i { display: block; height: 100%; width: 0; background: var(--signal); transition: width 0.2s; }
+
+        /* Touch: joystick on the left, jump on the right */
+        .stick { position: fixed; left: 22px; bottom: 22px; width: 120px; height: 120px; border-radius: 50%; z-index: 7; display: none; background: rgba(247, 243, 234, 0.6); border: 2px solid var(--line); touch-action: none; }
+        .stick i { position: absolute; left: 50%; top: 50%; width: 52px; height: 52px; margin: -26px 0 0 -26px; border-radius: 50%; background: var(--paper); border: 2px solid var(--line); box-shadow: 0 3px 0 var(--line); }
+        .jump-btn { position: fixed; right: 22px; bottom: 30px; z-index: 7; display: none; width: 76px; height: 76px; border-radius: 50%; border: 2px solid var(--line); background: var(--paper); box-shadow: 0 3px 0 var(--line); font-weight: 800; touch-action: none; }
+        @media (hover: none) and (pointer: coarse) {
+            .stick, .jump-btn { display: block; }
+            .keys { display: none; }
+            .card { bottom: 160px; }
+        }
+        @media (max-width: 640px) {
+            .hud { min-width: 0; padding: 8px 12px; top: 10px; left: 10px; }
+            .hud h1 { font-size: 16px; }
+            .meters { font-size: 13px; }
+            .top-links { top: 10px; right: 10px; }
+            .top-links .btn { padding: 5px 9px; font-size: 13px; }
+            .top-links .opt { display: none; }
+        }
+        @media (max-width: 480px) {
+            .hud h1 { display: none; }
+            .hud .meters { margin-top: 0; font-size: 12px; gap: 0 10px; }
+            .top-links { flex-direction: column; align-items: flex-end; gap: 6px; }
+            .minimap { top: 86px; }
+            .minimap { top: 52px; right: 10px; width: 104px; height: 104px; }
+            .card { right: 10px; left: 10px; width: auto; max-height: 45vh; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="scene" tabindex="0"></canvas>
+
+    <div class="panel hud">
+        <h1>Career Street</h1>
+        <div class="meters">
+            <span>Places visited</span><b id="m-visited">0/10</b>
+            <span>Calls matched</span><b id="m-calls">0/7</b>
+            <span>Bugs caught</span><b id="m-bugs">0/10</b>
+            <span>Time</span><b id="m-time">0:00</b>
+        </div>
+    </div>
+
+    <div class="top-links">
+        <button class="btn" id="btn-night" aria-pressed="false">Night</button>
+        <button class="btn opt" id="btn-sound" aria-pressed="false">Sound off</button>
+        <a class="btn" href="index.html">Plain version</a>
+        <a class="btn opt" href="mailto:randika.l.abeyrathna@gmail.com">Email</a>
+    </div>
+    <canvas class="panel minimap" id="minimap" width="320" height="320" aria-hidden="true"></canvas>
+    <div id="bubbles" aria-hidden="true"></div>
+
+    <div class="panel keys">
+        <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> walk &nbsp; <kbd>Shift</kbd> run &nbsp; <kbd>Space</kbd> jump<br>
+        Drag to look around, scroll to zoom
+    </div>
+    <div class="panel toast" id="toast"></div>
+    <div class="panel card" id="card" aria-live="polite"></div>
+    <div class="stick" id="stick"><i></i></div>
+    <button class="jump-btn" id="jump-btn">Jump</button>
+
+    <div class="intro" id="intro">
+        <div class="panel">
+            <h2>Welcome to Career Street.</h2>
+            <p>
+                I'm Randika Abeyrathna, a Lead Software Engineer from Kandy, Sri Lanka. This little town is my
+                career. Walk up the street from 2017 to today, and stop at any building to read about it.
+            </p>
+            <div class="rules">
+                At seven places a colleague will hand you a real situation from that job. Make your call, then see what I did.<br>
+                Ten bugs have escaped into town. Catch them all.
+            </div>
+            <div class="progress"><i id="progress"></i></div>
+            <div class="actions">
+                <button class="btn primary" id="start" disabled>Loading the town</button>
+                <a href="index.html">Rather read a normal page?</a>
+            </div>
+        </div>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+        import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+        import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js';
+        import { Water } from 'three/addons/objects/Water.js';
+        import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+        import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+        import { GTAOPass } from 'three/addons/postprocessing/GTAOPass.js';
+        import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+        // =====================================================================
+        // Content
+        // =====================================================================
+        // side: 'L' / 'R' of Career Street, or a custom placement.
+        const STATIONS = [
+            {
+                id: 'swarna', model: 'city/building-c', side: 'L', z: 38, npc: 'female-a',
+                kicker: '2017 to 2019', title: 'Swarnamahal Financial Services', role: 'Associate Software Engineer',
+                body: [
+                    'Developed and maintained the Pawning Management System used across 17 branches.',
+                    'Designed and built the HR Management System for 500+ employees.',
+                    'Maintained the InBank administration system and other internal Java and Oracle apps.',
+                ],
+                stack: 'Java, Oracle',
+                decision: {
+                    q: 'One branch asks for a change to the pawning system that only suits them. What do you do?',
+                    options: ['Build it just for that branch', 'Talk to the business users, work out what every branch needs, then build that', 'Say no and move on'],
+                    answer: 1,
+                    did: 'I worked closely with business users to gather requirements, then shipped enhancements that worked for all 17 branches.',
+                },
+            },
+            {
+                id: 'uni', model: 'city/building-k', side: 'R', z: 42, npc: 'male-b',
+                kicker: 'Education', title: 'University', role: 'Two degrees',
+                body: [
+                    'MSc in Information Technology, Cardiff Metropolitan University. Distinction.',
+                    'B.Eng. in Software Engineering, IIC University of Technology. Second Upper Class.',
+                ],
+            },
+            {
+                id: 'silverlake', model: 'city/building-f', side: 'R', z: 24, npc: 'male-a',
+                kicker: '2019 to 2021', title: 'Silverlake Digital Economy', role: 'Software Engineer, via Just In Time Group',
+                body: [
+                    'Built and supported the digital banking platform for People\'s Bank Sri Lanka.',
+                    'Developed Java, Spring Boot and DB2 applications for new business requirements.',
+                    'Production support: investigating incidents, fixing defects and deploying updates.',
+                ],
+                stack: 'Java, Spring Boot, IBM DB2, WebSphere, RabbitMQ',
+                decision: {
+                    q: 'A defect shows up in the live banking app. What is your first move?',
+                    options: ['Deploy a quick guess at a fix', 'Investigate the incident and find the actual cause', 'Wait for the next scheduled release'],
+                    answer: 1,
+                    did: 'On a banking system you investigate first. I traced incidents, fixed the real defect, and then deployed the update.',
+                },
+            },
+            {
+                id: 'hcl', model: 'city/building-skyscraper-c', side: 'L', z: 20, npc: 'female-b',
+                kicker: '2021 to 2024', title: 'HCL Technologies', role: 'Senior Software Engineer, healthcare',
+                body: [
+                    'Designed, built and maintained Spring Boot microservices on Oracle for healthcare systems.',
+                    'Traced complex production issues to the root cause and shipped permanent fixes.',
+                    'Tuned Oracle SQL and backend services for performance and scale.',
+                ],
+                stack: 'Java, Spring Boot, microservices, Oracle',
+                decision: {
+                    q: 'The same production issue in a healthcare system keeps coming back every few weeks.',
+                    options: ['Restart the service on a schedule', 'Add more servers', 'Trace it to the root cause and fix it for good'],
+                    answer: 2,
+                    did: 'I analysed root causes and put permanent fixes in place, so the same issue stopped coming back.',
+                },
+            },
+            {
+                id: 'skills', model: 'city/building-d', place: { x: -24, z: 15, rot: Math.PI }, npc: 'male-c',
+                kicker: 'Toolbox', title: 'The Workshop', role: 'What I build with',
+                body: [
+                    'Languages: Java, JavaScript, PL/SQL, SQL.',
+                    'Backend: Spring Boot, Spring MVC, Spring Security, REST APIs, microservices, Java EE, JSP, IFS Cloud Aurena.',
+                    'Databases: Oracle, PostgreSQL, IBM DB2.',
+                    'Cloud and DevOps: AWS (EC2, RDS, S3, Route 53, SNS, SQS), Docker, Jenkins, CI/CD, Git, GitHub, Bitbucket.',
+                    'Ways of working: Agile, Scrum, TDD, code review, mentoring.',
+                ],
+            },
+            {
+                id: 'ai', model: 'city/building-g', place: { x: 24, z: -3, rot: 0 }, npc: 'female-d',
+                kicker: 'How I work', title: 'AI Lab', role: 'AI tools in my day-to-day work',
+                body: [
+                    'I use AI tools like a quick pair programmer. I still make the design calls, and I own what ships.',
+                    'Day to day: reading legacy Java and JSP before migrating it, drafting tests, checking SQL, and a first-pass review before a pull request.',
+                    'With my team: AI-written code gets the same review as anything else, and no customer data or secrets go into prompts.',
+                ],
+                decision: {
+                    q: 'An AI assistant hands you a neat-looking fix for a bug.',
+                    options: ['Merge it, it looks right', 'Review and test it like any other change', 'Never use AI tools'],
+                    answer: 1,
+                    did: 'AI speeds me up, but its code goes through the same review and tests as anyone else\'s.',
+                },
+            },
+            {
+                id: 'mexxar', model: 'city/building-h', side: 'R', z: -8, npc: 'male-b',
+                kicker: '2024', title: 'MEXXAR', role: 'Senior Software Engineer, Kandy',
+                body: [
+                    'Technical lead for a backend team of five: sprint planning, task assignment, code review and mentoring.',
+                    'Designed the backend architecture and built Spring Boot microservices.',
+                    'Ran deployment pipelines and the AWS infrastructure for production releases.',
+                ],
+                stack: 'Spring Boot, microservices, AWS, CI/CD, Jira',
+                decision: {
+                    q: 'You lead a team of five and nobody can see what is in progress or what is late.',
+                    options: ['Bring in Agile sprint planning on Jira', 'Ask everyone for a daily status email', 'Do the urgent work yourself'],
+                    answer: 0,
+                    did: 'I introduced Agile practices and Jira-based sprint planning, which made tracking and delivery much clearer.',
+                },
+            },
+            {
+                id: 'ifs1', model: 'city/building-skyscraper-a', side: 'L', z: -16, npc: 'female-a',
+                kicker: '2024 to 2025', title: 'IFS', role: 'Senior Software Engineer, via Just In Time Group',
+                body: [
+                    'Migrated legacy Java and JSP modules to the IFS Cloud Aurena framework.',
+                    'Redesigned Java EE implementations to fit the IFS Cloud architecture.',
+                    'Designed and tuned Oracle SQL, views and PL/SQL components.',
+                ],
+                stack: 'Java EE, JSP, Oracle, PL/SQL',
+                decision: {
+                    q: 'You are migrating an old JSP module to IFS Cloud Aurena. How do you approach it?',
+                    options: ['Rewrite it from scratch and add new features while you are at it', 'Keep the business behaviour exactly, and redesign it to fit the new architecture', 'Wrap the old page so it shows up inside the new one'],
+                    answer: 1,
+                    did: 'Customers depend on how the old module behaves. I kept that behaviour and redesigned the code to fit Aurena.',
+                },
+            },
+            {
+                id: 'ifs2', model: 'city/building-skyscraper-e', side: 'R', z: -28, npc: 'male-a',
+                kicker: '2025 to now', title: 'IFS', role: 'Lead Software Engineer, via Just In Time Group',
+                body: [
+                    'Lead the engineering team: planning, estimating stories, code review and mentoring, while staying hands-on.',
+                    'Key part of a large modernisation effort, moving legacy modules onto IFS Cloud Aurena.',
+                    'Fix performance problems by reading execution plans, rewriting SQL and redesigning views.',
+                ],
+                stack: 'Java EE, IFS Cloud Aurena, Oracle, PL/SQL',
+                decision: {
+                    q: 'An important Oracle screen has become slow. Where do you start?',
+                    options: ['Add indexes to every column it touches', 'Cache everything', 'Read the execution plan and see what the database is actually doing'],
+                    answer: 2,
+                    did: 'I start with the execution plan. It shows the real problem, then I optimise the SQL or redesign the view.',
+                },
+            },
+            {
+                id: 'mail', model: 'suburban/building-type-g', place: { x: 0, z: -58, rot: 0 }, npc: null,
+                kicker: 'End of the street', title: 'Get in touch', role: 'Want me on your team?',
+                body: [
+                    'I\'m open to backend, cloud migration and system architecture work.',
+                    'Based in Kandy, Sri Lanka.',
+                ],
+                contact: true,
+            },
+        ];
+
+        // What each colleague says when you walk up
+        const LINES = {
+            swarna: 'Seventeen branches, one system. Opening time is the busy hour.',
+            uni: 'The library still has your thesis on the shelf.',
+            silverlake: 'Quiet night in production. Let\'s keep it that way.',
+            hcl: 'If it broke twice, it has a root cause.',
+            skills: 'Every tool in here has been used in production.',
+            ai: 'The assistant wrote it. Someone still has to review it.',
+            mexxar: 'Sprint planning at ten. Bring your estimates.',
+            ifs1: 'Same behaviour, new architecture. That\'s the rule.',
+            ifs2: 'Before you add an index, read the execution plan.',
+        };
+
+        const S = 4.2;                 // city kit scale: one road tile = S units
+        const CHAR_SCALE = 1.35;
+        const ROAD_HALF = 4, WALK_OUT = 7.2, CURB = 0.16;
+        const STREET = { zStart: 56, zEnd: -50 };
+        const CROSS = { z: 6, x0: -44, x1: 44 };
+        const LAKE = { x: 44, z: -16, r: 13 };
+        const WORLD_R = 70;
+        const PLAZA = { x: 0, z: 64, r: 10 };
+        const SPAWN = new THREE.Vector3(0, CURB, 58.5);
+        const BUG_COUNT = 10;
+        const DECISION_COUNT = STATIONS.filter(s => s.decision).length;
+        const isTouch = matchMedia('(hover: none) and (pointer: coarse)').matches;
+        const quality = isTouch || window.innerWidth < 800 ? 'low' : 'high';
+
+        // =====================================================================
+        // Renderer and scene
+        // =====================================================================
+        const canvas = document.getElementById('scene');
+        let renderer;
+        try {
+            renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+        } catch (err) {
+            document.querySelector('.intro .rules').textContent = 'This town needs WebGL, which your browser has turned off. The plain version has everything.';
+            throw err;
+        }
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, quality === 'high' ? 2 : 1.5));
+        renderer.outputColorSpace = THREE.SRGBColorSpace;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 0.95;
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color('#c9dbe6');
+        scene.fog = new THREE.Fog('#dce7ee', 110, 320);
+
+        const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 600);
+        camera.position.set(0, 8, 64);
+
+        const sun = new THREE.DirectionalLight('#fff2df', 2.6);
+        sun.castShadow = true;
+        sun.shadow.mapSize.set(quality === 'high' ? 4096 : 2048, quality === 'high' ? 4096 : 2048);
+        Object.assign(sun.shadow.camera, { left: -38, right: 38, top: 38, bottom: -38, near: 1, far: 160 });
+        sun.shadow.bias = -0.0004;
+        sun.shadow.normalBias = 0.03;
+        const SUN_DIR = new THREE.Vector3(-0.55, 0.75, 0.35).normalize();
+        scene.add(sun, sun.target);
+        const hemi = new THREE.HemisphereLight('#dfeaf2', '#7d8a5a', 0.35);
+        scene.add(hemi);
+
+        // =====================================================================
+        // Loading
+        // =====================================================================
+        const manager = new THREE.LoadingManager();
+        const progressEl = document.getElementById('progress');
+        manager.onProgress = (url, loaded, total) => { progressEl.style.width = `${Math.round((loaded / total) * 100)}%`; };
+        const gltfLoader = new GLTFLoader(manager);
+        const cache = new Map();
+        function loadModel(name) {
+            if (!cache.has(name)) cache.set(name, gltfLoader.loadAsync(`assets/models/${name}.glb`));
+            return cache.get(name);
+        }
+        function prep(obj) {
+            obj.traverse(o => {
+                if (o.isMesh) {
+                    o.castShadow = true;
+                    o.receiveShadow = true;
+                    if (o.material && o.material.map) o.material.map.anisotropy = 8;
+                }
+            });
+            return obj;
+        }
+        async function place(name, x, z, { rot = 0, scale = S, y = 0 } = {}) {
+            const gltf = await loadModel(name);
+            const obj = prep(gltf.scene.clone(true));
+            obj.scale.setScalar(scale);
+            obj.position.set(x, y, z);
+            obj.rotation.y = rot;
+            scene.add(obj);
+            return obj;
+        }
+
+        // =====================================================================
+        // Ground, roads and sidewalks (flat surfaces are drawn here; everything standing is a model)
+        // =====================================================================
+        function noiseTexture(base, spread, size = 512, repeat = 1) {
+            const c = document.createElement('canvas');
+            c.width = c.height = size;
+            const g = c.getContext('2d');
+            g.fillStyle = base; g.fillRect(0, 0, size, size);
+            const col = new THREE.Color(base);
+            for (let i = 0; i < size * size / 30; i++) {
+                const t = (Math.random() - 0.5) * spread;
+                g.fillStyle = `rgb(${Math.round(Math.min(255, Math.max(0, (col.r + t) * 255)))},${Math.round(Math.min(255, Math.max(0, (col.g + t * 1.1) * 255)))},${Math.round(Math.min(255, Math.max(0, (col.b + t * 0.6) * 255)))})`;
+                g.fillRect(Math.random() * size, Math.random() * size, 2, 2);
+            }
+            const tex = new THREE.CanvasTexture(c);
+            tex.colorSpace = THREE.SRGBColorSpace;
+            tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+            tex.repeat.set(repeat, repeat);
+            tex.anisotropy = 8;
+            return tex;
+        }
+
+        const grassMat = new THREE.MeshStandardMaterial({ map: noiseTexture('#86ad5a', 0.12, 512, 60), roughness: 1 });
+        const ground = new THREE.Mesh(new THREE.CircleGeometry(260, 96), grassMat);
+        ground.rotation.x = -Math.PI / 2;
+        ground.receiveShadow = true;
+        scene.add(ground);
+
+        const asphaltMat = new THREE.MeshStandardMaterial({ map: noiseTexture('#55575c', 0.025, 512, 1), roughness: 0.9 });
+        const walkMat = new THREE.MeshStandardMaterial({ map: noiseTexture('#d3cec4', 0.025, 512, 1), roughness: 0.85 });
+        const curbMat = new THREE.MeshStandardMaterial({ color: '#b9b4aa', roughness: 0.8 });
+        const paintMat = new THREE.MeshStandardMaterial({ color: '#f3efe4', roughness: 0.7 });
+
+        function slab(w, d, x, z, y, h, material) {
+            const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), material);
+            m.position.set(x, y - h / 2, z);
+            m.receiveShadow = true;
+            scene.add(m);
+            return m;
+        }
+        function repeatMap(m, w, d, unit) {
+            const mat = m.material.clone();
+            mat.map = m.material.map.clone();
+            mat.map.needsUpdate = true;
+            mat.map.repeat.set(w / unit, d / unit);
+            m.material = mat;
+        }
+        // Main street (north-south) and cross street (east-west)
+        const streetLen = STREET.zStart - STREET.zEnd;
+        repeatMap(slab(ROAD_HALF * 2, streetLen, 0, (STREET.zStart + STREET.zEnd) / 2, 0.02, 0.05, asphaltMat), ROAD_HALF * 2, streetLen, 8);
+        repeatMap(slab(CROSS.x1 - CROSS.x0, ROAD_HALF * 2, 0, CROSS.z, 0.021, 0.05, asphaltMat), CROSS.x1 - CROSS.x0, ROAD_HALF * 2, 8);
+        // A turning circle at the north end
+        const circle = new THREE.Mesh(new THREE.CylinderGeometry(9, 9, 0.05, 48), asphaltMat);
+        circle.position.set(0, -0.005, STREET.zEnd);
+        circle.receiveShadow = true;
+        scene.add(circle);
+
+        // Sidewalk strips (stored for height lookups)
+        const walks = [];
+        function sidewalk(x0, x1, z0, z1) {
+            const w = x1 - x0, d = z1 - z0;
+            if (w <= 0 || d <= 0) return;
+            const m = slab(w, d, (x0 + x1) / 2, (z0 + z1) / 2, CURB, CURB + 0.05, walkMat);
+            repeatMap(m, w, d, 6);
+            walks.push({ x0, x1, z0, z1 });
+        }
+        const cz0 = CROSS.z - ROAD_HALF, cz1 = CROSS.z + ROAD_HALF;
+        [-1, 1].forEach(side => {
+            const xa = side < 0 ? -WALK_OUT : ROAD_HALF, xb = side < 0 ? -ROAD_HALF : WALK_OUT;
+            sidewalk(xa, xb, cz1, STREET.zStart);                 // south of the crossing
+            sidewalk(xa, xb, STREET.zEnd + 6, cz0);               // north of the crossing
+            const za = side < 0 ? cz0 - (WALK_OUT - ROAD_HALF) : cz1, zb = side < 0 ? cz0 : cz1 + (WALK_OUT - ROAD_HALF);
+            sidewalk(CROSS.x0, -WALK_OUT, za, zb);
+            sidewalk(WALK_OUT, CROSS.x1, za, zb);
+        });
+        // Fill the corners of the crossing
+        [[-WALK_OUT, -ROAD_HALF], [ROAD_HALF, WALK_OUT]].forEach(([x0, x1]) => {
+            sidewalk(x0, x1, cz0 - (WALK_OUT - ROAD_HALF), cz0);
+            sidewalk(x0, x1, cz1, cz1 + (WALK_OUT - ROAD_HALF));
+        });
+
+        // Lane markings
+        const dash = new THREE.BoxGeometry(0.18, 0.02, 1.6);
+        const dashes = new THREE.InstancedMesh(dash, paintMat, 200);
+        let di = 0;
+        const m4 = new THREE.Matrix4();
+        for (let z = STREET.zStart - 2; z > STREET.zEnd + 8; z -= 4) {
+            if (Math.abs(z - CROSS.z) < ROAD_HALF + 3) continue;
+            dashes.setMatrixAt(di++, m4.makeTranslation(0, 0.05, z));
+        }
+        const rotY = new THREE.Matrix4().makeRotationY(Math.PI / 2);
+        for (let x = CROSS.x0 + 2; x < CROSS.x1; x += 4) {
+            if (Math.abs(x) < ROAD_HALF + 3) continue;
+            dashes.setMatrixAt(di++, new THREE.Matrix4().makeTranslation(x, 0.05, CROSS.z).multiply(rotY));
+        }
+        dashes.count = di;
+        scene.add(dashes);
+        // Zebra crossings at the intersection
+        const zebra = new THREE.BoxGeometry(0.7, 0.02, 2.6);
+        const stripes = new THREE.InstancedMesh(zebra, paintMat, 64);
+        let si = 0;
+        [cz1 + 2, cz0 - 2].forEach(z => {
+            for (let x = -ROAD_HALF + 0.7; x < ROAD_HALF; x += 1.3) stripes.setMatrixAt(si++, m4.makeTranslation(x, 0.05, z));
+        });
+        [-(ROAD_HALF + 2), ROAD_HALF + 2].forEach(x => {
+            for (let z = cz0 + 0.7; z < cz1; z += 1.3) stripes.setMatrixAt(si++, new THREE.Matrix4().makeTranslation(x, 0.05, z).multiply(rotY));
+        });
+        stripes.count = si;
+        scene.add(stripes);
+
+        function groundHeight(x, z) {
+            for (const w of walks) if (x >= w.x0 && x <= w.x1 && z >= w.z0 && z <= w.z1) return CURB;
+            if (Math.hypot(x - PLAZA.x, z - PLAZA.z) < PLAZA.r) return CURB;
+            return 0;
+        }
+
+        // Lake
+        let water = null;
+        new THREE.TextureLoader(manager).load('assets/env/waternormals.jpg', tex => {
+            tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+            water = new Water(new THREE.CircleGeometry(LAKE.r, 64), {
+                textureWidth: 512, textureHeight: 512, waterNormals: tex,
+                sunDirection: SUN_DIR.clone(), sunColor: 0xffffff, waterColor: 0x2c6a7c,
+                distortionScale: 2.2, fog: true,
+            });
+            water.rotation.x = -Math.PI / 2;
+            water.position.set(LAKE.x, 0.06, LAKE.z);
+            scene.add(water);
+        });
+        const shore = new THREE.Mesh(new THREE.RingGeometry(LAKE.r - 0.1, LAKE.r + 1.6, 64), new THREE.MeshStandardMaterial({ color: '#d8c79e', roughness: 1 }));
+        shore.rotation.x = -Math.PI / 2;
+        shore.position.set(LAKE.x, 0.04, LAKE.z);
+        shore.receiveShadow = true;
+        scene.add(shore);
+
+        // Sky and image-based lighting
+        new RGBELoader(manager).load('assets/env/sky_1k.hdr', hdr => {
+            hdr.mapping = THREE.EquirectangularReflectionMapping;
+            scene.background = hdr;
+            scene.environment = hdr;
+            scene.backgroundIntensity = 1;
+        });
+
+        // =====================================================================
+        // Signs
+        // =====================================================================
+        function signTexture(title, sub) {
+            const c = document.createElement('canvas');
+            c.width = 1024; c.height = 360;
+            const g = c.getContext('2d');
+            g.fillStyle = '#f7f3ea';
+            g.beginPath(); g.roundRect(0, 0, 1024, 360, 36); g.fill();
+            g.fillStyle = '#e2552b'; g.fillRect(64, 70, 70, 10);
+            g.fillStyle = '#6a6c72';
+            g.font = `500 52px 'Schibsted Grotesk', Arial, sans-serif`;
+            g.fillText(sub, 64, 150);
+            g.fillStyle = '#1f2024';
+            let size = 104;
+            const setFont = () => { g.font = `800 ${size}px 'Schibsted Grotesk', Arial, sans-serif`; };
+            setFont();
+            while (g.measureText(title).width > 900 && size > 54) { size -= 4; setFont(); }
+            g.fillText(title, 64, 270);
+            const tex = new THREE.CanvasTexture(c);
+            tex.colorSpace = THREE.SRGBColorSpace;
+            tex.anisotropy = 8;
+            return tex;
+        }
+        function makeSign(title, sub) {
+            const group = new THREE.Group();
+            const board = new THREE.Mesh(new THREE.PlaneGeometry(3.4, 1.2), new THREE.MeshStandardMaterial({ map: signTexture(title, sub), roughness: 0.6, transparent: true }));
+            board.position.set(0, 2.25, 0.04);
+            const back = new THREE.Mesh(new THREE.BoxGeometry(3.5, 1.3, 0.06), new THREE.MeshStandardMaterial({ color: '#2b2d33', roughness: 0.5, metalness: 0.3 }));
+            back.position.y = 2.25;
+            const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 1.7, 12), back.material);
+            pole.position.set(0, 0.85, -0.02);
+            group.add(board, back, pole);
+            prep(group);
+            return group;
+        }
+
+        // =====================================================================
+        // Characters
+        // =====================================================================
+        class Actor {
+            constructor(gltf) {
+                this.root = prep(SkeletonUtils.clone(gltf.scene));
+                this.root.scale.setScalar(CHAR_SCALE);
+                this.mixer = new THREE.AnimationMixer(this.root);
+                this.actions = {};
+                gltf.animations.forEach(clip => { this.actions[clip.name] = this.mixer.clipAction(clip); });
+                ['jump', 'emote-yes', 'emote-no', 'interact-right', 'pick-up'].forEach(n => {
+                    const a = this.actions[n];
+                    if (a) { a.setLoop(THREE.LoopOnce, 1); a.clampWhenFinished = true; }
+                });
+                this.current = null;
+                this.oneShot = false;
+                this.mixer.addEventListener('finished', () => { this.oneShot = false; this.play(this.base || 'idle'); });
+                this.play('idle');
+            }
+            play(name, fade = 0.2) {
+                const next = this.actions[name];
+                if (!next || this.current === next) return;
+                next.reset().setEffectiveWeight(1).fadeIn(fade).play();
+                if (this.current) this.current.fadeOut(fade);
+                this.current = next;
+            }
+            once(name) {
+                this.oneShot = true;
+                this.current = null;
+                this.play(name, 0.15);
+            }
+            loop(name) {
+                this.base = name;
+                if (!this.oneShot) this.play(name);
+            }
+        }
+
+        // =====================================================================
+        // Colliders
+        // =====================================================================
+        const boxes = [];   // axis-aligned rectangles {x0,x1,z0,z1}
+        const circles = [{ x: LAKE.x, z: LAKE.z, r: LAKE.r + 0.6 }];
+        function addBoxCollider(obj, pad = 0.2) {
+            const b = new THREE.Box3().setFromObject(obj);
+            boxes.push({ x0: b.min.x - pad, x1: b.max.x + pad, z0: b.min.z - pad, z1: b.max.z + pad });
+            return b;
+        }
+        function collide(p, r) {
+            for (const b of boxes) {
+                if (p.x > b.x0 - r && p.x < b.x1 + r && p.z > b.z0 - r && p.z < b.z1 + r) {
+                    const dl = p.x - (b.x0 - r), dr = (b.x1 + r) - p.x, dn = p.z - (b.z0 - r), ds = (b.z1 + r) - p.z;
+                    const m = Math.min(dl, dr, dn, ds);
+                    if (m === dl) p.x = b.x0 - r; else if (m === dr) p.x = b.x1 + r; else if (m === dn) p.z = b.z0 - r; else p.z = b.z1 + r;
+                }
+            }
+            for (const c of circles) {
+                const dx = p.x - c.x, dz = p.z - c.z, d = Math.hypot(dx, dz), min = c.r + r;
+                if (d < min && d > 1e-4) { p.x = c.x + dx / d * min; p.z = c.z + dz / d * min; }
+            }
+            const d = Math.hypot(p.x, p.z - 0);
+            if (d > WORLD_R) { p.x *= WORLD_R / d; p.z *= WORLD_R / d; }
+        }
+
+        // =====================================================================
+        // Build the town
+        // =====================================================================
+        const npcs = [];
+        let player = null;
+        const occupied = []; // rectangles where we should not scatter props
+
+        async function buildStations() {
+            await document.fonts.ready;
+            await Promise.all(STATIONS.map(async s => {
+                let x, z, rot;
+                if (s.place) ({ x, z, rot } = s.place);
+                else { rot = s.side === 'L' ? Math.PI / 2 : -Math.PI / 2; x = s.side === 'L' ? -11 : 11; z = s.z; }
+                const obj = await place(s.model, x, z, { rot, scale: S * 1.1 });
+                // Push the building back so its front sits just behind the sidewalk
+                const box = new THREE.Box3().setFromObject(obj);
+                if (!s.place) {
+                    const front = s.side === 'L' ? box.max.x : box.min.x;
+                    obj.position.x += (s.side === 'L' ? -WALK_OUT - 0.6 : WALK_OUT + 0.6) - front;
+                }
+                const b = addBoxCollider(obj);
+                occupied.push({ x0: b.min.x - 3, x1: b.max.x + 3, z0: b.min.z - 3, z1: b.max.z + 3 });
+
+                // Front direction (towards the street or plaza)
+                const dir = new THREE.Vector3(Math.sin(rot), 0, Math.cos(rot));
+                const frontPoint = new THREE.Vector3(obj.position.x, 0, obj.position.z);
+                const halfDepth = Math.abs(dir.x) > 0.5 ? (b.max.x - b.min.x) / 2 : (b.max.z - b.min.z) / 2;
+                frontPoint.addScaledVector(dir, halfDepth + 2.2);
+                if (!s.place) frontPoint.x = s.side === 'L' ? -5.6 : 5.6;
+                s.spot = frontPoint;
+                const sideways = new THREE.Vector3(dir.z, 0, -dir.x);
+
+                // Sign beside the door
+                const sign = makeSign(s.title, s.kicker);
+                sign.position.copy(frontPoint).addScaledVector(sideways, -2.6).addScaledVector(dir, -0.6);
+                sign.position.y = groundHeight(sign.position.x, sign.position.z);
+                // Angle street signs towards people walking up from the start
+                sign.rotation.y = s.place ? rot : rot + (s.side === 'L' ? -Math.PI / 4 : Math.PI / 4);
+                scene.add(sign);
+                circles.push({ x: sign.position.x, z: sign.position.z, r: 0.25 });
+
+                // Glowing ring on the ground
+                const ring = new THREE.Mesh(new THREE.RingGeometry(1.25, 1.45, 48), new THREE.MeshBasicMaterial({ color: '#e2552b', transparent: true, opacity: 0.9 }));
+                ring.rotation.x = -Math.PI / 2;
+                ring.position.set(frontPoint.x, groundHeight(frontPoint.x, frontPoint.z) + 0.02, frontPoint.z);
+                scene.add(ring);
+                s.ring = ring;
+
+                // A colleague waiting outside
+                if (s.npc) {
+                    const actor = new Actor(await loadModel(`characters/character-${s.npc}`));
+                    const p = frontPoint.clone().addScaledVector(sideways, 2).addScaledVector(dir, -0.5);
+                    actor.root.position.set(p.x, groundHeight(p.x, p.z), p.z);
+                    actor.root.rotation.y = rot;
+                    actor.homeRot = rot;
+                    scene.add(actor.root);
+                    circles.push({ x: p.x, z: p.z, r: 0.45 });
+                    npcs.push(actor);
+                    s.npcActor = actor;
+                    actor.mixer.update(Math.random() * 2);
+                    if (LINES[s.id]) {
+                        actor.bubble = document.createElement('div');
+                        actor.bubble.className = 'bubble';
+                        actor.bubble.textContent = LINES[s.id];
+                        document.getElementById('bubbles').appendChild(actor.bubble);
+                    }
+                }
+            }));
+        }
+
+        function isFree(x, z, margin = 0) {
+            if (Math.abs(x) < WALK_OUT + 1 + margin && z < STREET.zStart + 2 && z > STREET.zEnd - 10) return false;
+            if (Math.abs(z - CROSS.z) < WALK_OUT + 1 + margin && x > CROSS.x0 - 2 && x < CROSS.x1 + 2) return false;
+            if (Math.hypot(x - LAKE.x, z - LAKE.z) < LAKE.r + 3 + margin) return false;
+            if (Math.hypot(x - PLAZA.x, z - PLAZA.z) < PLAZA.r + 2 + margin) return false;
+            if (occupied.some(o => x > o.x0 - margin && x < o.x1 + margin && z > o.z0 - margin && z < o.z1 + margin)) return false;
+            return true;
+        }
+
+        async function buildFiller() {
+            // Second-row buildings to make it feel like a town
+            const fill = [
+                ['city/building-a', -11, 50], ['city/building-b', 11, 52], ['city/building-e', -11, 28], ['city/building-i', 11, 32],
+                ['city/building-j', 11, 14], ['city/building-l', -11, -4], ['city/building-m', 11, -18], ['city/building-n', -11, -28],
+                ['city/building-skyscraper-b', -11, -40], ['city/building-skyscraper-d', 11, -40],
+            ];
+            await Promise.all(fill.map(async ([name, x, z]) => {
+                if (occupied.some(o => x > o.x0 && x < o.x1 && z > o.z0 && z < o.z1)) return;
+                const rot = x < 0 ? Math.PI / 2 : -Math.PI / 2;
+                const obj = await place(name, x, z, { rot, scale: S * 1.05 });
+                const box = new THREE.Box3().setFromObject(obj);
+                const front = x < 0 ? box.max.x : box.min.x;
+                obj.position.x += (x < 0 ? -WALK_OUT - 0.6 : WALK_OUT + 0.6) - front;
+                const b = addBoxCollider(obj);
+                occupied.push({ x0: b.min.x - 1, x1: b.max.x + 1, z0: b.min.z - 1, z1: b.max.z + 1 });
+            }));
+            // Far skyline
+            const far = ['city/low-detail-building-a', 'city/low-detail-building-b', 'city/low-detail-building-c', 'city/low-detail-building-d', 'city/low-detail-building-wide-a', 'city/low-detail-building-wide-b'];
+            for (let i = 0; i < 22; i++) {
+                const a = Math.PI * 0.75 + (i / 22) * Math.PI * 1.1;
+                const r = 95 + Math.random() * 30;
+                place(far[i % far.length], Math.cos(a) * r, Math.sin(a) * r, { rot: -a - Math.PI / 2, scale: S * (1.2 + Math.random() * 0.8) });
+            }
+            // Suburban houses to the west, behind the workshop
+            const houses = ['suburban/building-type-a', 'suburban/building-type-c', 'suburban/building-type-e', 'suburban/building-type-k', 'suburban/building-type-m', 'suburban/building-type-o', 'suburban/building-type-r'];
+            const homeSpots = [[-24, 30, Math.PI / 2], [-36, 30, Math.PI / 2], [-24, 42, Math.PI / 2], [-36, 42, Math.PI / 2], [-26, -8, 0], [-38, -8, 0], [-26, -22, 0], [-38, -22, 0], [-32, -36, 0],
+                [22, 64, -Math.PI / 2], [34, 60, -Math.PI / 2], [-22, 64, Math.PI / 2], [-34, 58, Math.PI / 2], [12, 80, Math.PI], [-12, 80, Math.PI]];
+            await Promise.all(homeSpots.map(async ([x, z, rot], i) => {
+                const obj = await place(houses[i % houses.length], x, z, { rot, scale: S * 1.15 });
+                const b = addBoxCollider(obj);
+                occupied.push({ x0: b.min.x - 2, x1: b.max.x + 2, z0: b.min.z - 2, z1: b.max.z + 2 });
+            }));
+        }
+
+        const lamps = []; // street light poles, used for the night glow
+        async function buildStreetFurniture() {
+            const spots = [];
+            // Street lights along both sidewalks
+            for (let z = STREET.zStart - 4; z > STREET.zEnd + 8; z -= 12) {
+                if (Math.abs(z - CROSS.z) < 10) continue;
+                for (const side of [-1, 1]) spots.push([side * (ROAD_HALF + 0.5), z, side < 0 ? Math.PI / 2 : -Math.PI / 2]);
+            }
+            for (let x = -38; x <= 38; x += 14) {
+                if (Math.abs(x) < 10) continue;
+                for (const side of [-1, 1]) spots.push([x, CROSS.z + side * (ROAD_HALF + 0.5), side < 0 ? 0 : Math.PI]);
+            }
+            await Promise.all(spots.map(async ([x, z, rot]) => {
+                lamps.push(await place('roads/light-curved', x, z, { rot, scale: S * 1.15, y: CURB }));
+                circles.push({ x, z, r: 0.25 });
+            }));
+            // Traffic lights at the crossing corners
+            [[-ROAD_HALF - 0.6, cz1 + 0.6, Math.PI], [ROAD_HALF + 0.6, cz0 - 0.6, 0]].forEach(([x, z, rot]) => {
+                place('roads/traffic-light', x, z, { rot, scale: S * 1.1, y: CURB });
+                circles.push({ x, z, r: 0.3 });
+            });
+            // A little roadworks outside the IFS tower, because there is always a migration going on
+            [[-2.2, -20], [-1, -21.2], [0.4, -20]].forEach(([x, z]) => place('roads/construction-cone', x, z, { scale: S }));
+            place('roads/construction-barrier', -0.8, -23, { scale: S });
+            // Parasols outside the first shop
+            place('city/detail-parasol-a', -9, 33, { scale: S });
+            place('city/detail-parasol-b', -9, 44, { scale: S });
+        }
+
+        async function buildPlaza() {
+            // Paved square where the walk starts
+            const disc = new THREE.Mesh(new THREE.CylinderGeometry(PLAZA.r, PLAZA.r, CURB + 0.05, 64), walkMat.clone());
+            disc.material.map = walkMat.map.clone();
+            disc.material.map.repeat.set(4, 4);
+            disc.material.map.needsUpdate = true;
+            disc.position.set(PLAZA.x, (CURB - 0.05) / 2, PLAZA.z);
+            disc.receiveShadow = true;
+            scene.add(disc);
+            const ringStone = new THREE.Mesh(new THREE.RingGeometry(PLAZA.r - 0.6, PLAZA.r, 64), new THREE.MeshStandardMaterial({ color: '#b9b2a4', roughness: 0.9 }));
+            ringStone.rotation.x = -Math.PI / 2;
+            ringStone.position.set(PLAZA.x, CURB + 0.01, PLAZA.z);
+            scene.add(ringStone);
+
+            // Fountain
+            const stone = new THREE.MeshStandardMaterial({ color: '#d6d0c4', roughness: 0.75 });
+            const fz = PLAZA.z + 2.5;
+            const basin = new THREE.Mesh(new THREE.CylinderGeometry(2.6, 2.8, 0.7, 40), stone);
+            basin.position.set(PLAZA.x, CURB + 0.35, fz);
+            const pool = new THREE.Mesh(new THREE.CylinderGeometry(2.3, 2.3, 0.05, 40), new THREE.MeshStandardMaterial({ color: '#4d93a6', roughness: 0.08, metalness: 0.2 }));
+            pool.position.set(PLAZA.x, CURB + 0.62, fz);
+            const column = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.4, 1.6, 20), stone);
+            column.position.set(PLAZA.x, CURB + 1.2, fz);
+            const bowl = new THREE.Mesh(new THREE.CylinderGeometry(1, 0.35, 0.35, 28), stone);
+            bowl.position.set(PLAZA.x, CURB + 2.05, fz);
+            [basin, pool, column, bowl].forEach(m => { m.castShadow = m.receiveShadow = true; scene.add(m); });
+            circles.push({ x: PLAZA.x, z: fz, r: 2.9 });
+            // Water drops falling from the top bowl
+            const dropGeo = new THREE.SphereGeometry(0.06, 6, 4);
+            const dropMat = new THREE.MeshStandardMaterial({ color: '#cfeaf2', roughness: 0.1, transparent: true, opacity: 0.85 });
+            fountainDrops = Array.from({ length: 36 }, (_, i) => {
+                const m = new THREE.Mesh(dropGeo, dropMat);
+                scene.add(m);
+                return { m, a: (i / 36) * Math.PI * 2, t: Math.random() };
+            });
+            fountainCenter = new THREE.Vector3(PLAZA.x, CURB + 2.2, fz);
+
+            // Entrance arch over the street
+            const archMat = new THREE.MeshStandardMaterial({ color: '#2b2d33', roughness: 0.5, metalness: 0.3 });
+            const archZ = STREET.zStart - 1;
+            [-6, 6].forEach(x => {
+                const pillar = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.38, 8.4, 16), archMat);
+                pillar.position.set(x, CURB + 4.2, archZ);
+                pillar.castShadow = true;
+                scene.add(pillar);
+                circles.push({ x, z: archZ, r: 0.45 });
+            });
+            const beam = new THREE.Mesh(new THREE.BoxGeometry(12.8, 1.7, 0.25), archMat);
+            beam.position.set(0, CURB + 8.6, archZ);
+            beam.castShadow = true;
+            scene.add(beam);
+            const tex = signTexture('Career Street', '2017 to today');
+            [1, -1].forEach(face => {
+                const board = new THREE.Mesh(new THREE.PlaneGeometry(4.6, 1.6), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.6, transparent: true }));
+                board.position.set(0, CURB + 8.6, archZ + face * 0.14);
+                if (face < 0) board.rotation.y = Math.PI;
+                scene.add(board);
+            });
+
+            // Planters, palms and lamps round the edge
+            for (let i = 0; i < 6; i++) {
+                const a = Math.PI * 0.15 + (i / 5) * Math.PI * 0.7 + Math.PI; // southern half
+                const x = PLAZA.x + Math.cos(a) * (PLAZA.r - 1.6), z = PLAZA.z - Math.sin(a) * (PLAZA.r - 1.6);
+                place('suburban/planter', x, z, { scale: S, y: CURB, rot: -a });
+                circles.push({ x, z, r: 0.7 });
+            }
+            for (let i = 0; i < 8; i++) {
+                const a = (i / 8) * Math.PI * 2 + 0.2;
+                const x = PLAZA.x + Math.cos(a) * (PLAZA.r + 2.5), z = PLAZA.z + Math.sin(a) * (PLAZA.r + 2.5);
+                if (z < PLAZA.z - 6 && Math.abs(x) < WALK_OUT + 2) continue; // keep the street opening clear
+                place(i % 2 ? 'nature/tree_palmTall' : 'nature/tree_palmDetailedTall', x, z, { scale: 3.6 + Math.random(), rot: Math.random() * 6 });
+                circles.push({ x, z, r: 0.5 });
+            }
+            await Promise.all([[-PLAZA.r + 0.8, 0, Math.PI / 2], [PLAZA.r - 0.8, 0, -Math.PI / 2], [0, PLAZA.r - 0.8, Math.PI]].map(async ([dx, dz, rot]) => {
+                lamps.push(await place('roads/light-curved', PLAZA.x + dx, PLAZA.z + dz, { rot, scale: S * 1.15, y: CURB }));
+                circles.push({ x: PLAZA.x + dx, z: PLAZA.z + dz, r: 0.25 });
+            }));
+        }
+        let fountainDrops = [], fountainCenter = null;
+
+        async function buildNature() {
+            const trees = ['nature/tree_oak', 'nature/tree_default', 'nature/tree_detailed', 'nature/tree_pineRoundA'];
+            const palms = ['nature/tree_palmTall', 'nature/tree_palmDetailedTall', 'nature/tree_palmBend'];
+            const bushes = ['nature/plant_bush', 'nature/plant_bushLarge', 'nature/plant_bushDetailed'];
+            const flowers = ['nature/flower_redA', 'nature/flower_yellowA', 'nature/flower_purpleA', 'nature/grass_large', 'nature/grass'];
+            // Palms around the lake (this is Sri Lanka after all)
+            for (let i = 0; i < 14; i++) {
+                const a = (i / 14) * Math.PI * 2 + Math.random() * 0.2;
+                const r = LAKE.r + 3 + Math.random() * 4;
+                const x = LAKE.x + Math.cos(a) * r, z = LAKE.z + Math.sin(a) * r;
+                if (!isFree(x, z, -1.5) && Math.hypot(x - LAKE.x, z - LAKE.z) < LAKE.r + 2) continue;
+                if (Math.abs(z - CROSS.z) < WALK_OUT + 1) continue;
+                place(palms[i % 3], x, z, { rot: Math.random() * Math.PI * 2, scale: 3.4 + Math.random() * 1.2 });
+                circles.push({ x, z, r: 0.5 });
+            }
+            ['nature/lily_large', 'nature/lily_large', 'nature/lily_large'].forEach((n, i) => {
+                place(n, LAKE.x - 4 + i * 3.5, LAKE.z + 3 - i * 2.5, { scale: 3, y: 0.08, rot: Math.random() * 6 });
+            });
+            ['nature/rock_largeA', 'nature/rock_largeB', 'nature/stone_largeA'].forEach((n, i) => {
+                const a = 2.3 + i * 0.5;
+                place(n, LAKE.x + Math.cos(a) * (LAKE.r + 0.6), LAKE.z + Math.sin(a) * (LAKE.r + 0.6), { scale: 3.2, rot: Math.random() * 6 });
+            });
+            // Trees and bushes everywhere there is room
+            let planted = 0;
+            for (let tries = 0; planted < 120 && tries < 4000; tries++) {
+                const x = (Math.random() - 0.5) * 130, z = (Math.random() - 0.5) * 130;
+                if (Math.hypot(x, z) > WORLD_R + 8 || !isFree(x, z, 1)) continue;
+                const pick = Math.random();
+                if (pick < 0.55) {
+                    place(trees[Math.floor(Math.random() * trees.length)], x, z, { rot: Math.random() * 6, scale: 3.4 + Math.random() * 1.6 });
+                    circles.push({ x, z, r: 0.6 });
+                } else if (pick < 0.8) {
+                    place(bushes[Math.floor(Math.random() * bushes.length)], x, z, { rot: Math.random() * 6, scale: 3 + Math.random() });
+                } else {
+                    place(flowers[Math.floor(Math.random() * flowers.length)], x, z, { rot: Math.random() * 6, scale: 3 });
+                }
+                planted++;
+            }
+            // Green hills on the horizon, for the Kandy hill country
+            const hillMat = new THREE.MeshStandardMaterial({ color: '#6f9a55', roughness: 1, flatShading: true });
+            for (let i = 0; i < 18; i++) {
+                const a = (i / 18) * Math.PI * 2 + Math.random() * 0.15;
+                const r = 170 + Math.random() * 40;
+                const hill = new THREE.Mesh(new THREE.SphereGeometry(1, 10, 6, 0, Math.PI * 2, 0, Math.PI / 2), hillMat);
+                hill.scale.set(55 + Math.random() * 30, 9 + Math.random() * 12, 55 + Math.random() * 30);
+                hill.position.set(Math.cos(a) * r, -1, Math.sin(a) * r);
+                scene.add(hill);
+            }
+        }
+
+        async function buildPlayer() {
+            const gltf = await loadModel('characters/character-male-f');
+            player = new Actor(gltf);
+            player.root.position.copy(SPAWN);
+            player.root.rotation.y = Math.PI;
+            scene.add(player.root);
+        }
+
+        // =====================================================================
+        // Bugs
+        // =====================================================================
+        const bugs = [];
+        const shellMat = new THREE.MeshStandardMaterial({ color: '#d23a2a', roughness: 0.25, metalness: 0.1 });
+        const blackMat = new THREE.MeshStandardMaterial({ color: '#1d1d22', roughness: 0.4 });
+        function makeBug() {
+            const g = new THREE.Group();
+            const shell = new THREE.Mesh(new THREE.SphereGeometry(0.32, 24, 16, 0, Math.PI * 2, 0, Math.PI / 2), shellMat);
+            shell.scale.set(1, 0.75, 1.25);
+            shell.position.y = 0.12;
+            const belly = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 0.1, 24), blackMat);
+            belly.scale.set(1, 1, 1.2);
+            belly.position.y = 0.12;
+            const head = new THREE.Mesh(new THREE.SphereGeometry(0.15, 16, 12), blackMat);
+            head.position.set(0, 0.16, 0.4);
+            const seam = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.02, 0.78), blackMat);
+            seam.position.set(0, 0.36, 0);
+            g.add(shell, belly, head, seam);
+            for (let i = 0; i < 6; i++) {
+                const dot = new THREE.Mesh(new THREE.SphereGeometry(0.05, 10, 8), blackMat);
+                dot.position.set((i % 2 ? 1 : -1) * 0.15, 0.31 - (i > 3 ? 0.04 : 0), -0.2 + Math.floor(i / 2) * 0.2);
+                g.add(dot);
+            }
+            const legs = [];
+            for (let i = 0; i < 6; i++) {
+                const leg = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.03, 0.03), blackMat);
+                leg.position.set(i % 2 ? 0.3 : -0.3, 0.06, -0.2 + Math.floor(i / 2) * 0.2);
+                g.add(leg);
+                legs.push(leg);
+            }
+            g.userData.legs = legs;
+            g.scale.setScalar(1.4);
+            return prep(g);
+        }
+        function spawnBugs() {
+            for (let i = 0; i < BUG_COUNT; i++) {
+                let x, z, n = 0;
+                do {
+                    x = (Math.random() - 0.5) * 100; z = (Math.random() - 0.5) * 100; n++;
+                } while ((Math.hypot(x, z) > WORLD_R - 5 || Math.hypot(x - LAKE.x, z - LAKE.z) < LAKE.r + 2 || Math.hypot(x - SPAWN.x, z - SPAWN.z) < 12) && n < 200);
+                const mesh = makeBug();
+                mesh.position.set(x, groundHeight(x, z), z);
+                scene.add(mesh);
+                bugs.push({ mesh, heading: Math.random() * Math.PI * 2, caught: false, t: Math.random() * 10 });
+            }
+        }
+
+        // =====================================================================
+        // UI
+        // =====================================================================
+        const state = { started: false, visited: new Set(), decided: {}, bugsCaught: 0, startTime: 0, finishTime: 0, current: null };
+        const $ = id => document.getElementById(id);
+        const card = $('card');
+        let toastTimer;
+        function toast(text) {
+            const t = $('toast');
+            t.textContent = text;
+            t.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
+        }
+        const matchedCount = () => STATIONS.filter(s => s.decision && state.decided[s.id] === s.decision.answer).length;
+        function updateMeters() {
+            $('m-visited').textContent = `${state.visited.size}/${STATIONS.length}`;
+            $('m-calls').textContent = `${matchedCount()}/${DECISION_COUNT}`;
+            $('m-bugs').textContent = `${state.bugsCaught}/${BUG_COUNT}`;
+        }
+        const fmtTime = ms => { const s = Math.floor(ms / 1000); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; };
+        const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+        function renderCard(s, mode = 'info') {
+            let html = `<div class="kicker">${esc(s.kicker)}</div><h2>${esc(s.title)}</h2><div class="role">${esc(s.role)}</div>`;
+            if (mode === 'info') {
+                html += `<ul>${s.body.map(b => `<li>${esc(b)}</li>`).join('')}</ul>`;
+                if (s.stack) html += `<div class="stack">${esc(s.stack)}</div>`;
+                if (s.decision) {
+                    const chosen = state.decided[s.id];
+                    html += chosen === undefined
+                        ? `<div class="actions"><button class="btn primary" data-act="decide">What would you do here?</button></div>`
+                        : `<span class="done-tag">${chosen === s.decision.answer ? 'You made the same call I did' : 'Call made. See what I did'}</span>
+                           <div class="actions"><button class="btn" data-act="decide">See the situation again</button></div>`;
+                }
+                if (s.contact) {
+                    const time = state.finishTime ? fmtTime(state.finishTime - state.startTime) : null;
+                    html += `<div class="result"><strong>Your walk so far</strong>
+                        ${state.visited.size} of ${STATIONS.length} places visited, ${matchedCount()} of ${DECISION_COUNT} calls matched,
+                        ${state.bugsCaught} of ${BUG_COUNT} bugs caught${time ? ` in ${time}` : ''}.</div>
+                        <div class="actions">
+                            <a class="btn primary" href="mailto:randika.l.abeyrathna@gmail.com">Send me an email</a>
+                            <a class="btn" href="assets/cv/Randika-Abeyrathna-CV.pdf" download>Download my CV</a>
+                            <a class="btn" href="https://www.linkedin.com/in/randika-abeyrathna/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                        </div>`;
+                }
+            } else {
+                const d = s.decision, chosen = state.decided[s.id];
+                html += `<div class="q">${esc(d.q)}</div>`;
+                if (chosen === undefined) {
+                    html += `<div class="options">${d.options.map((o, i) => `<button class="option" data-opt="${i}">${esc(o)}</button>`).join('')}</div>`;
+                } else {
+                    const good = chosen === d.answer;
+                    html += `<div class="result ${good ? 'good' : 'bad'}"><strong>${good ? 'Same call I made.' : 'I went another way.'}</strong>
+                        ${good ? '' : `You picked "${esc(d.options[chosen])}". I chose "${esc(d.options[d.answer])}".<br><br>`}${esc(d.did)}</div>
+                        <div class="actions"><button class="btn" data-act="info">Back to ${esc(s.title)}</button></div>`;
+                }
+            }
+            card.innerHTML = html;
+        }
+        card.addEventListener('click', e => {
+            const s = state.current;
+            if (!s) return;
+            const act = e.target.closest('[data-act]');
+            const opt = e.target.closest('[data-opt]');
+            if (act) renderCard(s, act.dataset.act === 'decide' ? 'decision' : 'info');
+            if (opt && state.decided[s.id] === undefined) {
+                const choice = Number(opt.dataset.opt);
+                state.decided[s.id] = choice;
+                const good = choice === s.decision.answer;
+                s.ring.material.color.set(good ? '#2f9a5a' : '#1f2024');
+                if (player) player.once(good ? 'emote-yes' : 'emote-no');
+                good ? sfx.good() : sfx.bad();
+                if (s.npcActor) s.npcActor.once(good ? 'emote-yes' : 'emote-no');
+                renderCard(s, 'decision');
+                updateMeters();
+                if (Object.keys(state.decided).length === DECISION_COUNT) toast(`All calls made: ${matchedCount()} of ${DECISION_COUNT} matched mine`);
+            }
+        });
+        ['pointerdown', 'wheel'].forEach(ev => document.querySelectorAll('.panel, .btn, .stick, .jump-btn').forEach(el => el.addEventListener(ev, e => e.stopPropagation())));
+
+        function openStation(s) {
+            state.current = s;
+            if (!state.visited.has(s.id)) { state.visited.add(s.id); updateMeters(); }
+            renderCard(s, 'info');
+            card.classList.add('open');
+            card.scrollTop = 0;
+            if (s.npcActor) s.npcActor.once('interact-right');
+            sfx.open();
+        }
+        function closeStation() { state.current = null; card.classList.remove('open'); }
+
+        // =====================================================================
+        // Input: keys, camera drag, touch joystick
+        // =====================================================================
+        const keys = new Set();
+        const KEYMAP = { KeyW: 'f', ArrowUp: 'f', KeyS: 'b', ArrowDown: 'b', KeyA: 'l', ArrowLeft: 'l', KeyD: 'r', ArrowRight: 'r', ShiftLeft: 'run', ShiftRight: 'run' };
+        let jumpQueued = false;
+        window.addEventListener('keydown', e => {
+            if (!state.started) return;
+            if (e.code === 'Space') { jumpQueued = true; e.preventDefault(); }
+            const k = KEYMAP[e.code];
+            if (k) { keys.add(k); e.preventDefault(); }
+        });
+        window.addEventListener('keyup', e => { const k = KEYMAP[e.code]; if (k) keys.delete(k); });
+        window.addEventListener('blur', () => keys.clear());
+
+        const cam = { yaw: 0, pitch: 0.42, dist: 11, targetDist: 11 };
+        let look = null;
+        canvas.addEventListener('pointerdown', e => {
+            look = { id: e.pointerId, x: e.clientX, y: e.clientY };
+            canvas.setPointerCapture(e.pointerId);
+        });
+        canvas.addEventListener('pointermove', e => {
+            if (!look || e.pointerId !== look.id) return;
+            cam.yaw -= (e.clientX - look.x) * 0.005;
+            cam.pitch = THREE.MathUtils.clamp(cam.pitch + (e.clientY - look.y) * 0.004, 0.12, 1.2);
+            look.x = e.clientX; look.y = e.clientY;
+        });
+        const endLook = e => { if (look && e.pointerId === look.id) look = null; };
+        canvas.addEventListener('pointerup', endLook);
+        canvas.addEventListener('pointercancel', endLook);
+        canvas.addEventListener('wheel', e => {
+            cam.targetDist = THREE.MathUtils.clamp(cam.targetDist + e.deltaY * 0.01, 5, 24);
+            e.preventDefault();
+        }, { passive: false });
+
+        const stick = { el: $('stick'), knob: $('stick').querySelector('i'), id: null, x: 0, y: 0 };
+        stick.el.addEventListener('pointerdown', e => {
+            stick.id = e.pointerId;
+            try { stick.el.setPointerCapture(e.pointerId); } catch (_) { /* pointer already gone */ }
+            moveStick(e);
+        });
+        stick.el.addEventListener('pointermove', e => { if (e.pointerId === stick.id) moveStick(e); });
+        const endStick = e => {
+            if (e.pointerId !== stick.id) return;
+            stick.id = null; stick.x = stick.y = 0;
+            stick.knob.style.transform = '';
+        };
+        stick.el.addEventListener('pointerup', endStick);
+        stick.el.addEventListener('pointercancel', endStick);
+        function moveStick(e) {
+            const r = stick.el.getBoundingClientRect();
+            let dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+            const max = r.width / 2 - 10, len = Math.hypot(dx, dy);
+            if (len > max) { dx *= max / len; dy *= max / len; }
+            stick.x = dx / max; stick.y = dy / max;
+            stick.knob.style.transform = `translate(${dx}px, ${dy}px)`;
+        }
+        $('jump-btn').addEventListener('pointerdown', e => { e.preventDefault(); jumpQueued = true; });
+
+        // =====================================================================
+        // Rendering pipeline
+        // =====================================================================
+        let composer = null;
+        function setupComposer(w, h) {
+            if (quality !== 'high') return;
+            const target = new THREE.WebGLRenderTarget(w, h, { type: THREE.HalfFloatType, samples: 4 });
+            composer = new EffectComposer(renderer, target);
+            composer.addPass(new RenderPass(scene, camera));
+            const ao = new GTAOPass(scene, camera, w, h);
+            ao.output = GTAOPass.OUTPUT.Default;
+            ao.blendIntensity = 0.85;
+            ao.updateGtaoMaterial({ radius: 0.6, distanceExponent: 1.4, thickness: 1.2, scale: 1 });
+            composer.addPass(ao);
+            composer.addPass(new OutputPass());
+        }
+        function resize() {
+            const w = window.innerWidth, h = window.innerHeight;
+            renderer.setSize(w, h, false);
+            camera.aspect = w / h;
+            camera.fov = w < h ? 60 : 45;
+            camera.updateProjectionMatrix();
+            if (composer) { composer.setSize(w, h); composer.setPixelRatio(renderer.getPixelRatio()); }
+        }
+        setupComposer(window.innerWidth, window.innerHeight);
+        window.addEventListener('resize', resize);
+        resize();
+
+        // =====================================================================
+        // Main loop
+        // =====================================================================
+        // =====================================================================
+        // Night: dim the sun and sky, light the street lamps
+        // =====================================================================
+        const glowParts = [];
+        function glowTexture() {
+            const c = document.createElement('canvas');
+            c.width = c.height = 128;
+            const g = c.getContext('2d');
+            const grad = g.createRadialGradient(64, 64, 0, 64, 64, 64);
+            grad.addColorStop(0, 'rgba(255,214,150,1)');
+            grad.addColorStop(0.35, 'rgba(255,190,120,0.45)');
+            grad.addColorStop(1, 'rgba(255,170,90,0)');
+            g.fillStyle = grad;
+            g.fillRect(0, 0, 128, 128);
+            return new THREE.CanvasTexture(c);
+        }
+        function buildLampGlows() {
+            const tex = glowTexture();
+            lamps.forEach(lamp => {
+                // The lamp head is at the far end of the arm, so step from the pole past the model's centre
+                const box = new THREE.Box3().setFromObject(lamp);
+                const centre = box.getCenter(new THREE.Vector3());
+                const head = new THREE.Vector3(
+                    lamp.position.x + (centre.x - lamp.position.x) * 2,
+                    box.max.y - 0.25,
+                    lamp.position.z + (centre.z - lamp.position.z) * 2,
+                );
+                const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, color: '#ffd9a0', transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending }));
+                halo.position.copy(head);
+                halo.scale.setScalar(1.6);
+                const pool = new THREE.Mesh(new THREE.PlaneGeometry(7, 7), new THREE.MeshBasicMaterial({ map: tex, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending }));
+                pool.rotation.x = -Math.PI / 2;
+                pool.position.set(head.x, groundHeight(head.x, head.z) + 0.03, head.z);
+                scene.add(halo, pool);
+                glowParts.push(halo, pool);
+            });
+        }
+        const LOOK = {
+            day: { sun: 2.6, sunColor: new THREE.Color('#fff2df'), env: 0.85, bg: 1, hemi: 0.35, fog: new THREE.Color('#dce7ee'), exposure: 0.95 },
+            night: { sun: 0.45, sunColor: new THREE.Color('#9fb4ff'), env: 0.16, bg: 0.1, hemi: 0.1, fog: new THREE.Color('#141c2b'), exposure: 1.15 },
+        };
+        let night = 0, nightTarget = 0, lastEnv = -1;
+        let litMaterials = [];
+        function collectMaterials() {
+            const set = new Set();
+            scene.traverse(o => {
+                if (!o.material) return;
+                (Array.isArray(o.material) ? o.material : [o.material]).forEach(m => { if ('envMapIntensity' in m) set.add(m); });
+            });
+            litMaterials = [...set];
+            lastEnv = -1;
+        }
+        function applyLook() {
+            const d = LOOK.day, n = LOOK.night, k = night;
+            sun.intensity = THREE.MathUtils.lerp(d.sun, n.sun, k);
+            sun.color.copy(d.sunColor).lerp(n.sunColor, k);
+            // three r160 has no scene.environmentIntensity, so scale each material's environment light
+            const env = THREE.MathUtils.lerp(d.env, n.env, k);
+            if (Math.abs(env - lastEnv) > 0.002) {
+                litMaterials.forEach(m => { m.envMapIntensity = env; });
+                lastEnv = env;
+            }
+            scene.backgroundIntensity = THREE.MathUtils.lerp(d.bg, n.bg, k);
+            hemi.intensity = THREE.MathUtils.lerp(d.hemi, n.hemi, k);
+            scene.fog.color.copy(d.fog).lerp(n.fog, k);
+            renderer.toneMappingExposure = THREE.MathUtils.lerp(d.exposure, n.exposure, k);
+            glowParts.forEach((m, i) => { m.material.opacity = (i % 2 ? 0.75 : 1) * Math.max(0, k * 1.2 - 0.2); });
+        }
+        $('btn-night').addEventListener('click', e => {
+            nightTarget = nightTarget ? 0 : 1;
+            e.currentTarget.setAttribute('aria-pressed', String(!!nightTarget));
+            e.currentTarget.textContent = nightTarget ? 'Day' : 'Night';
+            canvas.focus();
+        });
+
+        // =====================================================================
+        // Sound (off until asked for; everything is synthesised, no files)
+        // =====================================================================
+        const sound = { on: false, ctx: null };
+        function audio() {
+            if (!sound.ctx) sound.ctx = new (window.AudioContext || window.webkitAudioContext)();
+            return sound.ctx;
+        }
+        function tone(freq, start, dur, vol = 0.06, type = 'sine') {
+            if (!sound.on) return;
+            const ctx = audio(), t = ctx.currentTime + start;
+            const o = ctx.createOscillator(), g = ctx.createGain();
+            o.type = type;
+            o.frequency.setValueAtTime(freq, t);
+            g.gain.setValueAtTime(0.0001, t);
+            g.gain.exponentialRampToValueAtTime(vol, t + 0.015);
+            g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+            o.connect(g).connect(ctx.destination);
+            o.start(t); o.stop(t + dur + 0.05);
+        }
+        let noiseBuffer = null;
+        function step() {
+            if (!sound.on) return;
+            const ctx = audio();
+            if (!noiseBuffer) {
+                noiseBuffer = ctx.createBuffer(1, ctx.sampleRate * 0.08, ctx.sampleRate);
+                const d = noiseBuffer.getChannelData(0);
+                for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 3);
+            }
+            const src = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+            src.buffer = noiseBuffer;
+            f.type = 'lowpass'; f.frequency.value = 900 + Math.random() * 300;
+            g.gain.value = 0.09;
+            src.connect(f).connect(g).connect(ctx.destination);
+            src.start();
+        }
+        const sfx = {
+            good() { tone(660, 0, 0.18); tone(880, 0.12, 0.3); },
+            bad() { tone(440, 0, 0.18, 0.05, 'triangle'); tone(330, 0.12, 0.3, 0.05, 'triangle'); },
+            bug() { tone(980, 0, 0.08, 0.05, 'square'); tone(1470, 0.05, 0.12, 0.04, 'square'); },
+            open() { tone(520, 0, 0.12, 0.03); },
+        };
+        $('btn-sound').addEventListener('click', e => {
+            sound.on = !sound.on;
+            if (sound.on) audio().resume();
+            e.currentTarget.setAttribute('aria-pressed', String(sound.on));
+            e.currentTarget.textContent = sound.on ? 'Sound on' : 'Sound off';
+            if (sound.on) sfx.open();
+            canvas.focus();
+        });
+
+        // =====================================================================
+        // Minimap
+        // =====================================================================
+        const mini = $('minimap'), mctx = mini.getContext('2d');
+        const MAP_R = 74;
+        const toMap = (x, z) => [(x / MAP_R) * 150 + 160, (z / MAP_R) * 150 + 160];
+        function drawMinimap() {
+            const g = mctx;
+            g.clearRect(0, 0, 320, 320);
+            g.fillStyle = night > 0.5 ? '#2d3a2a' : '#a8c486';
+            g.beginPath(); g.arc(160, 160, 156, 0, Math.PI * 2); g.fill();
+            g.fillStyle = night > 0.5 ? '#26506a' : '#7fb3c8';
+            const [lx, lz] = toMap(LAKE.x, LAKE.z);
+            g.beginPath(); g.arc(lx, lz, LAKE.r / MAP_R * 150, 0, Math.PI * 2); g.fill();
+            g.strokeStyle = '#55575c'; g.lineCap = 'round';
+            g.lineWidth = 14;
+            g.beginPath(); g.moveTo(...toMap(0, STREET.zStart)); g.lineTo(...toMap(0, STREET.zEnd)); g.stroke();
+            g.beginPath(); g.moveTo(...toMap(CROSS.x0, CROSS.z)); g.lineTo(...toMap(CROSS.x1, CROSS.z)); g.stroke();
+            g.fillStyle = '#d3cec4';
+            const [px0, pz0] = toMap(PLAZA.x, PLAZA.z);
+            g.beginPath(); g.arc(px0, pz0, PLAZA.r / MAP_R * 150, 0, Math.PI * 2); g.fill();
+            STATIONS.forEach(s => {
+                if (!s.spot) return;
+                const [x, z] = toMap(s.spot.x, s.spot.z);
+                g.beginPath(); g.arc(x, z, 9, 0, Math.PI * 2);
+                g.fillStyle = state.visited.has(s.id) ? '#e2552b' : '#f7f3ea';
+                g.fill();
+                g.lineWidth = 3; g.strokeStyle = '#1f2024'; g.stroke();
+            });
+            g.fillStyle = '#d23a2a';
+            bugs.forEach(b => {
+                if (b.caught) return;
+                const [x, z] = toMap(b.mesh.position.x, b.mesh.position.z);
+                g.fillRect(x - 3, z - 3, 6, 6);
+            });
+            if (player) {
+                const [x, z] = toMap(player.root.position.x, player.root.position.z);
+                g.save();
+                g.translate(x, z);
+                g.rotate(-player.root.rotation.y + Math.PI);
+                g.beginPath(); g.moveTo(0, -14); g.lineTo(10, 10); g.lineTo(0, 5); g.lineTo(-10, 10); g.closePath();
+                g.fillStyle = '#1f2024'; g.fill();
+                g.lineWidth = 3; g.strokeStyle = '#f7f3ea'; g.stroke();
+                g.restore();
+            }
+            g.lineWidth = 4; g.strokeStyle = '#1f2024';
+            g.beginPath(); g.arc(160, 160, 156, 0, Math.PI * 2); g.stroke();
+        }
+
+        // ?photo hides the interface and frames the town (used for the share image)
+        const params = new URLSearchParams(location.search);
+        const photoMode = params.has('photo');
+        if (photoMode) document.body.classList.add('photo');
+        if (photoMode && !params.has('notitle')) {
+            const t = document.createElement('div');
+            t.className = 'photo-title';
+            t.innerHTML = '<b>Randika Abeyrathna</b><span>Lead Software Engineer. Walk through my career on Career Street.</span>';
+            document.body.appendChild(t);
+        }
+        if (params.has('night')) { night = nightTarget = 1; }
+
+        const clock = new THREE.Clock();
+        const vel = new THREE.Vector3();
+        let vy = 0, airborne = false, stepTimer = 0;
+        const camLook = new THREE.Vector3().copy(SPAWN);
+        const tmp = new THREE.Vector3(), fwd = new THREE.Vector3(), right = new THREE.Vector3();
+
+        function loop() {
+            requestAnimationFrame(loop);
+            const dt = Math.min(clock.getDelta(), 0.05);
+            const t = clock.elapsedTime;
+
+            if (player) {
+                const p = player.root.position;
+                // Input relative to the camera
+                fwd.set(-Math.sin(cam.yaw), 0, -Math.cos(cam.yaw));
+                right.set(Math.cos(cam.yaw), 0, -Math.sin(cam.yaw));
+                let ix = 0, iz = 0;
+                if (state.started) {
+                    if (keys.has('f')) iz += 1;
+                    if (keys.has('b')) iz -= 1;
+                    if (keys.has('l')) ix -= 1;
+                    if (keys.has('r')) ix += 1;
+                    if (stick.id !== null) { ix += stick.x; iz -= stick.y; }
+                }
+                const mag = Math.min(1, Math.hypot(ix, iz));
+                const running = keys.has('run') || (stick.id !== null && mag > 0.92);
+                const speed = (running ? 8.5 : 4.6) * mag;
+                tmp.set(0, 0, 0).addScaledVector(fwd, iz).addScaledVector(right, ix);
+                if (tmp.lengthSq() > 0) tmp.normalize();
+                vel.lerp(tmp.multiplyScalar(speed), 1 - Math.pow(0.0001, dt));
+                p.x += vel.x * dt;
+                p.z += vel.z * dt;
+                collide(p, 0.45);
+
+                const floor = groundHeight(p.x, p.z);
+                if (jumpQueued && !airborne) { vy = 6.5; airborne = true; player.once('jump'); }
+                jumpQueued = false;
+                if (airborne || p.y > floor + 0.01) {
+                    vy -= 20 * dt;
+                    p.y += vy * dt;
+                    if (p.y <= floor) { p.y = floor; vy = 0; airborne = false; }
+                } else {
+                    p.y += (floor - p.y) * Math.min(1, dt * 20);
+                }
+
+                const moving = vel.length() > 0.4;
+                if (moving) {
+                    const face = Math.atan2(vel.x, vel.z);
+                    const diff = Math.atan2(Math.sin(face - player.root.rotation.y), Math.cos(face - player.root.rotation.y));
+                    player.root.rotation.y += diff * Math.min(1, dt * 12);
+                }
+                if (!airborne) player.loop(moving ? (vel.length() > 6 ? 'sprint' : 'walk') : 'idle');
+                if (moving && !airborne) {
+                    stepTimer -= dt * vel.length();
+                    if (stepTimer <= 0) { step(); stepTimer = 1.7; }
+                }
+                player.mixer.update(dt);
+
+                // Places
+                let near = null, nearD = Infinity;
+                STATIONS.forEach(s => {
+                    if (!s.spot) return;
+                    const d = Math.hypot(p.x - s.spot.x, p.z - s.spot.z);
+                    if (d < 3.2 && d < nearD) { near = s; nearD = d; }
+                    if (s.ring) s.ring.scale.setScalar(1 + Math.sin(t * 3 + s.spot.z) * 0.06);
+                });
+                if (state.started) {
+                    if (near && near !== state.current) openStation(near);
+                    else if (!near && state.current && Math.hypot(p.x - state.current.spot.x, p.z - state.current.spot.z) > 5) closeStation();
+                }
+
+                // Colleagues turn to look at you when you are close
+                npcs.forEach(n => {
+                    const dx = p.x - n.root.position.x, dz = p.z - n.root.position.z;
+                    const target = Math.hypot(dx, dz) < 6 ? Math.atan2(dx, dz) : n.homeRot;
+                    const diff = Math.atan2(Math.sin(target - n.root.rotation.y), Math.cos(target - n.root.rotation.y));
+                    n.root.rotation.y += diff * Math.min(1, dt * 4);
+                    n.mixer.update(dt);
+                });
+
+                // Bugs
+                bugs.forEach(b => {
+                    if (b.caught) {
+                        b.mesh.position.y += dt * 3;
+                        b.mesh.rotation.y += dt * 10;
+                        b.mesh.scale.multiplyScalar(0.92);
+                        if (b.mesh.scale.x < 0.02) b.mesh.visible = false;
+                        return;
+                    }
+                    b.t += dt;
+                    const dx = b.mesh.position.x - p.x, dz = b.mesh.position.z - p.z, dist = Math.hypot(dx, dz);
+                    let sp = 1.1;
+                    if (dist < 5) { b.heading = Math.atan2(dx, dz) + Math.sin(b.t * 5) * 0.7; sp = 5.2; }
+                    else if (Math.random() < dt * 0.8) b.heading += (Math.random() - 0.5) * 2;
+                    const bp = b.mesh.position;
+                    const bx = bp.x, bz = bp.z;
+                    bp.x += Math.sin(b.heading) * sp * dt;
+                    bp.z += Math.cos(b.heading) * sp * dt;
+                    collide(bp, 0.4);
+                    if (Math.abs(bp.x - bx - Math.sin(b.heading) * sp * dt) + Math.abs(bp.z - bz - Math.cos(b.heading) * sp * dt) > 1e-4) b.heading += Math.PI * 0.6;
+                    bp.y = groundHeight(bp.x, bp.z);
+                    b.mesh.rotation.y = b.heading;
+                    b.mesh.userData.legs.forEach((l, i) => { l.rotation.y = Math.sin(b.t * sp * 7 + i) * 0.45; });
+                    if (state.started && dist < 1.1) {
+                        b.caught = true;
+                        sfx.bug();
+                        state.bugsCaught++;
+                        updateMeters();
+                        if (state.bugsCaught === BUG_COUNT) {
+                            state.finishTime = performance.now();
+                            const ms = state.finishTime - state.startTime;
+                            let best = null;
+                            try {
+                                best = Number(localStorage.getItem('career-street-best')) || null;
+                                if (!best || ms < best) localStorage.setItem('career-street-best', String(ms));
+                            } catch (_) { /* storage blocked */ }
+                            toast(best && best < ms ? `All bugs caught in ${fmtTime(ms)}. Your best is ${fmtTime(best)}` : `All bugs caught in ${fmtTime(ms)}`);
+                            player.once('emote-yes');
+                        } else {
+                            toast(`Bug caught. ${BUG_COUNT - state.bugsCaught} to go`);
+                        }
+                    }
+                });
+
+                if (state.started && !state.finishTime) $('m-time').textContent = fmtTime(performance.now() - state.startTime);
+
+                // Camera follows from behind
+                cam.dist += (cam.targetDist - cam.dist) * Math.min(1, dt * 6);
+                tmp.set(p.x, p.y + 1.1, p.z);
+                camLook.lerp(tmp, 1 - Math.pow(0.0005, dt));
+                const goal = new THREE.Vector3(
+                    camLook.x + Math.sin(cam.yaw) * Math.cos(cam.pitch) * cam.dist,
+                    camLook.y + Math.sin(cam.pitch) * cam.dist,
+                    camLook.z + Math.cos(cam.yaw) * Math.cos(cam.pitch) * cam.dist,
+                );
+                if (photoMode && params.has('portrait')) {
+                    // Tall framing for the preview on the plain page
+                    camera.position.set(16, 30, 84);
+                    camera.lookAt(0, 0, 26);
+                } else if (photoMode) {
+                    camera.position.set(30, 24, 78);
+                    camera.lookAt(0, 0, 22);
+                } else if (!state.started) {
+                    goal.set(Math.sin(t * 0.06) * 34, 22, 30 + Math.cos(t * 0.06) * 34);
+                    camera.position.lerp(goal, 1 - Math.pow(0.05, dt));
+                    camera.lookAt(0, 4, 8);
+                } else {
+                    camera.position.lerp(goal, 1 - Math.pow(0.00002, dt));
+                    camera.lookAt(camLook);
+                }
+
+                // Shadows follow the player
+                sun.position.copy(p).addScaledVector(SUN_DIR, 70);
+                sun.target.position.copy(p);
+            }
+
+            if (water) water.material.uniforms.time.value += dt * 0.6;
+
+            night += (nightTarget - night) * Math.min(1, dt * 1.5);
+            applyLook();
+
+            // Fountain spray
+            if (fountainCenter) fountainDrops.forEach(d => {
+                d.t = (d.t + dt * 0.9) % 1;
+                const r = 0.15 + d.t * 1.1;
+                d.m.position.set(fountainCenter.x + Math.cos(d.a) * r, fountainCenter.y + 0.5 * Math.sin(d.t * Math.PI) - d.t * 1.1, fountainCenter.z + Math.sin(d.a) * r);
+            });
+
+            // Speech bubbles above colleagues near you
+            if (player) npcs.forEach(n => {
+                if (!n.bubble) return;
+                const near = state.started && n.root.position.distanceTo(player.root.position) < 7;
+                n.bubble.classList.toggle('show', near);
+                if (!near) return;
+                tmp.copy(n.root.position); tmp.y += 1.55;
+                tmp.project(camera);
+                const x = (tmp.x * 0.5 + 0.5) * window.innerWidth, y = (-tmp.y * 0.5 + 0.5) * window.innerHeight;
+                n.bubble.style.transform = `translate(${x}px, ${y}px) translate(-50%, -100%) translateY(-10px)`;
+                n.bubble.style.visibility = tmp.z < 1 ? 'visible' : 'hidden';
+            });
+
+            if (Math.round(t * 60) % 2 === 0) drawMinimap();
+
+            if (composer) composer.render(dt); else renderer.render(scene, camera);
+        }
+
+        // =====================================================================
+        // Start
+        // =====================================================================
+        const startBtn = $('start');
+        startBtn.addEventListener('click', () => {
+            $('intro').classList.add('hidden');
+            state.started = true;
+            state.startTime = performance.now();
+            cam.yaw = 0;
+            canvas.focus();
+            toast('Walk up the street. 2017 is on your left');
+        });
+
+        loop();
+        (async () => {
+            try {
+                await buildStations();
+                await Promise.all([buildPlayer(), buildFiller(), buildStreetFurniture(), buildPlaza()]);
+                buildLampGlows();
+                await buildNature();
+                spawnBugs();
+                updateMeters();
+                startBtn.disabled = false;
+                startBtn.textContent = 'Start walking';
+                progressEl.style.width = '100%';
+                collectMaterials();
+                document.body.dataset.ready = 'true';
+                // ?debug exposes the world to the console for testing
+                if (params.has('debug')) window.__world = { player, STATIONS, bugs, state, keys, look: () => ({ night, sun: sun.intensity, env: lastEnv, bg: scene.backgroundIntensity, glows: glowParts.length }) };
+            } catch (err) {
+                console.error(err);
+                startBtn.textContent = 'Could not load the town';
+                document.querySelector('.intro .rules').textContent = location.protocol === 'file:'
+                    ? 'Browsers block 3D models on pages opened straight from a file. Run a small local server in this folder (for example: npx http-server) and open it from there.'
+                    : 'Something went wrong loading the 3D models. The plain version has everything.';
+            }
+        })();
+    </script>
+</body>
+</html>

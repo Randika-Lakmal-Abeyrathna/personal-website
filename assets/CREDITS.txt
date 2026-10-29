@@ -1,0 +1,15 @@
+Third-party assets used by world.html
+
+3D models: Kenney (www.kenney.nl), CC0 1.0 public domain
+  - Mini Characters        -> assets/models/characters
+  - City Kit (Commercial)  -> assets/models/city
+  - City Kit (Suburban)    -> assets/models/suburban
+  - City Kit (Roads)       -> assets/models/roads
+  - Nature Kit             -> assets/models/nature
+  Original license files: assets/models/LICENSE-kenney-*.txt
+
+Sky / lighting: "Kloofendal 48d Partly Cloudy (Pure Sky)" by Greg Zaal, Poly Haven (polyhaven.com), CC0 1.0
+  -> assets/env/sky_1k.hdr
+
+Water normal map: three.js examples (github.com/mrdoob/three.js), MIT license
+  -> assets/env/waternormals.jpg
