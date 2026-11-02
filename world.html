@@ -19,6 +19,7 @@
     <meta property="og:image:height" content="630">
     <meta name="twitter:card" content="summary_large_image">
 
+    <link rel="modulepreload" href="assets/vendor/three/three.module.min.js">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -35,7 +36,11 @@
         }
         *, *::before, *::after { box-sizing: border-box; }
         html, body { margin: 0; height: 100%; overflow: hidden; }
-        body { background: #c9dbe6; color: var(--ink); font-family: var(--font); -webkit-font-smoothing: antialiased; user-select: none; }
+        body { background: #c9dbe6; color: var(--ink); font-family: var(--font); -webkit-font-smoothing: antialiased; }
+        /* Stop drags on the scene and controls from selecting text; cards and the intro stay selectable */
+        #scene, .hud, .top-links, .keys, .toast, .stick, .jump-btn, #bubbles { user-select: none; -webkit-user-select: none; }
+        :focus-visible { outline: 3px solid var(--signal); outline-offset: 2px; }
+        #scene:focus-visible { outline: none; }
         a { color: inherit; }
         button { font: inherit; color: inherit; }
         #scene { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; outline: none; }
@@ -145,6 +150,9 @@
             .minimap { top: 52px; right: 10px; width: 104px; height: 104px; }
             .card { right: 10px; left: 10px; width: auto; max-height: 45vh; }
         }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { transition-duration: 0.01ms !important; }
+        }
     </style>
 </head>
 <body>
@@ -178,9 +186,9 @@
     <div class="stick" id="stick"><i></i></div>
     <button class="jump-btn" id="jump-btn">Jump</button>
 
-    <div class="intro" id="intro">
+    <div class="intro" id="intro" role="dialog" aria-modal="true" aria-labelledby="intro-title">
         <div class="panel">
-            <h2>Welcome to Career Street.</h2>
+            <h2 id="intro-title" tabindex="-1">Welcome to Career Street.</h2>
             <p>
                 I'm Randika Abeyrathna, a Lead Software Engineer based in Colombo, Sri Lanka. This little town is my
                 career. Walk up the street from 2017 to today, and stop at any building to read about it.
@@ -189,7 +197,7 @@
                 At seven places a colleague will hand you a real situation from that job. Make your call, then see what I did.<br>
                 Ten bugs have escaped into town. Catch them all.
             </div>
-            <div class="progress"><i id="progress"></i></div>
+            <div class="progress" role="progressbar" aria-label="Loading the town" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="progress"></i></div>
             <div class="actions">
                 <button class="btn primary" id="start" disabled>Loading the town</button>
                 <a href="index.html">Rather read a normal page?</a>
@@ -200,8 +208,8 @@
     <script type="importmap">
         {
             "imports": {
-                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+                "three": "./assets/vendor/three/three.module.min.js",
+                "three/addons/": "./assets/vendor/three/addons/"
             }
         }
     </script>
@@ -210,6 +218,7 @@
         import * as THREE from 'three';
         import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+        import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
         import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js';
         import { Water } from 'three/addons/objects/Water.js';
         import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
@@ -431,8 +440,12 @@
         // =====================================================================
         const manager = new THREE.LoadingManager();
         const progressEl = document.getElementById('progress');
-        manager.onProgress = (url, loaded, total) => { progressEl.style.width = `${Math.round((loaded / total) * 100)}%`; };
-        const gltfLoader = new GLTFLoader(manager);
+        const setProgress = pct => {
+            progressEl.style.width = `${pct}%`;
+            progressEl.parentElement.setAttribute('aria-valuenow', String(pct));
+        };
+        manager.onProgress = (url, loaded, total) => setProgress(Math.round((loaded / total) * 100));
+        const gltfLoader = new GLTFLoader(manager).setMeshoptDecoder(MeshoptDecoder); // models are meshopt-compressed
         const cache = new Map();
         function loadModel(name) {
             if (!cache.has(name)) cache.set(name, gltfLoader.loadAsync(`assets/models/${name}.glb`));
@@ -1589,8 +1602,14 @@
         // Start
         // =====================================================================
         const startBtn = $('start');
+        // While the intro dialog is open, everything behind it is out of reach for keyboard and screen readers
+        const behindIntro = document.querySelectorAll('#scene, .hud, .top-links, .keys, #card, #stick, #jump-btn');
+        behindIntro.forEach(el => { el.inert = true; });
+        $('intro-title').focus();
         startBtn.addEventListener('click', () => {
+            behindIntro.forEach(el => { el.inert = false; });
             $('intro').classList.add('hidden');
+            $('intro').inert = true;
             state.started = true;
             state.startTime = performance.now();
             cam.yaw = 0;
@@ -1609,7 +1628,8 @@
                 updateMeters();
                 startBtn.disabled = false;
                 startBtn.textContent = 'Start walking';
-                progressEl.style.width = '100%';
+                setProgress(100);
+                startBtn.focus();
                 collectMaterials();
                 document.body.dataset.ready = 'true';
                 // ?debug exposes the world to the console for testing

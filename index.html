@@ -20,9 +20,23 @@
     <meta property="og:image:height" content="630">
     <meta name="twitter:card" content="summary_large_image">
 
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Randika Abeyrathna",
+        "jobTitle": "Lead Software Engineer",
+        "url": "https://randika.me/",
+        "email": "mailto:randika.l.abeyrathna@gmail.com",
+        "address": { "@type": "PostalAddress", "addressLocality": "Colombo", "addressCountry": "LK" },
+        "knowsAbout": ["Java", "Spring Boot", "Oracle", "PL/SQL", "AWS", "Microservices"],
+        "sameAs": ["https://www.linkedin.com/in/randika-abeyrathna/"]
+    }
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -30,7 +44,7 @@
             --paper-deep: #e9e3d6;
             --ink: #1b1a17;
             --ink-soft: #4a463e;
-            --muted: #7a7466;
+            --muted: #6b6558;
             --rule: #cfc7b6;
             --rule-soft: #ddd6c7;
             --accent: #b4381c;
@@ -83,6 +97,14 @@
         p { margin: 0; }
         h1, h2, h3 { margin: 0; font-weight: 400; }
         ::selection { background: var(--ink); color: var(--paper); }
+        :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+        .skip {
+            position: absolute; left: var(--gutter); top: 8px; z-index: 10;
+            padding: 8px 14px; background: var(--ink); color: var(--paper); text-decoration: none;
+            transform: translateY(-200%);
+        }
+        .skip:focus { transform: none; }
+        .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
         .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gutter); }
         .mono { font-family: var(--mono); font-size: 12px; letter-spacing: 0.02em; }
@@ -107,7 +129,7 @@
         }
         .masthead-name { font-family: var(--serif); font-size: 22px; text-decoration: none; letter-spacing: -0.01em; }
         .masthead nav { display: flex; gap: 26px; font-size: 14px; }
-        .masthead nav a { text-decoration: none; color: var(--ink-soft); }
+        .masthead nav a { text-decoration: none; color: var(--ink-soft); display: inline-block; padding: 6px 0; }
         .masthead nav a:hover { color: var(--accent); }
         .masthead-meta { display: flex; gap: 18px; color: var(--muted); }
         @media (max-width: 860px) { .masthead-meta { display: none; } }
@@ -136,7 +158,7 @@
             font-size: 18px; color: var(--ink-soft);
         }
         .hero-links { display: flex; flex-wrap: wrap; gap: 10px 28px; margin-top: 32px; font-size: 15px; }
-        .hero-links a { font-weight: 500; }
+        .hero-links a { font-weight: 500; display: inline-block; padding: 2px 0; }
         @media (max-width: 900px) { .hero { grid-template-columns: 1fr; align-items: start; } }
 
         /* ---------- Live system model ---------- */
@@ -173,6 +195,7 @@
         .sys-controls button:hover:not(:disabled) { background: var(--ink); color: var(--paper); }
         .sys-controls button:disabled { opacity: 0.45; cursor: default; }
         .sys-controls button.quiet { border-color: transparent; color: var(--muted); }
+        .sys-controls .pause { margin-left: auto; }
         @media (max-width: 480px) {
             .sys-head { flex-wrap: wrap; row-gap: 2px; }
             .sys-metrics > div { padding: 8px 10px; }
@@ -319,7 +342,7 @@
         .edu { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--ink); }
         .edu > div { padding: 22px 24px 0 0; }
         .edu > div + div { border-left: 1px solid var(--rule); padding-left: 24px; }
-        .edu h3 { font-family: var(--serif); font-size: 24px; line-height: 1.2; }
+        .edu h3 { font-family: var(--serif); font-size: 24px; line-height: 1.2; margin-top: 8px; }
         .edu p { color: var(--ink-soft); margin-top: 6px; }
         @media (max-width: 760px) {
             .edu { grid-template-columns: 1fr; }
@@ -333,6 +356,7 @@
             font-size: clamp(44px, 8vw, 112px);
             line-height: 0.98; letter-spacing: -0.03em;
         }
+        .contact .section-no { margin-bottom: 20px; }
         .contact h2 a { text-decoration: none; }
         .contact h2 a:hover { color: var(--accent); }
         .contact-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; margin-top: 48px; border-top: 1px solid var(--ink); padding-top: 16px; }
@@ -340,7 +364,7 @@
         .contact-grid .mono { display: block; color: var(--muted); margin-bottom: 4px; }
         @media (max-width: 720px) { .contact-grid { grid-template-columns: 1fr 1fr; } }
         @media (max-width: 480px) { .contact-grid { grid-template-columns: 1fr; } }
-        .contact-grid a { overflow-wrap: anywhere; }
+        .contact-grid a { overflow-wrap: anywhere; display: inline-block; padding: 3px 0; }
 
         .colophon { border-top: 1px solid var(--rule); padding: 20px 0 28px; color: var(--muted); }
         .colophon .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px 24px; }
@@ -350,9 +374,11 @@
 </head>
 <body>
 
+    <a class="skip" href="#main">Skip to content</a>
+
     <header class="masthead">
         <div class="wrap">
-            <a href="#top" class="masthead-name">Randika Abeyrathna</a>
+            <a href="#main" class="masthead-name">Randika Abeyrathna</a>
             <div class="masthead-meta mono">
                 <span>Colombo, Sri Lanka</span>
                 <span id="clock"></span>
@@ -367,7 +393,7 @@
         </div>
     </header>
 
-    <main id="top">
+    <main id="main">
 
         <!-- Hero -->
         <section class="wrap hero">
@@ -416,6 +442,7 @@
                     <button id="b-fix">Fix the slow query</button>
                     <button id="b-crash">Crash a server</button>
                     <button id="b-reset" class="quiet">Reset</button>
+                    <button id="b-pause" class="quiet pause" aria-pressed="false">Pause</button>
                 </div>
                 <p class="sys-status" id="sys-status" aria-live="polite"></p>
             </figure>
@@ -449,7 +476,7 @@
                     <div class="section-no mono">Work</div>
                     <div>
                         <h2>Where I've worked</h2>
-                        <p>Click a role to see what I did there.</p>
+                        <p>Open a role to see what I did there.</p>
                     </div>
                 </div>
 
@@ -459,7 +486,7 @@
                             <span class="job-years mono">2025–now</span>
                             <span class="job-role">Lead Software Engineer</span>
                             <span class="job-org">IFS<small>Contract via Just In Time Group · Colombo</small></span>
-                            <span class="job-toggle">+</span>
+                            <span class="job-toggle" aria-hidden="true">+</span>
                         </summary>
                         <div class="job-body">
                             <span></span>
@@ -475,12 +502,12 @@
                         </div>
                     </details>
 
-                    <details class="job">
+                    <details class="job" open>
                         <summary>
                             <span class="job-years mono">2024–2025</span>
                             <span class="job-role">Senior Software Engineer</span>
                             <span class="job-org">IFS<small>Contract via Just In Time Group · Colombo</small></span>
-                            <span class="job-toggle">+</span>
+                            <span class="job-toggle" aria-hidden="true">+</span>
                         </summary>
                         <div class="job-body">
                             <span></span>
@@ -500,7 +527,7 @@
                             <span class="job-years mono">2024</span>
                             <span class="job-role">Senior Software Engineer</span>
                             <span class="job-org">MEXXAR<small>Kandy</small></span>
-                            <span class="job-toggle">+</span>
+                            <span class="job-toggle" aria-hidden="true">+</span>
                         </summary>
                         <div class="job-body">
                             <span></span>
@@ -522,7 +549,7 @@
                             <span class="job-years mono">2021–2024</span>
                             <span class="job-role">Senior Software Engineer</span>
                             <span class="job-org">HCL Technologies<small>Healthcare · Colombo</small></span>
-                            <span class="job-toggle">+</span>
+                            <span class="job-toggle" aria-hidden="true">+</span>
                         </summary>
                         <div class="job-body">
                             <span></span>
@@ -543,7 +570,7 @@
                             <span class="job-years mono">2019–2021</span>
                             <span class="job-role">Software Engineer</span>
                             <span class="job-org">Just In Time Group<small>Assigned to Silverlake Digital Economy (Malaysia)</small></span>
-                            <span class="job-toggle">+</span>
+                            <span class="job-toggle" aria-hidden="true">+</span>
                         </summary>
                         <div class="job-body">
                             <span></span>
@@ -564,7 +591,7 @@
                             <span class="job-years mono">2017–2019</span>
                             <span class="job-role">Associate Software Engineer</span>
                             <span class="job-org">Swarnamahal Financial Services<small>Colombo</small></span>
-                            <span class="job-toggle">+</span>
+                            <span class="job-toggle" aria-hidden="true">+</span>
                         </summary>
                         <div class="job-body">
                             <span></span>
@@ -634,11 +661,12 @@
                     <div><h2>Tools of the trade</h2></div>
                 </div>
                 <table class="spec">
-                    <tr><th>Languages</th><td><span>Java</span><span>JavaScript</span><span>PL/SQL</span><span>SQL</span></td></tr>
-                    <tr><th>Backend</th><td><span>Spring Boot</span><span>Spring MVC</span><span>Spring Security</span><span>REST APIs</span><span>Microservices</span><span>Java EE</span><span>JSP</span><span>IFS Cloud Aurena</span></td></tr>
-                    <tr><th>Databases</th><td><span>Oracle</span><span>PostgreSQL</span><span>IBM DB2</span></td></tr>
-                    <tr><th>Cloud &amp; DevOps</th><td><span>AWS (EC2, RDS, S3, Route 53, SNS, SQS)</span><span>Docker</span><span>Jenkins</span><span>CI/CD</span><span>Git, GitHub, Bitbucket</span></td></tr>
-                    <tr><th>Ways of working</th><td><span>Agile</span><span>Scrum</span><span>TDD</span><span>Code review</span><span>Mentoring</span></td></tr>
+                    <caption class="visually-hidden">Skills by area</caption>
+                    <tr><th scope="row">Languages</th><td><span>Java</span><span>JavaScript</span><span>PL/SQL</span><span>SQL</span></td></tr>
+                    <tr><th scope="row">Backend</th><td><span>Spring Boot</span><span>Spring MVC</span><span>Spring Security</span><span>REST APIs</span><span>Microservices</span><span>Java EE</span><span>JSP</span><span>IFS Cloud Aurena</span></td></tr>
+                    <tr><th scope="row">Databases</th><td><span>Oracle</span><span>PostgreSQL</span><span>IBM DB2</span></td></tr>
+                    <tr><th scope="row">Cloud &amp; DevOps</th><td><span>AWS (EC2, RDS, S3, Route 53, SNS, SQS)</span><span>Docker</span><span>Jenkins</span><span>CI/CD</span><span>Git, GitHub, Bitbucket</span></td></tr>
+                    <tr><th scope="row">Ways of working</th><td><span>Agile</span><span>Scrum</span><span>TDD</span><span>Code review</span><span>Mentoring</span></td></tr>
                 </table>
             </div>
         </section>
@@ -653,12 +681,12 @@
                 <div class="edu">
                     <div>
                         <div class="mono muted">Master's</div>
-                        <h3 style="margin-top:8px">MSc in Information Technology</h3>
+                        <h3>MSc in Information Technology</h3>
                         <p>Cardiff Metropolitan University · Distinction</p>
                     </div>
                     <div>
                         <div class="mono muted">Bachelor's</div>
-                        <h3 style="margin-top:8px">B.Eng. in Software Engineering</h3>
+                        <h3>B.Eng. in Software Engineering</h3>
                         <p>IIC University of Technology · Second Upper Class</p>
                     </div>
                 </div>
@@ -668,7 +696,7 @@
         <!-- Contact -->
         <section class="contact" id="contact">
             <div class="wrap">
-                <div class="section-no mono" style="margin-bottom:20px">Contact</div>
+                <div class="section-no mono">Contact</div>
                 <h2>Have a hard backend problem?<br><a href="mailto:randika.l.abeyrathna@gmail.com"><em>Write to me.</em></a></h2>
                 <div class="contact-grid">
                     <div><span class="mono">Email</span><a class="link" href="mailto:randika.l.abeyrathna@gmail.com">randika.l.abeyrathna@gmail.com</a></div>
@@ -692,12 +720,13 @@
         // { name: 'Project name', text: 'One or two sentences on what it does and what you used.', url: 'https://github.com/...' }
         const AI_PROJECTS = [];
 
+        const esc = v => String(v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
         const list = document.getElementById('ai-project-list');
         if (AI_PROJECTS.length) {
             list.innerHTML = AI_PROJECTS.map(p => `
                 <div class="project">
-                    <div class="project-name">${p.url ? `<a class="link" href="${p.url}" target="_blank" rel="noopener noreferrer">${p.name}</a>` : p.name}</div>
-                    <p>${p.text}</p>
+                    <div class="project-name">${p.url ? `<a class="link" href="${esc(p.url)}" target="_blank" rel="noopener noreferrer">${esc(p.name)}</a>` : esc(p.name)}</div>
+                    <p>${esc(p.text)}</p>
                 </div>`).join('');
         } else {
             document.getElementById('ai-projects').remove();
@@ -925,14 +954,23 @@
             });
             $('b-reset').addEventListener('click', reset);
 
-            // Run only while visible
+            // Starts paused for visitors who ask for reduced motion
+            let paused = matchMedia('(prefers-reduced-motion: reduce)').matches;
+            function setPaused(p) {
+                paused = p;
+                $('b-pause').textContent = p ? 'Play' : 'Pause';
+                $('b-pause').setAttribute('aria-pressed', String(p));
+            }
+            $('b-pause').addEventListener('click', () => setPaused(!paused));
+
+            // Run only while visible and not paused
             let visible = true, last = performance.now();
             new IntersectionObserver(([e]) => { visible = e.isIntersecting; }).observe(svg);
             function loop(now) {
                 requestAnimationFrame(loop);
                 const dt = Math.min(now - last, 100);
                 last = now;
-                if (!visible || document.hidden) return;
+                if (paused || !visible || document.hidden) return;
                 const rate = sim.spikeUntil ? SPIKE_RATE : BASE_RATE;
                 sim.carry += rate * dt / 1000;
                 while (sim.carry >= 1) { sim.carry -= 1; spawn(now); }
@@ -941,6 +979,7 @@
                 events(now);
             }
             reset();
+            setPaused(paused);
             requestAnimationFrame(loop);
         })();
     </script>
