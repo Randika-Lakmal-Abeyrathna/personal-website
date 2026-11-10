@@ -13,3 +13,8 @@ Sky / lighting: "Kloofendal 48d Partly Cloudy (Pure Sky)" by Greg Zaal, Poly Hav
 
 Water normal map: three.js examples (github.com/mrdoob/three.js), MIT license
   -> assets/env/waternormals.jpg
+
+Fonts used by index.html (latin subset, self-hosted), SIL Open Font License 1.1
+  - Newsreader by Production Type      -> assets/fonts/newsreader*.woff2
+  - IBM Plex Sans and IBM Plex Mono    -> assets/fonts/plex-*.woff2
+  License text: https://openfontlicense.org
