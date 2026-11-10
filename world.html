@@ -205,6 +205,14 @@
         </div>
     </div>
 
+    <!-- Browsers refuse to load module scripts from file://, so the town's code below never runs there -->
+    <script>
+        if (location.protocol === 'file:') {
+            document.getElementById('start').textContent = 'Could not load the town';
+            document.querySelector('.intro .rules').textContent = 'Browsers block 3D pages opened straight from a file. Run a small local server in this folder (for example: npx http-server) and open it from there.';
+        }
+    </script>
+
     <script type="importmap">
         {
             "imports": {
@@ -275,11 +283,11 @@
                 id: 'hcl', model: 'city/building-skyscraper-c', side: 'L', z: 20, npc: 'female-b',
                 kicker: '2021 to 2024', title: 'HCL Technologies', role: 'Senior Software Engineer, healthcare',
                 body: [
-                    'Designed, built and maintained Spring Boot microservices on Oracle for healthcare systems.',
+                    'Built and maintained Spring Boot microservices on Oracle, with AWS Lambda functions, for healthcare systems.',
+                    'Cut response times by about 20% on key healthcare workflows by tuning Oracle SQL and backend services.',
                     'Traced complex production issues to the root cause and shipped permanent fixes.',
-                    'Tuned Oracle SQL and backend services for performance and scale.',
                 ],
-                stack: 'Java, Spring Boot, microservices, Oracle',
+                stack: 'Java, Spring Boot, microservices, Oracle, AWS Lambda',
                 decision: {
                     q: 'The same production issue in a healthcare system keeps coming back every few weeks.',
                     options: ['Restart the service on a schedule', 'Add more servers', 'Trace it to the root cause and fix it for good'],
@@ -291,20 +299,22 @@
                 id: 'skills', model: 'city/building-d', place: { x: -24, z: 15, rot: Math.PI }, npc: 'male-c',
                 kicker: 'Toolbox', title: 'The Workshop', role: 'What I build with',
                 body: [
-                    'Languages: Java, JavaScript, PL/SQL, SQL.',
-                    'Backend: Spring Boot, Spring MVC, Spring Security, REST APIs, microservices, Java EE, JSP, IFS Cloud Aurena.',
-                    'Databases: Oracle, PostgreSQL, IBM DB2.',
-                    'Cloud and DevOps: AWS (EC2, RDS, S3, Route 53, SNS, SQS), Docker, Jenkins, CI/CD, Git, GitHub, Bitbucket.',
-                    'Ways of working: Agile, Scrum, TDD, code review, mentoring.',
+                    'Backend: Java, Spring Boot, Spring Security, REST APIs, microservices, Java EE, JSP, IFS Cloud Aurena.',
+                    'Frontend: Angular, React, TypeScript, JavaScript, HTML/CSS.',
+                    'AI: Claude Code, agentic AI workflows, automated code review, AI knowledge bases.',
+                    'Databases: Oracle, IBM DB2, PL/SQL, SQL performance tuning.',
+                    'Messaging and security: Apache Kafka, RabbitMQ, Keycloak, OAuth2 / OpenID Connect, mTLS.',
+                    'Cloud and DevOps: AWS (EC2, RDS, S3, SQS, SNS, Lambda), Docker, CI/CD, Git.',
                 ],
             },
             {
                 id: 'ai', model: 'city/building-g', place: { x: 24, z: -3, rot: 0 }, npc: 'female-d',
-                kicker: 'How I work', title: 'AI Lab', role: 'AI tools in my day-to-day work',
+                kicker: 'At IFS', title: 'AI Lab', role: 'AI in my team\'s engineering work',
                 body: [
-                    'I use AI tools like a quick pair programmer. I still make the design calls, and I own what ships.',
-                    'Day to day: reading legacy Java and JSP before migrating it, drafting tests, checking SQL, and a first-pass review before a pull request.',
-                    'With my team: AI-written code gets the same review as anything else, and no customer data or secrets go into prompts.',
+                    'Pre-PR check: an AI review against team rules before a pull request. Issues show up in 3 to 4 minutes, not after a 2 to 3 hour CI build.',
+                    'Team toolkit: 10 to 15 reusable Claude Code commands and rules in a shared repo, used daily by about 10 engineers.',
+                    'Knowledge base: the team\'s repos, code and docs indexed so the AI has real project context.',
+                    'Rules: AI-written code gets the same review as anything else, and no customer data or secrets go into prompts.',
                 ],
                 decision: {
                     q: 'An AI assistant hands you a neat-looking fix for a bug.',
@@ -319,9 +329,10 @@
                 body: [
                     'Technical lead for a backend team of five: sprint planning, task assignment, code review and mentoring.',
                     'Designed the backend architecture and built Spring Boot microservices.',
+                    'Built React front-end components and connected them to Spring Boot REST APIs.',
                     'Ran deployment pipelines and the AWS infrastructure for production releases.',
                 ],
-                stack: 'Spring Boot, microservices, AWS, CI/CD, Jira',
+                stack: 'Spring Boot, React, microservices, AWS, CI/CD, Jira',
                 decision: {
                     q: 'You lead a team of five and nobody can see what is in progress or what is late.',
                     options: ['Bring in Agile sprint planning on Jira', 'Ask everyone for a daily status email', 'Do the urgent work yourself'],
@@ -337,7 +348,7 @@
                     'Redesigned Java EE implementations to fit the IFS Cloud architecture.',
                     'Designed and tuned Oracle SQL, views and PL/SQL components.',
                 ],
-                stack: 'Java EE, JSP, Oracle, PL/SQL',
+                stack: 'Java EE, JSP, Oracle, PL/SQL, IFS Cloud Aurena',
                 decision: {
                     q: 'You are migrating an old JSP module to IFS Cloud Aurena. How do you approach it?',
                     options: ['Rewrite it from scratch and add new features while you are at it', 'Keep the business behaviour exactly, and redesign it to fit the new architecture', 'Wrap the old page so it shows up inside the new one'],
@@ -349,11 +360,12 @@
                 id: 'ifs2', model: 'city/building-skyscraper-e', side: 'R', z: -28, npc: 'male-a',
                 kicker: '2025 to now', title: 'IFS', role: 'Lead Software Engineer, via Just In Time Group',
                 body: [
-                    'Lead the engineering team: planning, estimating stories, code review and mentoring, while staying hands-on.',
-                    'Key part of a large modernisation effort, moving legacy modules onto IFS Cloud Aurena.',
-                    'Fix performance problems by reading execution plans, rewriting SQL and redesigning views.',
+                    'Lead a team of 8 engineers moving a legacy aerospace maintenance platform to IFS Cloud (Aurena).',
+                    'Work with Angular UI components and shape REST APIs to fit what the frontend needs.',
+                    'Fix Oracle performance problems by reading execution plans, rewriting SQL and redesigning views.',
+                    'Lead the team\'s use of AI: shared Claude Code commands, a knowledge base and a pre-PR check.',
                 ],
-                stack: 'Java EE, IFS Cloud Aurena, Oracle, PL/SQL',
+                stack: 'Java, Angular, Oracle, PL/SQL, IFS Cloud Aurena, Claude Code',
                 decision: {
                     q: 'An important Oracle screen has become slow. Where do you start?',
                     options: ['Add indexes to every column it touches', 'Cache everything', 'Read the execution plan and see what the database is actually doing'],
@@ -365,7 +377,7 @@
                 id: 'mail', model: 'suburban/building-type-g', place: { x: 0, z: -58, rot: 0 }, npc: null,
                 kicker: 'End of the street', title: 'Get in touch', role: 'Want me on your team?',
                 body: [
-                    'I\'m open to backend, cloud migration and system architecture work.',
+                    'I\'m open to full-stack Java and lead engineer roles.',
                     'Based in Colombo, Sri Lanka.',
                 ],
                 contact: true,

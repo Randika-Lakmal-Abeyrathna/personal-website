@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Randika Abeyrathna, Lead Software Engineer</title>
-    <meta name="description" content="Randika Abeyrathna is a Lead Software Engineer in Colombo, Sri Lanka, building enterprise Java back ends with Spring Boot, Oracle and AWS.">
+    <meta name="description" content="Randika Abeyrathna is a full-stack Lead Software Engineer in Colombo, Sri Lanka, building enterprise systems with Java, Spring Boot, Angular, React, Oracle and AWS.">
     <meta name="theme-color" content="#f2eee5" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#151411" media="(prefers-color-scheme: dark)">
     <link rel="canonical" href="https://randika.me/">
@@ -14,7 +14,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://randika.me/">
     <meta property="og:title" content="Randika Abeyrathna, Lead Software Engineer">
-    <meta property="og:description" content="Eight years of enterprise Java back ends with Spring Boot, Oracle and AWS. Read the CV, or walk through it in a small 3D town.">
+    <meta property="og:description" content="Full-stack Java engineer with 9+ years in banking, healthcare, aerospace and finance. Spring Boot, Angular, React, Oracle, AWS. Leads a team of 8 at IFS.">
     <meta property="og:image" content="https://randika.me/assets/og-image.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -29,8 +29,8 @@
         "url": "https://randika.me/",
         "email": "mailto:randika.l.abeyrathna@gmail.com",
         "address": { "@type": "PostalAddress", "addressLocality": "Colombo", "addressCountry": "LK" },
-        "knowsAbout": ["Java", "Spring Boot", "Oracle", "PL/SQL", "AWS", "Microservices"],
-        "sameAs": ["https://www.linkedin.com/in/randika-abeyrathna/"]
+        "knowsAbout": ["Java", "Spring Boot", "Angular", "React", "TypeScript", "Oracle", "PL/SQL", "AWS", "Microservices", "Claude Code"],
+        "sameAs": ["https://www.linkedin.com/in/randika-abeyrathna/", "https://github.com/Randika-Lakmal-Abeyrathna"]
     }
     </script>
 
@@ -48,9 +48,12 @@
             --rule: #cfc7b6;
             --rule-soft: #ddd6c7;
             --accent: #b4381c;
-            --band: #1b1a17;
+            /* Third colour: a deep green used for labels, figures and tags */
+            --green: #1f5d55;
+            --green-wash: #dfe6dc;
+            --band: #1f3a36;
             --band-text: #f2eee5;
-            --band-soft: #cfc9bc;
+            --band-soft: #c9d3cc;
             --band-accent: #e9a08e;
             color-scheme: light;
 
@@ -73,9 +76,11 @@
                 --rule: #3a362e;
                 --rule-soft: #2b2823;
                 --accent: #e2694a;
-                --band: #24221d;
+                --green: #7fbfae;
+                --green-wash: #1e2a26;
+                --band: #1a2a27;
                 --band-text: #ece6d8;
-                --band-soft: #aea797;
+                --band-soft: #aeb8b1;
                 --band-accent: #e2694a;
                 color-scheme: dark;
             }
@@ -160,6 +165,8 @@
         .hero-links { display: flex; flex-wrap: wrap; gap: 10px 28px; margin-top: 32px; font-size: 15px; }
         .hero-links a { font-weight: 500; display: inline-block; padding: 2px 0; }
         @media (max-width: 900px) { .hero { grid-template-columns: 1fr; align-items: start; } }
+        /* On phones the demo would push Work two screens down, so it is left out there */
+        @media (max-width: 600px) { .hero .sys { display: none; } }
 
         /* ---------- Live system model ---------- */
         .sys { margin: 0; }
@@ -167,7 +174,7 @@
         .sys-head { display: flex; justify-content: space-between; gap: 12px; padding: 10px 14px; border-bottom: 1px solid var(--rule); color: var(--muted); }
         .sys-head b { color: var(--ink); font-weight: 500; }
         .sys-live { display: inline-flex; align-items: center; gap: 6px; }
-        .sys-live::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: #3f9a5a; }
+        .sys-live::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
         #sys { display: block; width: 100%; height: auto; }
         .sys-line { stroke: var(--rule); stroke-width: 1.2; fill: none; }
         .sys-node rect { fill: var(--paper); stroke: var(--ink); stroke-width: 1.2; transition: stroke 0.3s; }
@@ -214,7 +221,7 @@
         }
         .ledger div.cell { padding: 16px 0; padding-right: 16px; }
         .ledger div.cell + div.cell { border-left: 1px solid var(--rule); padding-left: 16px; }
-        .ledger .num { font-family: var(--serif); font-size: 30px; line-height: 1.1; }
+        .ledger .num { font-family: var(--serif); font-size: 30px; line-height: 1.1; color: var(--green); }
         .ledger .lbl { color: var(--muted); font-size: 13px; }
 
         /* ---------- Link to the 3D world ---------- */
@@ -246,7 +253,7 @@
             display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: 24px;
             margin-bottom: clamp(28px, 4vw, 48px);
         }
-        .section-no { color: var(--accent); padding-top: 12px; }
+        .section-no { color: var(--green); padding-top: 12px; }
         .section-head h2 {
             font-family: var(--serif); font-size: clamp(32px, 4vw, 52px);
             line-height: 1.05; letter-spacing: -0.02em;
@@ -288,7 +295,8 @@
         .job-body li { position: relative; padding-left: 22px; color: var(--ink-soft); }
         .job-body li + li { margin-top: 8px; }
         .job-body li::before { content: ''; position: absolute; left: 2px; top: 0.7em; width: 6px; height: 1px; background: var(--muted); }
-        .job-stack { margin-top: 16px; color: var(--muted); }
+        .job-stack { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 6px; }
+        .job-stack span { padding: 2px 8px; background: var(--green-wash); color: var(--green); }
         @media (max-width: 760px) {
             .job summary { grid-template-columns: minmax(0, 1fr) 24px; gap: 4px 12px; }
             .job-years { grid-column: 1; }
@@ -300,28 +308,21 @@
         }
 
         /* ---------- AI ---------- */
-        .ai-intro {
-            font-family: var(--serif);
-            font-size: clamp(22px, 2.4vw, 30px);
-            line-height: 1.3;
-            max-width: 30em;
-            letter-spacing: -0.01em;
-        }
+        .ai-intro { font-size: 18px; color: var(--ink-soft); max-width: 40em; }
         .ai-cols {
-            display: grid; grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
+            display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
             border-top: 1px solid var(--ink);
-            margin-top: 48px;
+            margin-top: 36px;
         }
-        .ai-col { padding: 22px 24px 0 0; }
+        .ai-col { padding: 22px 24px 24px 0; }
         .ai-col + .ai-col { border-left: 1px solid var(--rule); padding-left: 24px; }
-        .ai-col h3 { font-family: var(--serif); font-size: 24px; margin: 8px 0 14px; }
-        .ai-col p, .ai-col li { color: var(--ink-soft); font-size: 15px; }
-        .ai-col ul { margin: 0; padding: 0; list-style: none; }
-        .ai-col li { padding: 9px 0; border-top: 1px solid var(--rule-soft); }
-        .ai-col li:first-child { border-top: 0; padding-top: 0; }
-        .ai-col li b { color: var(--ink); font-weight: 500; }
-        .project + .project { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--rule-soft); }
-        .project-name { font-weight: 500; color: var(--ink); }
+        .ai-fig { font-family: var(--serif); font-size: 40px; line-height: 1; color: var(--green); letter-spacing: -0.02em; }
+        .ai-fig-note { color: var(--muted); margin-top: 6px; }
+        .ai-col h3 { font-family: var(--serif); font-size: 24px; margin: 20px 0 8px; }
+        .ai-col p { color: var(--ink-soft); font-size: 15px; }
+        .ai-rules { margin: 28px 0 0; padding: 18px 0 0; list-style: none; border-top: 1px solid var(--rule); color: var(--ink-soft); font-size: 15px; }
+        .ai-rules li + li { margin-top: 6px; }
+        .ai-rules b { color: var(--ink); font-weight: 500; }
         @media (max-width: 860px) {
             .ai-cols { grid-template-columns: 1fr; }
             .ai-col, .ai-col + .ai-col { padding: 22px 0; border-left: 0; }
@@ -359,9 +360,10 @@
         .contact .section-no { margin-bottom: 20px; }
         .contact h2 a { text-decoration: none; }
         .contact h2 a:hover { color: var(--accent); }
-        .contact-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; margin-top: 48px; border-top: 1px solid var(--ink); padding-top: 16px; }
+        .contact-grid { display: grid; grid-template-columns: minmax(0, 1.6fr) repeat(4, minmax(0, 1fr)); gap: 24px; margin-top: 48px; border-top: 1px solid var(--ink); padding-top: 16px; }
         .contact-grid div { font-size: 15px; }
-        .contact-grid .mono { display: block; color: var(--muted); margin-bottom: 4px; }
+        .contact-grid .mono { display: block; color: var(--green); margin-bottom: 4px; }
+        @media (max-width: 1000px) { .contact-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
         @media (max-width: 720px) { .contact-grid { grid-template-columns: 1fr 1fr; } }
         @media (max-width: 480px) { .contact-grid { grid-template-columns: 1fr; } }
         .contact-grid a { overflow-wrap: anywhere; display: inline-block; padding: 3px 0; }
@@ -388,7 +390,7 @@
                 <a href="#ai">AI</a>
                 <a href="#skills" class="opt">Skills</a>
                 <a href="#contact">Contact</a>
-                <a href="world.html" class="nav-play">Play</a>
+                <a href="world.html" class="nav-play">3D CV</a>
             </nav>
         </div>
     </header>
@@ -400,24 +402,25 @@
             <div>
                 <div class="kicker mono">
                     <span><b>Lead Software Engineer</b> at IFS</span>
-                    <span>Java · Spring Boot · Oracle · AWS</span>
+                    <span>Java · Spring Boot · Angular · React · AWS</span>
                 </div>
-                <h1>I build the Java back ends that banks, hospitals and aerospace teams <em>rely on</em> every day.</h1>
+                <h1>Full-stack Java engineer. I lead a team of 8 at IFS.</h1>
                 <p class="hero-body">
-                    Eight years of enterprise backend work: designing Spring Boot services, tuning Oracle until
-                    the execution plans make sense, moving legacy Java and JSP onto modern platforms, and helping
-                    the engineers around me do their best work. I lead, and I still write the code.
+                    9+ years building enterprise systems for banking, healthcare, aerospace and finance:
+                    Spring Boot microservices, Angular and React frontends, Oracle performance tuning, and moving
+                    legacy Java and JSP onto modern platforms. I also lead my team's use of AI in day-to-day engineering.
                 </p>
                 <div class="hero-links">
-                    <a class="link" href="mailto:randika.l.abeyrathna@gmail.com">randika.l.abeyrathna@gmail.com</a>
-                    <a class="link" href="https://www.linkedin.com/in/randika-abeyrathna/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
                     <a class="link" href="assets/cv/Randika-Abeyrathna-CV.pdf" download>Download CV (PDF)</a>
+                    <a class="link" href="https://www.linkedin.com/in/randika-abeyrathna/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                    <a class="link" href="https://github.com/Randika-Lakmal-Abeyrathna" target="_blank" rel="noopener noreferrer">GitHub</a>
+                    <a class="link" href="mailto:randika.l.abeyrathna@gmail.com">randika.l.abeyrathna@gmail.com</a>
                 </div>
             </div>
 
             <figure class="sys" aria-label="Interactive model of a backend system">
                 <div class="sys-frame">
-                    <div class="sys-head mono"><span><b>A backend, live</b></span><span class="sys-live">each dot is a request</span></div>
+                    <div class="sys-head mono"><span><b>Request flow demo</b></span><span class="sys-live">JavaScript + SVG</span></div>
                     <svg id="sys" viewBox="0 0 400 372" role="img" aria-label="Users send requests to an API gateway, which spreads them over three Spring Boot instances that query an Oracle database.">
                         <path class="sys-line" d="M200 52 V112"/>
                         <path class="sys-line" d="M200 144 L78 210 M200 144 V210 M200 144 L322 210"/>
@@ -450,24 +453,12 @@
 
         <div class="ledger">
             <div class="wrap">
-                <div class="cell"><div class="num">8+</div><div class="lbl">years in enterprise software</div></div>
+                <div class="cell"><div class="num">9+</div><div class="lbl">years in enterprise software</div></div>
+                <div class="cell"><div class="num">8</div><div class="lbl">engineers in my team at IFS</div></div>
                 <div class="cell"><div class="num">4</div><div class="lbl">industries: aerospace, banking, healthcare, finance</div></div>
-                <div class="cell"><div class="num">6</div><div class="lbl">roles since 2017</div></div>
                 <div class="cell"><div class="num">MSc</div><div class="lbl">IT, with Distinction, Cardiff Met</div></div>
             </div>
         </div>
-
-        <!-- Invitation to the 3D world -->
-        <section class="play-band">
-            <div class="wrap">
-                <div>
-                    <div class="mono play-kicker">Career Street</div>
-                    <h2>Rather explore than read?</h2>
-                    <p>Walk through my career in a small 3D town. Every building is a place I've worked or studied. Make the calls I made, and catch a few bugs on the way.</p>
-                </div>
-                <a class="play-btn" href="world.html">Enter the town</a>
-            </div>
-        </section>
 
         <!-- Experience -->
         <section class="section" id="work">
@@ -492,12 +483,16 @@
                             <span></span>
                             <div>
                                 <ul>
-                                    <li>Lead the engineering team: planning work, estimating stories, reviewing code and mentoring, while staying hands-on with backend development and solution design.</li>
-                                    <li>Play a key role in migrating legacy Java and JSP modules to the IFS Cloud Aurena framework, including designing the Oracle database structures behind them.</li>
-                                    <li>Improve performance by reading execution plans, rewriting Oracle SQL and redesigning database views.</li>
-                                    <li>Run technical investigations and proofs of concept to choose between approaches on difficult problems.</li>
+                                    <li>Lead a team of 8 software engineers on the migration of a legacy aerospace maintenance platform to IFS Cloud (Aurena), owning work planning, code reviews and engineering standards.</li>
+                                    <li>Resolve complex Oracle database performance issues by analyzing execution plans, optimizing SQL queries and redesigning database views.</li>
+                                    <li>Work with Angular UI components (data binding, services, async data handling) and shape REST APIs to fit frontend needs.</li>
+                                    <li>Drive the team's adoption of AI in engineering with Claude Code: built and maintain 10–15 reusable AI commands and rules in a shared team repository, used daily by around 10 engineers to complete development tasks faster and more consistently.</li>
+                                    <li>Designed agentic AI workflows that carry out multi-step development tasks such as code analysis, review and validation, with team-defined standards and guardrails for how AI is used.</li>
+                                    <li>Built an AI knowledge base by indexing the repositories, code and documentation the team needs, giving the AI the project context required for accurate code analysis and implementation.</li>
+                                    <li>Built an AI-powered pre-PR check that reviews changes against team rules and validates branches before a pull request is opened. Developers catch issues in 3–4 minutes instead of waiting for the 2–3 hour CI build to fail, reducing wasted build cycles and rework.</li>
+                                    <li>Mentor engineers on effective AI usage, and use AI daily for code analysis, understanding legacy code during the migration, and implementation.</li>
                                 </ul>
-                                <div class="job-stack mono">Java EE · IFS Cloud Aurena · Oracle · PL/SQL</div>
+                                <div class="job-stack mono"><span>Java</span><span>Angular</span><span>Oracle</span><span>PL/SQL</span><span>IFS Cloud Aurena</span><span>Claude Code</span></div>
                             </div>
                         </div>
                     </details>
@@ -513,11 +508,12 @@
                             <span></span>
                             <div>
                                 <ul>
-                                    <li>Migrated legacy Java and JSP modules to IFS Cloud Aurena without losing existing business behaviour.</li>
-                                    <li>Redesigned legacy Java EE implementations to fit the IFS Cloud architecture.</li>
-                                    <li>Designed and tuned Oracle SQL, views and PL/SQL components for speed and maintainability.</li>
+                                    <li>Migrated legacy Java and JSP modules to the IFS Cloud Aurena framework, redesigning Java EE implementations to fit IFS Cloud architecture while preserving existing business functionality.</li>
+                                    <li>Designed and optimized Oracle SQL queries, database views and PL/SQL components to improve application performance and maintainability.</li>
+                                    <li>Performed technical investigations and proofs of concept to evaluate implementation approaches for new requirements.</li>
+                                    <li>Collaborated with cross-functional teams to deliver new features in Agile sprints.</li>
                                 </ul>
-                                <div class="job-stack mono">Java EE · JSP · Oracle · PL/SQL</div>
+                                <div class="job-stack mono"><span>Java EE</span><span>JSP</span><span>Oracle</span><span>PL/SQL</span><span>IFS Cloud Aurena</span></div>
                             </div>
                         </div>
                     </details>
@@ -533,13 +529,14 @@
                             <span></span>
                             <div>
                                 <ul>
-                                    <li>Technical lead for a backend team of five: sprint planning, task assignment, code review and mentoring.</li>
-                                    <li>Worked directly with customers to gather requirements, demo each sprint and fold their feedback into the plan.</li>
-                                    <li>Designed the backend architecture and built Spring Boot microservices.</li>
-                                    <li>Introduced Agile practices and Jira-based sprint planning to the team.</li>
-                                    <li>Built and ran deployment pipelines and the AWS infrastructure behind production releases.</li>
+                                    <li>Provided technical leadership for a backend team of 5 engineers by planning sprint work, assigning tasks, reviewing code and mentoring developers.</li>
+                                    <li>Worked directly with customers to gather requirements, prioritize features, demonstrate sprint deliverables and incorporate feedback.</li>
+                                    <li>Designed backend architecture and developed Spring Boot microservices.</li>
+                                    <li>Contributed to React front-end features, building components and integrating them with Spring Boot REST APIs.</li>
+                                    <li>Introduced Agile practices and Jira-based sprint planning.</li>
+                                    <li>Implemented deployment pipelines and managed AWS infrastructure for reliable releases.</li>
                                 </ul>
-                                <div class="job-stack mono">Spring Boot · Microservices · AWS · CI/CD · Jira</div>
+                                <div class="job-stack mono"><span>Spring Boot</span><span>React</span><span>Microservices</span><span>AWS</span><span>CI/CD</span><span>Jira</span></div>
                             </div>
                         </div>
                     </details>
@@ -555,12 +552,12 @@
                             <span></span>
                             <div>
                                 <ul>
-                                    <li>Designed, built and maintained Spring Boot microservices on Oracle for healthcare systems.</li>
-                                    <li>Tracked complex production issues to their root cause and shipped permanent fixes.</li>
-                                    <li>Tuned Oracle SQL and backend services for performance and scale.</li>
-                                    <li>Worked with QA, business analysts and infrastructure teams on every release.</li>
+                                    <li>Designed, developed and maintained enterprise Java Spring Boot applications using a microservices architecture, Oracle databases and AWS Lambda functions for healthcare solutions.</li>
+                                    <li>Optimized Oracle SQL queries and backend services, cutting response times by ~20% on key healthcare workflows.</li>
+                                    <li>Resolved complex production issues by analyzing root causes, implementing permanent fixes and minimizing service disruptions.</li>
+                                    <li>Collaborated with QA, business analysts and infrastructure teams to deliver high-quality releases.</li>
                                 </ul>
-                                <div class="job-stack mono">Java · Spring Boot · Microservices · Oracle</div>
+                                <div class="job-stack mono"><span>Java</span><span>Spring Boot</span><span>Microservices</span><span>Oracle</span><span>AWS Lambda</span></div>
                             </div>
                         </div>
                     </details>
@@ -576,12 +573,12 @@
                             <span></span>
                             <div>
                                 <ul>
-                                    <li>Built and supported the digital banking platform for People's Bank Sri Lanka.</li>
-                                    <li>Developed and enhanced Java, Spring Boot and DB2 applications for new business requirements.</li>
-                                    <li>Handled production support: investigating incidents, fixing defects and deploying updates.</li>
-                                    <li>Reviewed code and pushed for quality and maintainability improvements.</li>
+                                    <li>Developed and supported enterprise digital banking solutions for People's Bank Sri Lanka.</li>
+                                    <li>Developed, enhanced and maintained Java, Spring Boot and DB2 applications.</li>
+                                    <li>Provided 24x7 production support: incidents, defect fixes and production deployments.</li>
+                                    <li>Worked with IBM WebSphere, RabbitMQ and CI/CD pipelines.</li>
                                 </ul>
-                                <div class="job-stack mono">Java · Spring Boot · IBM DB2 · WebSphere · RabbitMQ</div>
+                                <div class="job-stack mono"><span>Java</span><span>Spring Boot</span><span>IBM DB2</span><span>WebSphere</span><span>RabbitMQ</span></div>
                             </div>
                         </div>
                     </details>
@@ -597,11 +594,11 @@
                             <span></span>
                             <div>
                                 <ul>
-                                    <li>Developed and maintained the Pawning Management System used across 17 branches.</li>
-                                    <li>Designed and built the HR Management System for 500+ employees.</li>
-                                    <li>Maintained the InBank administration system and other internal Java and Oracle applications.</li>
+                                    <li>Main developer of the Pawning Management System, used daily by 100+ users across 17 branches.</li>
+                                    <li>Designed and developed the HR Management System for 500+ employees.</li>
+                                    <li>System administrator for the InBank administration system, and developed internal Java/Oracle applications.</li>
                                 </ul>
-                                <div class="job-stack mono">Java · Oracle</div>
+                                <div class="job-stack mono"><span>Java</span><span>Oracle</span></div>
                             </div>
                         </div>
                     </details>
@@ -615,40 +612,36 @@
                 <div class="section-head">
                     <div class="section-no mono">AI</div>
                     <div>
-                        <h2>How I work with AI</h2>
+                        <h2>AI in my team's work</h2>
+                        <p>At IFS I'm responsible for how my team uses AI. We use Claude Code. These are three things I built that the team uses every day.</p>
                     </div>
                 </div>
 
                 <div class="indent">
-                    <p class="ai-intro">
-                        I treat AI tools as a fast pair programmer, not an authority. They speed up the reading,
-                        drafting and checking around my work; the design decisions, and the responsibility for what ships, stay with me.
-                    </p>
-
-                    <div class="ai-cols" id="ai-cols">
+                    <div class="ai-cols">
                         <div class="ai-col">
-                            <h3>Every day</h3>
-                            <ul>
-                                <li><b>Reading legacy code.</b> Getting oriented in old Java and JSP modules before migrating them.</li>
-                                <li><b>Drafting tests</b> and boilerplate, then reviewing every line.</li>
-                                <li><b>A second look</b> at SQL and execution plans while tuning Oracle.</li>
-                                <li><b>First-pass reviews</b> before I open a pull request.</li>
-                            </ul>
+                            <div class="ai-fig">3–4 min</div>
+                            <div class="ai-fig-note mono">instead of a 2–3 hour CI build</div>
+                            <h3>Pre-PR check</h3>
+                            <p>An AI review that checks changes against our team rules and validates the branch before a pull request is opened. Developers find problems in minutes, not after the CI build fails.</p>
                         </div>
                         <div class="ai-col">
-                            <h3>With my team</h3>
-                            <ul>
-                                <li><b>Bringing AI tools into the team's workflow</b>, with clear ground rules.</li>
-                                <li><b>Same review bar.</b> AI-written code goes through the same review as anything else.</li>
-                                <li><b>Nothing sensitive</b> goes into a prompt: no customer data, no secrets.</li>
-                                <li><b>Sharing what works.</b> Useful prompts and patterns get passed around, not reinvented.</li>
-                            </ul>
+                            <div class="ai-fig">10–15</div>
+                            <div class="ai-fig-note mono">commands, used daily by ~10 engineers</div>
+                            <h3>Team AI toolkit</h3>
+                            <p>Reusable Claude Code commands and rules in a shared team repository. Everyone runs the same steps for common tasks, so the results are consistent.</p>
                         </div>
-                        <div class="ai-col" id="ai-projects">
-                            <h3>On my own time</h3>
-                            <div id="ai-project-list"></div>
+                        <div class="ai-col">
+                            <div class="ai-fig">Repos</div>
+                            <div class="ai-fig-note mono">plus code and docs, indexed</div>
+                            <h3>AI knowledge base</h3>
+                            <p>The repositories, code and documentation the team needs, indexed so the AI has real project context when it analyses or changes code.</p>
                         </div>
                     </div>
+                    <ul class="ai-rules">
+                        <li><b>Same review.</b> AI-written code gets the same review as anything else.</li>
+                        <li><b>No sensitive data.</b> No customer data or secrets in prompts.</li>
+                    </ul>
                 </div>
             </div>
         </section>
@@ -658,15 +651,18 @@
             <div class="wrap">
                 <div class="section-head">
                     <div class="section-no mono">Skills</div>
-                    <div><h2>Tools of the trade</h2></div>
+                    <div><h2>What I work with</h2></div>
                 </div>
                 <table class="spec">
                     <caption class="visually-hidden">Skills by area</caption>
-                    <tr><th scope="row">Languages</th><td><span>Java</span><span>JavaScript</span><span>PL/SQL</span><span>SQL</span></td></tr>
-                    <tr><th scope="row">Backend</th><td><span>Spring Boot</span><span>Spring MVC</span><span>Spring Security</span><span>REST APIs</span><span>Microservices</span><span>Java EE</span><span>JSP</span><span>IFS Cloud Aurena</span></td></tr>
-                    <tr><th scope="row">Databases</th><td><span>Oracle</span><span>PostgreSQL</span><span>IBM DB2</span></td></tr>
-                    <tr><th scope="row">Cloud &amp; DevOps</th><td><span>AWS (EC2, RDS, S3, Route 53, SNS, SQS)</span><span>Docker</span><span>Jenkins</span><span>CI/CD</span><span>Git, GitHub, Bitbucket</span></td></tr>
-                    <tr><th scope="row">Ways of working</th><td><span>Agile</span><span>Scrum</span><span>TDD</span><span>Code review</span><span>Mentoring</span></td></tr>
+                    <tr><th scope="row">Backend</th><td><span>Java</span><span>Spring Boot</span><span>Spring Security</span><span>REST APIs</span><span>Microservices</span><span>Java EE</span><span>JSP</span><span>IFS Cloud Aurena</span></td></tr>
+                    <tr><th scope="row">Frontend</th><td><span>Angular</span><span>React</span><span>TypeScript</span><span>JavaScript</span><span>HTML/CSS</span></td></tr>
+                    <tr><th scope="row">AI</th><td><span>Claude Code</span><span>Agentic AI workflows</span><span>Prompt &amp; context engineering</span><span>Automated code review</span><span>AI knowledge bases</span></td></tr>
+                    <tr><th scope="row">Databases</th><td><span>Oracle</span><span>IBM DB2</span><span>PL/SQL</span><span>SQL performance tuning</span><span>Execution plan analysis</span></td></tr>
+                    <tr><th scope="row">Messaging</th><td><span>Apache Kafka</span><span>RabbitMQ</span></td></tr>
+                    <tr><th scope="row">Cloud &amp; DevOps</th><td><span>AWS (EC2, RDS, S3, SQS, SNS, Lambda)</span><span>Docker</span><span>CI/CD pipelines</span><span>Git</span></td></tr>
+                    <tr><th scope="row">Security</th><td><span>Keycloak</span><span>OAuth2 / OpenID Connect</span><span>mTLS</span></td></tr>
+                    <tr><th scope="row">Leadership</th><td><span>Team leadership</span><span>Mentoring</span><span>Code reviews</span><span>Agile delivery</span><span>Legacy modernization</span><span>Production support</span></td></tr>
                 </table>
             </div>
         </section>
@@ -693,14 +689,27 @@
             </div>
         </section>
 
+        <!-- Link to the 3D world -->
+        <section class="play-band">
+            <div class="wrap">
+                <div>
+                    <div class="mono play-kicker">Side project</div>
+                    <h2>Career Street</h2>
+                    <p>The same CV as a small 3D town, built with Three.js. Each building is a job or a degree. Walk up to one to read about it.</p>
+                </div>
+                <a class="play-btn" href="world.html">Open Career Street</a>
+            </div>
+        </section>
+
         <!-- Contact -->
         <section class="contact" id="contact">
             <div class="wrap">
                 <div class="section-no mono">Contact</div>
-                <h2>Have a hard backend problem?<br><a href="mailto:randika.l.abeyrathna@gmail.com"><em>Write to me.</em></a></h2>
+                <h2>Hiring for a full-stack Java role?<br><a href="mailto:randika.l.abeyrathna@gmail.com"><em>Email me.</em></a></h2>
                 <div class="contact-grid">
                     <div><span class="mono">Email</span><a class="link" href="mailto:randika.l.abeyrathna@gmail.com">randika.l.abeyrathna@gmail.com</a></div>
                     <div><span class="mono">LinkedIn</span><a class="link" href="https://www.linkedin.com/in/randika-abeyrathna/" target="_blank" rel="noopener noreferrer">in/randika-abeyrathna</a></div>
+                    <div><span class="mono">GitHub</span><a class="link" href="https://github.com/Randika-Lakmal-Abeyrathna" target="_blank" rel="noopener noreferrer">Randika-Lakmal-Abeyrathna</a></div>
                     <div><span class="mono">CV</span><a class="link" href="assets/cv/Randika-Abeyrathna-CV.pdf" download>Download PDF</a></div>
                     <div><span class="mono">Based in</span>Colombo, Sri Lanka</div>
                 </div>
@@ -711,28 +720,11 @@
     <footer class="colophon mono">
         <div class="wrap">
             <span>© <span id="year">2026</span> Randika Abeyrathna</span>
-            <span>Set in Newsreader &amp; IBM Plex</span>
+            <span>Plain HTML, CSS and JavaScript, built with help from Claude Code</span>
         </div>
     </footer>
 
     <script>
-        // Side projects for the AI section. Add your own here; the column hides itself while the list is empty.
-        // { name: 'Project name', text: 'One or two sentences on what it does and what you used.', url: 'https://github.com/...' }
-        const AI_PROJECTS = [];
-
-        const esc = v => String(v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
-        const list = document.getElementById('ai-project-list');
-        if (AI_PROJECTS.length) {
-            list.innerHTML = AI_PROJECTS.map(p => `
-                <div class="project">
-                    <div class="project-name">${p.url ? `<a class="link" href="${esc(p.url)}" target="_blank" rel="noopener noreferrer">${esc(p.name)}</a>` : esc(p.name)}</div>
-                    <p>${esc(p.text)}</p>
-                </div>`).join('');
-        } else {
-            document.getElementById('ai-projects').remove();
-            document.getElementById('ai-cols').style.setProperty('--cols', 2);
-        }
-
         // Local time in Colombo
         const clock = document.getElementById('clock');
         const fmt = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Colombo' });
@@ -903,7 +895,7 @@
                 if (sim.spikeUntil && now > sim.spikeUntil) {
                     sim.spikeUntil = 0;
                     $('b-spike').disabled = false;
-                    say(sim.slow ? 'Traffic is back to normal and the queue drains. The slow query is still there, waiting for the next spike.' : 'Traffic is back to normal.');
+                    say(sim.slow ? 'Traffic is back to normal and the queue drains. The slow query is still there.' : 'Traffic is back to normal.');
                 }
                 if (sim.crashed >= 0) {
                     const since = now - sim.crashAt;
@@ -916,7 +908,7 @@
                         sim.crashed = -1;
                         sim.rerouted = false;
                         $('b-crash').disabled = false;
-                        say('The instance restarted and is back in rotation. No one had to be woken up.');
+                        say('The instance restarted and is back in rotation.');
                     }
                 }
             }
